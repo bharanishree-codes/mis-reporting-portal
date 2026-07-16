@@ -90,7 +90,7 @@ MIS/
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/mis-reporting-portal.git
+git clone https://github.com/bharanishree-codes/mis-reporting-portal.git
 cd mis-reporting-portal
 
 # Create and activate a virtual environment
