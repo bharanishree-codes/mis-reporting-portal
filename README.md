@@ -5,7 +5,7 @@ A scalable, multi-tenant Management Information System (MIS) platform for academ
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
 ![Django](https://img.shields.io/badge/Django-092E20?logo=django)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?logo=postgresql)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql)
 
 ## Overview
 
@@ -18,14 +18,13 @@ The MIS Reporting Portal is a multi-tenant platform that gives academic institut
 - **Role-based dashboards** — tailored views and permissions for HODs, faculty, and compliance teams
 - **Dynamic filtering & reporting** — SQL-based report generation by department and academic year
 - **Configurable job scheduling** — database-driven task scheduling and system adaptability across tenants
-- **Data refresh & COB support** — built-in support for close-of-business and periodic data refresh activities
 
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
 | Backend Framework | Django, FastAPI, Django REST Framework (DRF) |
-| Database | PostgreSQL |
+| Database | MySQL |
 | Frontend | Bootstrap, JavaScript |
 | API Docs | Swagger / OpenAPI |
 | Version Control | Git |
@@ -84,7 +83,7 @@ MIS/
 ### Prerequisites
 
 - Python 3.10+
-- PostgreSQL 13+
+- MySQL 8.0+
 - pip / virtualenv
 
 ### Installation
@@ -111,6 +110,12 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+## API Documentation
+
+Once the server is running, API documentation is available at:
+
+- Swagger UI: `http://localhost:8000/swagger/`
+- ReDoc: `http://localhost:8000/redoc/`
 
 ## Key Contributions
 
