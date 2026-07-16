@@ -110,13 +110,6 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-## API Documentation
-
-Once the server is running, API documentation is available at:
-
-- Swagger UI: `http://localhost:8000/swagger/`
-- ReDoc: `http://localhost:8000/redoc/`
-
 ## Key Contributions
 
 - Developed a scalable multi-tenant MIS platform with ETL workflows for reporting and administrative data integration
