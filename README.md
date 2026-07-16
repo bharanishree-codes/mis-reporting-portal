@@ -90,7 +90,7 @@ MIS/
 
 ```bash
 # Clone the repository
-git clone https://github.com/bharanishree-codes/mis-reporting-portal.git
+git clone [https://github.com/bharanishree-codes/mis-reporting-portal.git](https://github.com/bharanishree-codes/mis-reporting-portal.git)
 cd mis-reporting-portal
 
 # Create and activate a virtual environment
@@ -109,6 +109,14 @@ python manage.py createsuperuser
 # Start the development server
 python manage.py runserver
 ```
+
+## API Documentation
+
+All APIs for this project are documented and organized using **API Studio**, an internal API management platform:
+
+- API Studio: [https://studio.hcaschennai.edu.in/](https://studio.hcaschennai.edu.in/)
+  
+APIs are listed as menu-driven items within the platform and are visible only to authenticated, authorized users.
 
 ## Key Contributions
 
