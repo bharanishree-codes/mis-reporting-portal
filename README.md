@@ -101,10 +101,6 @@ source venv/bin/activate    # On Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Configure environment variables
-cp .env.example .env
-# Edit .env with your database credentials and tenant settings
-
 # Run migrations
 python manage.py migrate
 
@@ -115,22 +111,6 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-### Environment Variables
-
-```
-DEBUG=True
-SECRET_KEY=your-secret-key
-DATABASE_URL=postgres://user:password@localhost:5432/mis_reporting_db
-DEFAULT_TENANT=default
-ALLOWED_HOSTS=localhost,127.0.0.1
-```
-
-## API Documentation
-
-Once the server is running, API documentation is available at:
-
-- Swagger UI: `http://localhost:8000/swagger/`
-- ReDoc: `http://localhost:8000/redoc/`
 
 ## Key Contributions
 
@@ -138,7 +118,6 @@ Once the server is running, API documentation is available at:
 - Implemented RBAC for HODs, faculty, and compliance teams
 - Built dynamic filtering and SQL-based report generation by department and academic year
 - Integrated database-driven configurations for flexible job scheduling and cross-tenant adaptability
-- Performed data refresh and close-of-business (COB) support activities
 
 ## Contact
 
