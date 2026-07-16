@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Filter & Dashboard</title>
+    <style>
+        /* Reset and Base Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-size: 13px; 
+            background: #f5f6fa; 
+            color: #2c3e50;
+        }
+
+        /* Sidebar Styles */
+        .sidebar { 
+            width: 280px; 
+            background: white; 
+            padding: 20px; 
+            border-right: 1px solid #e1e5e9; 
+            height: 100vh; 
+            position: fixed; 
+            left: 0; 
+            top: 0; 
+            transition: transform 0.3s ease; 
+            overflow-y: auto; 
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1); 
+            z-index: 1000;
+            transform: translateX(-290px); /* Start hidden by default */
+        }
+        .sidebar.show { transform: translateX(0); }
+        .toggle-btn { 
+            position: absolute; 
+            top: 15px; 
+            right: -35px; 
+            background: #3498db; 
+            color: #fff; 
+            width: 30px; 
+            height: 30px; 
+            text-align: center; 
+            line-height: 30px; 
+            cursor: pointer; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            font-size: 12px; 
+            border: none; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+            transition: all 0.3s ease; 
+            z-index: 1001;
+        }
+        .toggle-btn:hover { background: #2980b9; transform: scale(1.05); }
+
+        /* Filter Group Styles */
+        .filter-group { margin-bottom: 20px; }
+        .filter-group label { 
+            display: block; 
+            margin-bottom: 6px; 
+            font-weight: 600; 
+            color: #2c3e50; 
+            font-size: 13px; 
+        }
+        .filter-group select, .filter-group input { 
+            width: 100%; 
+            padding: 10px 12px; 
+            border: 2px solid #e9ecef; 
+            border-radius: 6px; 
+            font-size: 13px; 
+            background: white; 
+            transition: all 0.3s ease; 
+        }
+        .filter-group select:focus, .filter-group input:focus { 
+            outline: none; 
+            border-color: #3498db; 
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); 
+        }
+        .btn-apply { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white; 
+            padding: 12px 15px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 14px; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            margin-top: 10px; 
+        }
+        .btn-apply:hover { 
+            background: linear-gradient(135deg, #2980b9, #2573a7); 
+            transform: translateY(-1px); 
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3); 
+        }
+
+        /* Clear Filters Button */
+        .btn-clear { 
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d); 
+            color: white; 
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 13px; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            margin-top: 8px; 
+        }
+        .btn-clear:hover { 
+            background: linear-gradient(135deg, #7f8c8d, #718387); 
+            transform: translateY(-1px); 
+            box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3); 
+        }
+
+        /* Main Content Area */
+        .main-content {
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            width: 100%;
+        }
+        .sidebar.show + .main-content {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .dashboard-header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .dashboard-subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+        .stat-card.total { border-color: #3498db; }
+        .stat-card.staff { border-color: #e74c3c; }
+        .stat-card.department { border-color: #27ae60; }
+        .stat-card.year { border-color: #f39c12; }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Data Table */
+        .data-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .section-header {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 13px;
+        }
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Export Section */
+        .export-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+        .export-section h4 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .btn-export {
+            background: linear-gradient(135deg, #27ae60, #219653);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-block;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        .btn-export.pdf {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        .btn-export:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* No Data State */
+        .no-data {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        .no-data i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Enhanced Dropdown Styles */
+        .dropdown-checkbox { position: relative; width: 100%; font-size: 13px; }
+        .dropdown-checkbox-toggle {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            color: #2c3e50;
+        }
+        .dropdown-checkbox-toggle:hover { border-color: #3498db; }
+        .dropdown-checkbox-toggle:after {
+            content: '⌄';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #7f8c8d;
+            transition: transform 0.3s ease;
+        }
+        .dropdown-checkbox-toggle.active {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        .dropdown-checkbox-toggle.active:after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+        .dropdown-checkbox-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: dropdownFadeIn 0.2s ease;
+        }
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-checkbox-menu.show { display: block; }
+        .dropdown-checkbox-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f8f9fa;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s ease;
+        }
+        .dropdown-checkbox-item:last-child { border-bottom: none; }
+        .dropdown-checkbox-item:hover { background: #f8f9fa; }
+        .dropdown-checkbox-item input {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+            accent-color: #3498db;
+        }
+        .dropdown-checkbox-item label {
+            cursor: pointer;
+            margin: 0;
+            font-weight: normal;
+            flex: 1;
+        }
+        .dropdown-checkbox-header {
+            padding: 10px 12px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .select-all-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+        .select-all-btn:hover {
+            color: #2980b9;
+        }
+        .selected-options-text { 
+            font-size: 13px; 
+            color: #2c3e50; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
+            font-weight: 500;
+        }
+        .selected-count {
+            background: #3498db;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        /* Filter Toggle Button */
+        .filter-toggle {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .filter-toggle:hover {
+            background: linear-gradient(135deg, #2980b9, #2573a7);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        .filter-toggle i {
+            margin-right: 8px;
+        }
+        
+        /* Top Action Bar */
+        .top-action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .top-action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .export-buttons {
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Filter -->
+    <div class="sidebar" id="sidebar">
+        <div class="toggle-btn" id="toggleBtn">❯</div>
+        <h3>📊 MIS Reports</h3>
+        <form method="get" id="filterForm">
+            <input type="hidden" name="apply_filter" value="1" />
+
+            <!-- {% if user_role == 'Naac' %}
+            <div class="filter-group">
+                <label for="department">🏢 Department</label>
+                <select name="department" id="department">
+                    <option value="">All Departments</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept }}" {% if dept == selected_department %}selected{% endif %}>{{ dept }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %} -->
+
+
+
+
+<!-- Department Filter (Only show relevant department field based on user role) -->
+{% if user_role == 'Naac'  %}
+<div class="filter-group">
+    <label for="department">🏢 Filter by Department</label>
+    <select name="department" id="department">
+        <option value="">All Departments</option>
+        {% for dept in departments %}
+            <option value="{{ dept }}" {% if dept == selected_department %}selected{% endif %}>{{ dept }}</option>
+        {% endfor %}
+    </select>
+</div>
+{% else %}
+<!-- For Staff and HOD, show their department as read-only -->
+<div class="filter-group">
+    <label>🏢 Department Name</label>
+    <div style="padding: 10px 12px; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 6px; font-size: 13px; color: #2c3e50;">
+        <strong>{{ user_department|default:"N/A" }}</strong>
+    </div>
+</div>
+{% endif %}
+
+            <div class="filter-group">
+                <label for="staff_name">👤 Staff Name</label>
+                <select name="staff_name" id="staff_name">
+                    {% if user_role == 'Staff' %}
+                        <option value="{{ staff_data.0.name }}" selected>{{ staff_data.0.name }}</option>
+                    {% else %}
+                        <option value="">All Staff Names</option>
+                        {% for staff in staff_data %}
+                            <option value="{{ staff.name }}" data-department="{{ staff.department }}" {% if staff.name == selected_staff_name %}selected{% endif %}>{{ staff.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+        
+            <div class="filter-group">
+                <label for="staff_id">👨‍💼 Staff Code</label>
+                <select name="staff_id" id="staff_id">
+                    {% if user_role == 'Staff' %}
+                        <option value="{{ staff_data.0.id }}" selected>{{ staff_data.0.id }}</option>
+                    {% else %}
+                        <option value="">All Staff Members</option>
+                        {% for staff in staff_data %}
+                            <option value="{{ staff.id }}" data-department="{{ staff.department }}" {% if staff.id == selected_staff_id %}selected{% endif %}>{{ staff.id }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+
+            
+
+            <!-- <div class="filter-group">
+                <label for="year">📅 Academic Year</label>
+                <select name="year" id="year">
+                    <option value="">All Academic Years</option>
+                    {% for yr in years %}
+                        <option value="{{ yr }}" {% if yr == selected_year %}selected{% endif %}>{{ yr }}</option>
+                    {% endfor %}
+                </select>
+            </div> -->
+
+            <div class="filter-group">
+                <label for="year">📅 Academic Year</label>
+                <select name="year" id="year">
+                    <option value="">All Academic Years</option>
+                    {% for yr in years %}
+                        {% with next_year=yr|add:"1" %}
+                            <option value="{{ yr }}" {% if yr == selected_year %}selected{% endif %}>
+                                {{ yr }}-{{ next_year }}
+                            </option>
+                        {% endwith %}
+                    {% endfor %}
+                </select>
+            </div>
+            
+
+            <div class="filter-group">
+                <label for="form_type">📋 Form Type</label>
+                <select name="form_type" id="form_type" required>
+                    <option value="">Select Form Type</option>
+                    <option value="participations" {% if selected_form == 'participations' %}selected{% endif %}>Faculty Participations</option>
+                    <option value="research_articles" {% if selected_form == 'research_articles' %}selected{% endif %}>Research Article</option>
+                    <option value="books_and_chapters" {% if selected_form == 'books_and_chapters' %}selected{% endif %}>Books & Chapters</option>
+                </select>
+            </div>
+
+            <!-- Enhanced Participation Dropdown -->
+            <div class="filter-group" id="participationOptions" style="display: none;">
+                <label>🎯 Participation Types</label>
+                <div class="dropdown-checkbox">
+                    <button type="button" class="dropdown-checkbox-toggle" id="participationToggle">
+                        <span class="selected-options-text" id="selectedOptionsText">
+                            {% if selected_options %}
+                                {% if selected_options|length == 1 %}
+                                    {{ selected_options.0 }}
+                                {% else %}
+                                    {{ selected_options|length }} types selected
+                                {% endif %}
+                            {% else %}
+                                Select participation types
+                            {% endif %}
+                        </span>
+                        {% if selected_options and selected_options|length > 1 %}
+                        <span class="selected-count">{{ selected_options|length }}</span>
+                        {% endif %}
+                    </button>
+                    <div class="dropdown-checkbox-menu" id="participationMenu">
+                        <div class="dropdown-checkbox-header">
+                            <span>Select Options</span>
+                            <button type="button" class="select-all-btn" id="selectAllBtn">Select All</button>
+                        </div>
+                        {% for option in options %}
+                        <div class="dropdown-checkbox-item">
+                            <input type="checkbox" name="options" value="{{ option }}" id="option{{ forloop.counter }}"
+                                   {% if option in selected_options %}checked{% endif %}>
+                            <label for="option{{ forloop.counter }}">{{ option }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-apply">🚀 Apply Filters</button>
+            <button type="button" class="btn-clear" id="clearFilters">🗑️ Clear Filters</button>
+        </form>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content" id="mainContent">
+        <!-- Top Action Bar with Filter Toggle and Export Buttons -->
+        <div class="top-action-bar">
+            <button class="filter-toggle" id="filterToggle">
+                <i>📊</i> Show Filters
+            </button>
+            
+            {% if request.GET.apply_filter and parents %}
+            <div class="export-buttons">
+                <a href="?{% for opt in selected_options %}options={{ opt }}&{% endfor %}staff_id={{ selected_staff_id }}&staff_name={{ selected_staff_name }}&department={{ selected_department }}&year={{ selected_year }}&form_type={{ selected_form }}&export=excel" class="btn-export">📊 Export Excel</a>
+                <a href="?{% for opt in selected_options %}options={{ opt }}&{% endfor %}staff_id={{ selected_staff_id }}&staff_name={{ selected_staff_name }}&department={{ selected_department }}&year={{ selected_year }}&form_type={{ selected_form }}&export=pdf" class="btn-export pdf">📄 Export PDF</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card total">
+                <div class="stat-label">Total Records</div>
+                <div class="stat-value">{{ parents|length|default:0 }}</div>
+                <div class="stat-desc">Filtered Results</div>
+            </div>
+            <div class="stat-card staff">
+                <div class="stat-label">Staff Members</div>
+                <div class="stat-value">
+                    {% if selected_staff_id %}1{% else %}{{ staff_data|length }}{% endif %}
+                </div>
+                <div class="stat-desc">Active Staff</div>
+            </div>
+            <div class="stat-card department">
+                <div class="stat-label">Departments</div>
+                <div class="stat-value">
+                    {% if selected_department %}1{% else %}{{ departments|length }}{% endif %}
+                </div>
+                <div class="stat-desc">Total Departments</div>
+            </div>
+        </div>
+
+        <!-- Data Table Section -->
+        <div class="data-section">
+            <div class="section-header">
+                📋 Filtered Data Results ({{ parents|length|default:0 }} records)
+            </div>
+            
+            {% if parents %}
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Staff ID</th>
+                            <th>Staff Name</th>
+                            <th>Department</th>
+                            {% if selected_form == 'participations' %}
+                                <th>Participation Type</th>
+                                <th>Year</th>
+                            {% elif selected_form == 'books_and_chapters' %}
+                                <th>Book Title</th>
+                                <th>Publication Year</th>
+                            {% elif selected_form == 'research_articles' %}
+                                <th>Article Title</th>
+                                <th>Journal</th>
+                            {% elif selected_form == 'event_workshop' %}
+                                <th>Workshop Name</th>
+                                <th>Duration</th>
+                                <th>Participants</th>
+                            {% elif selected_form == 'program_offered' %}
+                                <th>Program Name</th>
+                                <th>Course Code</th>
+                                <th>Year</th>
+                                <th>Students</th>
+                            {% elif selected_form == 'competitive_examination' %}
+                                <th>Activity Name</th>
+                                <th>Year</th>
+                                <th>Students Attended</th>
+                                <th>Students Placed</th>
+                            {% elif selected_form == 'projects' %}
+                                <th>Course Name</th>
+                                <th>Created Date</th>
+                            {% elif selected_form == 'career_counseling' %}
+                                <th>Activity Name</th>
+                                <th>Year</th>
+                                <th>Students Benefited</th>
+                            {% elif selected_form == 'collaborative_students' %}
+                                <th>Collaboration Type</th>
+                                <th>Institution</th>
+                                <th>Year</th>
+                            {% elif selected_form == 'Extentions' %}
+                                <th>Activity Name</th>
+                                <th>Year</th>
+                                <th>Name of the Scheme</th>
+                            {% elif selected_form == 'Collaborative_Faculty' %}
+                                <th>Activity Title</th>
+                                <th>Participant</th>
+                                <th>Year</th>
+                            {% elif selected_form == 'governments_grants' %}
+                                <th>Grant Title</th>
+                                <th>Agency</th>
+                                <th>Amount</th>
+                                <th>Year</th>
+                            {% else %}
+                                <th>Activity</th>
+                                <th>Year</th>
+                            {% endif %}
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for parent in parents|slice:":10" %}
+                        <tr>
+                            <td>
+                                {% if parent.staff_id %}
+                                    {{ parent.staff_id }}
+                                {% elif parent.stf_id %}
+                                    {{ parent.stf_id }}
+                                {% elif parent.employee_id %}
+                                    {{ parent.employee_id }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if parent.staff_name %}
+                                    {{ parent.staff_name }}
+                                {% elif parent.stf_name %}
+                                    {{ parent.stf_name }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>{% if parent.department_name %}
+                                {{ parent.department_name }}
+                            {% elif parent.department %}
+                                {{ parent.department }}
+                            {% else %}
+                                N/A
+                            {% endif %}</td>
+                            
+                            {% if selected_form == 'participations' %}
+                                <td>{{ parent.participation|default:"N/A" }}</td>
+                                <td>{{ parent.year|default:"N/A" }}</td>
+                            {% elif selected_form == 'books_and_chapters' %}
+                                <td>{{ parent.title_of_book_or_chapter|default:"N/A" }}</td>
+                                <td>{{ parent.year_of_publication|default:"N/A" }}</td>
+                            {% elif selected_form == 'research_articles' %}
+                                <td>{{ parent.paper_title|default:"N/A" }}</td>
+                                <td>{{ parent.journal_name|default:"N/A" }}</td>
+                            {% elif selected_form == 'event_workshop' %}
+                                <td>{{ parent.name_of_the_workshop|default:"N/A" }}</td>
+                                <td>
+                                    {% if parent.duration_from and parent.duration_to %}
+                                        {{ parent.duration_from }} to {{ parent.duration_to }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>{{ parent.number_of_participants|default:"N/A" }}</td>
+                            {% elif selected_form == 'program_offered' %}
+                                <td>{{ parent.programs_offered|default:"N/A" }}</td>
+                                <td>{{ parent.course_code|default:"N/A" }}</td>
+                                <td>{{ parent.year_of_offering|default:"N/A" }}</td>
+                                <td>{{ parent.students_enrolled|default:"N/A" }} enrolled</td>
+                            {% elif selected_form == 'competitive_examination' %}
+                                <td>{{ parent.name_of_the_activity|default:"N/A" }}</td>
+                                <td>{{ parent.year_of_activity|default:"N/A" }}</td>
+                                <td>{{ parent.number_of_students_attended|default:"N/A" }}</td>
+                                <td>{{ parent.number_of_students_placed|default:"N/A" }}</td>
+                            {% elif selected_form == 'projects' %}
+                                <td>{{ parent.course_name|default:"N/A" }}</td>
+                                <td>{{ parent.created_on|default:"N/A" }}</td>
+                            {% elif selected_form == 'career_counseling' %}
+                                <td>{{ parent.counseling_detail|default:"N/A" }}</td>
+                                <td>{{ parent.year_of_activity|default:"N/A" }}</td>
+                                <td>{{ parent.number_of_students_placed|default:"N/A" }}</td>
+                            {% elif selected_form == 'collaborative_students' %}
+                                <td>{{ parent.activity_title|default:"N/A" }}</td>
+                                <td>{{ parent.agency_name|default:"N/A" }}</td>
+                                <td>{{ parent.year|default:"N/A" }}</td>
+                            {% elif selected_form == 'Extentions' %}
+                                <td>{{ parent.name_of_the_activity|default:"N/A" }}</td>
+                                <td>{{ parent.year_of_activity|default:"N/A" }}</td>
+                                <td>{{ parent.name_of_the_scheme|default:"N/A" }}</td>
+                            {% elif selected_form == 'Collaborative_Faculty' %}
+                                <td>{{ parent.activity_title|default:"N/A" }}</td>
+                                <td>{{ parent.participant_name|default:"N/A" }}</td>
+                                <td>{{ parent.collaboration_year|default:"N/A" }}</td>
+                            {% elif selected_form == 'governments_grants' %}
+                                <td>{{ parent.department_of_principal_investigator|default:"N/A" }}</td>
+                                <td>{{ parent.name_of_funding_agency|default:"N/A" }}</td>
+                                <td>{{ parent.amount_sanctioned|default:"N/A" }}</td>
+                                <td>{{ parent.year_of_award|default:"N/A" }}</td>
+                            {% else %}
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            {% endif %}
+                            <td>
+                                <span style="color: #27ae60; font-weight: 600;">●</span> Active
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if parents|length > 10 %}
+            <div style="padding: 15px; text-align: center; background: #f8f9fa; color: #7f8c8d; font-size: 12px;">
+                Showing 10 of {{ parents|length }} records. Use export for complete data.
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="no-data">
+                <div>📊</div>
+                <div style="font-size: 16px; margin-bottom: 10px;">No data found</div>
+                <div style="font-size: 13px;">Try adjusting your filters to see results</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar
+        const toggleBtn = document.getElementById('toggleBtn');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const filterToggle = document.getElementById('filterToggle');
+        const filterForm = document.getElementById('filterForm');
+        const clearFiltersBtn = document.getElementById('clearFilters');
+        
+        // Toggle sidebar when filter button is clicked
+        filterToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+            updateFilterToggleText();
+            toggleBtn.innerHTML = sidebar.classList.contains('show') ? '❮' : '❯';
+        });
+        
+        // Toggle sidebar with arrow button
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+            updateFilterToggleText();
+            toggleBtn.innerHTML = sidebar.classList.contains('show') ? '❮' : '❯';
+        });
+        
+        // Hide sidebar after applying filters
+        filterForm.addEventListener('submit', () => {
+            sidebar.classList.remove('show');
+            updateFilterToggleText();
+            toggleBtn.innerHTML = '❯';
+        });
+        
+        // Clear all filters
+        clearFiltersBtn.addEventListener('click', () => {
+            // Reset form fields
+            document.getElementById('department').value = '';
+            document.getElementById('staff_id').value = '';
+            document.getElementById('staff_name').value = '';
+            document.getElementById('year').value = '';
+            document.getElementById('form_type').value = '';
+            
+            // Clear participation checkboxes
+            const checkboxes = document.querySelectorAll('input[name="options"]');
+            checkboxes.forEach(cb => cb.checked = false);
+            updateSelectedOptionsText();
+            
+            // Hide participation options
+            document.getElementById('participationOptions').style.display = 'none';
+            
+            // Remove apply_filter parameter and submit
+            const url = new URL(window.location.href);
+            url.searchParams.delete('apply_filter');
+            window.location.href = url.toString();
+        });
+        
+        // Update filter toggle text based on sidebar state
+        function updateFilterToggleText() {
+            filterToggle.innerHTML = sidebar.classList.contains('show') 
+                ? '<i>📊</i> Hide Filters' 
+                : '<i>📊</i> Show Filters';
+        }
+        
+        // Auto-hide sidebar on mobile
+        function checkScreenSize() {
+            if (window.innerWidth < 768) {
+                sidebar.classList.remove('show');
+                updateFilterToggleText();
+                toggleBtn.innerHTML = '❯';
+            }
+        }
+
+        // Staff ID and Name linking
+        const staffIdSelect = document.getElementById('staff_id');
+        const staffNameSelect = document.getElementById('staff_name');
+        const departmentSelect = document.getElementById('department');
+    
+        if(staffIdSelect && staffNameSelect){
+            staffIdSelect.addEventListener('change', () => {
+                staffNameSelect.selectedIndex = staffIdSelect.selectedIndex;
+                if(departmentSelect){ 
+                    departmentSelect.value = staffIdSelect.options[staffIdSelect.selectedIndex].dataset.department || ''; 
+                }
+            });
+            staffNameSelect.addEventListener('change', () => {
+                staffIdSelect.selectedIndex = staffNameSelect.selectedIndex;
+                if(departmentSelect){ 
+                    departmentSelect.value = staffNameSelect.options[staffNameSelect.selectedIndex].dataset.department || ''; 
+                }
+            });
+        }
+    
+        // Department filtering for NAAC
+        if(departmentSelect){
+            departmentSelect.addEventListener('change', () => {
+                const dept = departmentSelect.value;
+                for(let i=0; i<staffIdSelect.options.length; i++){
+                    const show = dept === '' || staffIdSelect.options[i].dataset.department === dept;
+                    staffIdSelect.options[i].style.display = show ? 'block' : 'none';
+                    staffNameSelect.options[i].style.display = show ? 'block' : 'none';
+                }
+            });
+        }
+    
+        // Show/hide participation options based on form type
+        const formTypeSelect = document.getElementById('form_type');
+        const participationOptions = document.getElementById('participationOptions');
+        
+        if(formTypeSelect && participationOptions){
+            formTypeSelect.addEventListener('change', function() {
+                if(this.value === 'participations') {
+                    participationOptions.style.display = 'block';
+                } else {
+                    participationOptions.style.display = 'none';
+                    participationMenu.classList.remove('show');
+                    participationToggle.classList.remove('active');
+                    const checkboxes = participationMenu.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(cb => cb.checked = false);
+                    updateSelectedOptionsText();
+                }
+            });
+    
+            if(formTypeSelect.value === 'participations'){ 
+                participationOptions.style.display = 'block'; 
+            }
+        }
+    
+        // Enhanced dropdown functionality
+        const participationToggle = document.getElementById('participationToggle');
+        const participationMenu = document.getElementById('participationMenu');
+        const selectedOptionsText = document.getElementById('selectedOptionsText');
+        const selectAllBtn = document.getElementById('selectAllBtn');
+    
+        if(participationToggle && participationMenu){
+            participationToggle.addEventListener('click', function(e){
+                e.stopPropagation();
+                participationMenu.classList.toggle('show');
+                participationToggle.classList.toggle('active');
+            });
+    
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                participationMenu.classList.remove('show');
+                participationToggle.classList.remove('active');
+            });
+    
+            // Update selected options text
+            const checkboxes = participationMenu.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.addEventListener('change', updateSelectedOptionsText));
+    
+            // Select All functionality
+            selectAllBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                
+                checkboxes.forEach(cb => {
+                    cb.checked = !allChecked;
+                });
+                
+                updateSelectedOptionsText();
+                selectAllBtn.textContent = allChecked ? 'Select All' : 'Unselect All';
+            });
+    
+            // Prevent dropdown close when clicking inside
+            participationMenu.addEventListener('click', e => e.stopPropagation());
+        }
+    
+        function updateSelectedOptionsText(){
+            const checkboxes = document.querySelectorAll('#participationMenu input[type="checkbox"]');
+            const selected = Array.from(checkboxes).filter(cb => cb.checked);
+            const selectedCount = document.querySelector('.selected-count');
+            const selectAllBtn = document.getElementById('selectAllBtn');
+            
+            // Update select all button text
+            if (selectAllBtn) {
+                const allChecked = checkboxes.length > 0 && selected.length === checkboxes.length;
+                selectAllBtn.textContent = allChecked ? 'Unselect All' : 'Select All';
+            }
+            
+            if(selected.length === 0) {
+                selectedOptionsText.textContent = 'Select participation types';
+                if(selectedCount) selectedCount.remove();
+            } else if(selected.length === 1) {
+                selectedOptionsText.textContent = selected[0].nextElementSibling.textContent;
+                if(selectedCount) selectedCount.remove();
+            } else {
+                selectedOptionsText.textContent = selected.length + ' types selected';
+                if(!selectedCount) {
+                    const countBadge = document.createElement('span');
+                    countBadge.className = 'selected-count';
+                    countBadge.textContent = selected.length;
+                    participationToggle.appendChild(countBadge);
+                } else {
+                    selectedCount.textContent = selected.length;
+                }
+            }
+        }
+    
+        // Initialize selected options text
+        if(selectedOptionsText){ 
+            updateSelectedOptionsText(); 
+        }
+        
+        window.addEventListener('resize', checkScreenSize);
+        checkScreenSize(); // Initial check
+        updateFilterToggleText(); // Initial text update
+    </script>
+</body>
+</html>

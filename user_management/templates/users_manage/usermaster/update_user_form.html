@@ -1,0 +1,117 @@
+{% extends 'con_menus.html' %}
+
+{% block content %}
+
+    <style>
+        input[readonly], textarea[readonly] {
+              background-color: #e9ecef !important;
+              opacity: 1;
+          }
+
+    </style>
+
+    
+<h4 class="fw-bold py-3 mb-4">Update 
+</h4>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+            
+            <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ obj.username }}"
+                       {% if not create_user_config %}readonly{% endif %} required>
+            </div>
+
+                <div class="mb-3 col-md-6" id="dbCol">
+                    <label for="dbConnection" class="form-label">Status</label>
+                    <select class="form-control" id="reporting" name="status" {% if not create_user_config %}readonly{% endif %}>
+                        <option value="active" {% if obj.active %}selected{% endif %}>Active</option>
+                        <option value="inactive" {% if not obj.active %}selected{% endif %}>In-Active</option>
+                    </select>
+                </div>
+
+
+                   <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">firstname</label>
+                <input type="text" class="form-control" id="firstname" name="firstname" value="{{ obj.first_name }}" {% if not create_user_config %}readonly{% endif %} required>
+            </div>
+
+            <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">lastname</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ obj.last_name }}" {% if not create_user_config %}readonly{% endif %} required>
+            </div>
+
+                <div class="mb-3 col-md-6" id="dbCol">
+                    <label class="form-label">usertype</label>
+                    <select class="form-control" id="usertype" name="usertype" {% if not create_user_config %}readonly{% endif %} required>
+                        {% for ustc in user_type_choices %}
+                            {% if ustc != "admin" or user.first_name == "admin" or user.username == "admin" %}
+                                <option value="{{ ustc }}" {% if ustc == obj.user_type %}selected{% endif %}>
+                                    {{ ustc }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">email</label>
+                <input type="text" class="form-control" id="email" name="email" value="{{ obj.email }}" {% if not create_user_config %}readonly{% endif %} required>
+            </div>
+
+
+
+                <div class="col-md-6 mb-3">
+                    <label for="select2Success" class="form-label">User Role</label>
+                    <div class="select2-info">
+                        <select id="userrole" name="userrole" class="select2 form-select" multiple required>
+                            {% for urole in user_role_list %}
+                                <option value="{{ urole.psk_id }}"
+                                        {% if urole.psk_id in current_role %}selected{% endif %}>
+                                    {{ urole.role }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+
+            
+            
+
+        <div class="mb-3 col-md-6" id="dbCol">
+    <label for="dbConnection" class="form-label">reporting to</label>
+    <select class="form-control" id="reporting" name="reporting" {% if not create_user_config %}readonly{% endif %}>
+        <option value="{{ obj.reporting_to }}">{{ obj.reporting_to }}</option>
+        {% for userna in users_names_list %}
+            {% if obj.username != userna %}
+                <option value="{{ userna }}">{{ userna }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>
+
+
+
+
+
+            <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+</div>
+
+
+    
+
+
+{% endblock content %}
+

@@ -1,0 +1,66 @@
+{% extends 'con_menus.html' %}
+
+{% block content %}
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h5 class="fw-bold">Create Role</h5>
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+
+            <div class="mb-3" id="dbCol">
+                <label class="form-label">Role Name</label>
+                <input type="text" class="form-control" id="rolename" name="rolename" required>
+            </div>
+            
+            
+                <div class="mb-3" id="dbCol">
+                    <label for="dbConnection" class="form-label">user privilege</label>
+                    <div class="">
+                        <div class="list-group">
+                            {% for obj in user_privileges %}
+                            <label class="list-group-item">
+                                {% for menupre in menu_privilege_tbl_data %}
+                                    {% if obj.menu_privilege|add:0 == menupre.psk_id %}
+                                 <input class="form-check-input me-1 userpri-checkbox" name="userpri" type="checkbox" value="{{ obj.menu_privilege }}">
+                                {{ menupre.menu_privilege_name }}
+{% endif %}
+                                    {% endfor %}
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            
+{#                       <div class="mb-3 col-md-6">#}
+{#                <label class="form-label">Dashboard Name</label>#}
+{#                <input type="text" class="form-control" id="dashboard_name" name="dashboard_name" required>#}
+{#            </div>#}
+{#            #}
+{#                       <div class="mb-3 col-md-6">#}
+{#                <label class="form-label">Dashboard Url</label>#}
+{#                <input type="text" class="form-control" id="dashboard_url" name="dashboard_url" required>#}
+{#            </div>#}
+            
+            
+         
+
+            <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
+{% endblock content %}
+
+
+
+

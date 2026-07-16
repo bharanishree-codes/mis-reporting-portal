@@ -1,0 +1,139 @@
+{% extends "con_menus.html" %}
+{% load static %}
+{% block content %}
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+{##}
+{#<h4 class="fw-bold py-3 mb-4">Settings Form</h4>#}
+
+        <div class="card mb-4">
+            <h5 class="card-header">Settings Form</h5>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+
+                        <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">Application Name</label>
+                            <input type="text" class="form-control" value="{{ obj.application_name }}" id="app_name"
+                                   name="app_name">
+                        </div>
+
+
+                        <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">Api Url</label>
+                            <input type="text" class="form-control" value="{{ obj.application_url }}" id="api_url"
+                                   name="api_url">
+                        </div>
+
+                    
+                    <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">Home Page Name</label>
+                            <input type="text" class="form-control" value="{{ obj.home_page_name }}" id="home_page_name"
+                                   name="home_page_name">
+                        </div>
+                    
+
+                        <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">Home Page Url</label>
+                            <input type="text" class="form-control" value="{{ obj.home_page_url }}" id="home_page_url"
+                                   name="home_page_url">
+                        </div>
+                    
+                      
+
+                        <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">Favicon Caption</label>
+                            <input type="text" class="form-control" value="{{ obj.favicon_name }}" id="favicon_caption"
+                                   name="favicon_caption">
+                        </div>
+
+
+                        <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">Favicon Logo</label>
+                            {% if obj.favicon_logo %}
+                                <img src="{{ obj.favicon_logo }}" alt="Current Favicon" style="max-height: 50px;">
+                            {% endif %}
+                            <input type="file" class="form-control" id="favicon_file" name="favicon_file">
+                        </div>
+
+                       
+
+                        <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">App bar Minimize Logo</label>
+                            {% if obj.home_page_logo %}
+                                <img src="{{ obj.home_page_logo }}" alt="Current Favicon" style="max-height: 50px;">
+                            {% endif %}
+                            <input type="file" class="form-control" id="home_page_logo" name="home_page_logo">
+                        </div>
+
+                        <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">App Bar Standard Logo</label>
+                            {% if obj.app_bar_logo %}
+                                <img src="{{ obj.app_bar_logo }}" alt="Current Favicon" style="max-height: 50px;">
+                            {% endif %}
+                            <input type="file" class="form-control" id="app_bar_logo" name="app_bar_logo">
+                        </div>
+                    
+                    
+                     <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">Login Page Logo</label>
+                            {% if obj.login_page_logo %}
+                                <img src="{{ obj.login_page_logo }}" alt="Current Favicon" style="max-height: 50px;">
+                            {% endif %}
+                            <input type="file" class="form-control" id="login_page_logo" name="login_page_logo">
+                        </div>
+
+                        <div class="mb-3 col-md-6" id="dbCol">
+                            <label class="form-label">Login Page Image</label>
+                            {% if obj.login_page %}
+                                <img src="{{ obj.login_page }}" alt="Current Favicon" style="max-height: 50px;">
+                            {% endif %}
+                            <input type="file" class="form-control" id="login_page" name="login_page">
+                        </div>
+
+
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    
+
+    
+{#    <div class="col-lg-4 col-md-4 order-1">#}
+{#    <div class="row">#}
+{#         <div class="col">#}
+{#    <div class="card w-50 h-60">#}
+{#         {% if obj.favicon_logo %}#}
+{#      <img class="card-img-top" src="{{ obj.favicon_logo }}" alt="Card image cap">#}
+{#        {% else %}#}
+{#      <img class="card-img-top" src="{% static 'assets/img/no_img.jpg' %}" alt="Card image cap">#}
+{#        {% endif %}#}
+{#      <div class="card-body">#}
+{#        <h5 class="card-title">Favicon Logo</h5>#}
+{#        <a href="#" class="btn btn-sm btn-primary btn-icon"><i class="bx bxs-edit"></i></a>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{##}
+{#    </div>#}
+{#  </div>#}
+
+
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+    <script>
+    new MultiSelectTag('userrole')  // id
+</script>
+
+
+{% endblock content %}
+

@@ -1,0 +1,187 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<div class="d-flex justify-content-between align-items-center py-3 mb-4">
+    <h4 class="fw-bold">Add Participation Details</h4>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <!-- Show all selected options and create fields for each -->
+    {% for option in selected_options %}
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>{{ option }}</h5>
+        </div>
+        <div class="card-body">
+            {% if option == 'Board of Studies' %}
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="board_university">Name of the Board / University</label>
+                    <input type="text" name="board_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="board_designation">Nature of Post or Designation</label>
+                    <input type="text" name="board_designation" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="board_of_studies_file">Upload Proof of Document</label>
+                    <input type="file" name="board_of_studies_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            
+            {% elif option == 'Question Paper Setting' %}
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="qp_university">Name of the University / College</label>
+                    <input type="text" name="qp_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="qp_subject">Subject</label>
+                    <input type="text" name="qp_subject" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="question_paper_setting_file">Upload Communication Letter</label>
+                    <input type="file" name="question_paper_setting_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            
+            {% elif option == 'Evaluation' %}
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="eval_university">Name of the University / College</label>
+                    <input type="text" name="eval_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="eval_subject">Role/Subject</label>
+                    <input type="text" name="eval_subject" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="evaluation_file">Upload Proof of Document</label>
+                    <input type="file" name="evaluation_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            
+            {% elif option == 'Design and Development of Curriculum for ADD-On' %}
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="design_development_university">Name of the University / College</label>
+                    <input type="text" name="design_development_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="design_development_addon">Name of the Addon</label>
+                    <input type="text" name="design_development_addon" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="design_development_file">Upload Proof of Document</label>
+                    <input type="file" name="design_development_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            
+            {% elif option == 'Certificate Courses' %}
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="certificate_university">Name of the University / College</label>
+                    <input type="text" name="certificate_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="certificate_course">Name of the Course</label>
+                    <input type="text" name="certificate_course" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="certificate_courses_file">Upload Proof of Document</label>
+                    <input type="file" name="certificate_courses_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            
+            {% elif option == 'External Examiner' %}
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="external_examiner_university">Name of the University / College</label>
+                    <input type="text" name="external_examiner_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="external_examiner_file">Upload Communication Letter</label>
+                    <input type="file" name="external_examiner_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            
+            {% elif option == 'Conference' %}
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="conference_university">Name of the Conference</label>
+                    <input type="text" name="conference_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="conference_name">Role</label>
+                    <input type="text" name="conference_name" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="conference_file">Upload Proof of Document</label>
+                    <input type="file" name="conference_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            
+            {% elif option == 'Seminar' %}
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="seminar_university">Name of the Seminar</label>
+                    <input type="text" name="seminar_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="seminar_name">Role</label>
+                    <input type="text" name="seminar_name" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="seminar_file">Upload Proof of Document</label>
+                    <input type="file" name="seminar_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            
+            {% elif option == 'Workshop' %}
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="workshop_university">Name of the Workshop</label>
+                    <input type="text" name="workshop_university" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="workshop_name">Role</label>
+                    <input type="text" name="workshop_name" class="form-control" required>
+                </div>
+                <div class="mb-3 col-md-4">
+                    <label for="workshop_file">Upload Proof of Document</label>
+                    <input type="file" name="workshop_file" class="form-control" accept="application/pdf, image/jpeg">
+                    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    
+    <br/>
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">Save All Details</button>
+        <a href="{% url 'create_participation' %}">
+            <button type="button" class="btn btn-md btn-secondary">Cancel</button>
+        </a>
+    </div>
+</form>
+
+{% endblock content %}

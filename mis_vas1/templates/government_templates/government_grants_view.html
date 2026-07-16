@@ -1,0 +1,97 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- External Stylesheet for Multi-Select Tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h4 class="fw-bold py-3 mb-4">Government and non-governmental Details</h4>
+
+<!-- Collaborative Activity Information -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Department Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="department_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" value="{{ government_grants.department_name }}" required readonly>
+                </div>
+
+                <!-- Department Code -->
+                <div class="mb-3 col-md-3">
+                    <label for="department_code" class="form-label">Department Code</label>
+                    <input type="text" class="form-control" id="department_code" value="{{ government_grants.department_code }}" required readonly>
+                </div>
+
+                <!-- Department of Principal Investigator -->
+                <div class="mb-3 col-md-3">
+                    <label for="department_of_principal_investigator" class="form-label">Department of Principal Investigator</label>
+                    <input type="text" class="form-control" id="department_of_principal_investigator" value="{{ government_grants.department_of_principal_investigator }}" required readonly>
+                </div>
+
+                <!-- Amount Sanctioned -->
+                <div class="mb-3 col-md-3">
+                    <label for="amount_sanctioned" class="form-label">Amount Sanctioned</label>
+                    <input type="number" class="form-control" id="amount_sanctioned" value="{{ government_grants.amount_sanctioned }}" required readonly>
+                </div>
+
+                <!-- Name of Funding Agency -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_funding_agency" class="form-label">Name of Funding Agency</label>
+                    <input type="text" class="form-control" id="name_of_funding_agency" value="{{ government_grants.name_of_funding_agency }}" required readonly>
+                </div>
+
+                <!-- Name of Principal Investigator -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_principal_investigator" class="form-label">Name of Principal Investigator</label>
+                    <input type="text" class="form-control" id="name_of_principal_investigator" value="{{ government_grants.name_of_principal_investigator }}" required readonly>
+                </div>
+
+                <!-- Project Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="project_name" class="form-label">Project Name</label>
+                    <input type="text" class="form-control" id="project_name" value="{{ government_grants.project_name }}" required readonly>
+                </div>
+
+                <!-- Duration Start Date -->
+                <div class="mb-3 col-md-3">
+                    <label for="duration_start_date" class="form-label">Duration Start Date</label>
+                    <input type="date" class="form-control" id="duration_start_date" value="{{ government_grants.duration_start_date }}" required readonly>
+                </div>
+
+                <!-- Duration End Date -->
+                <div class="mb-3 col-md-3">
+                    <label for="duration_end_date" class="form-label">Duration End Date</label>
+                    <input type="date" class="form-control" id="duration_end_date" value="{{ government_grants.duration_end_date }}" required readonly>
+                </div>
+
+                <!-- Year of Award -->
+                <div class="mb-3 col-md-3">
+                    <label for="year_of_award" class="form-label">Year of Award</label>
+                    <input type="text" class="form-control" id="year_of_award" value="{{ government_grants.year_of_award }}" required readonly>
+                </div>
+
+                <!-- Government Type -->
+                <div class="mb-3 col-md-3">
+                    <label for="government_type" class="form-label">Government Type</label>
+                    <input type="text" class="form-control" id="government_type" value="{{ government_grants.government_type }}" required readonly>
+                </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-end">
+                <a class="btn btn-primary" href="{% url 'government_grants_update' government_grants.psk_id %}"><i class="bx bxs-edit">Edit</i></a>
+                <a class="btn btn-primary" href="{% url 'government_grants_list' %}"><span class="tf-icons bx bx-list-plus">List</span></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,158 @@
+<!-- sidebar.html -->
+{% load static %}
+<div class="sidebar" id="sidebar">
+    <!-- Header with Toggle -->
+    <div class="sidebar-header">
+        <h5 class="mb-1">
+            <i class="fas fa-filter me-2"></i>Data Filtering
+        </h5>
+        <small class="text-muted">Unified Data Dashboard</small>
+        <div class="toggle-btn" id="toggleBtn">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+    </div>
+
+    <div class="sidebar-content">
+        <!-- User Info -->
+        <div class="user-info-compact">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-details">
+                <div class="user-name">{{ username }}</div>
+                <div class="user-role">{{ user_role }}</div>
+                {% if user_role == "Hod" %}
+                <div class="user-role">{{ department_name }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-item">
+                <div class="stat-number">{{ total_parent_records }}</div>
+                <div class="stat-label">Parent Records</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ total_child_records }}</div>
+                <div class="stat-label">Child Records</div>
+            </div>
+        </div>
+
+        <form method="get" id="filterForm">
+            <!-- Department Filter (NAAC only) -->
+            {% if user_role == "Naac" %}
+            <div class="filter-section">
+                <h6><i class="fas fa-building me-2"></i>Department</h6>
+                <select class="form-select selectpicker" id="department" name="department" data-live-search="true" data-width="100%" title="Select department...">
+                    <option value="">All Departments</option>
+                    {% for department in departments %}
+                    <option value="{{ department }}" {% if department == selected_department %}selected{% endif %}>
+                        {{ department }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+
+            <!-- Staff Filter -->
+            <div class="filter-section">
+                <h6><i class="fas fa-users me-2"></i>Staff Member</h6>
+                {% if user_role == "Staff" %}
+                <input type="text" class="form-control" value="{{ username }}" readonly>
+                <input type="hidden" name="stf_id" value="{{ username }}">
+                <small class="text-muted mt-1 d-block">Viewing own data only</small>
+                {% else %}
+                <select class="form-select selectpicker" id="stf_id" name="stf_id" data-live-search="true" data-width="100%" title="Select staff members..." multiple>
+                    {% for staff_id in staff_ids %}
+                    <option value="{{ staff_id }}" {% if staff_id in selected_stf_ids %}selected{% endif %}>
+                        {{ staff_id }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% if user_role == "Hod" %}
+                <small class="text-muted mt-1 d-block">Department: {{ department_name }}</small>
+                {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- Form Selection Filter -->
+            <div class="filter-section">
+                <h6><i class="fas fa-list me-2"></i>Select Forms</h6>
+                <select class="form-select selectpicker" name="forms" data-width="100%" title="Select forms to display..." multiple>
+                    {% for form in form_options %}
+                    <option value="{{ form.key }}" {% if form.key in selected_forms %}selected{% endif %}>
+                        {{ form.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="filter-section">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i>Apply Filters
+                </button>
+                <button type="button" class="btn btn-outline-primary" onclick="clearFilters()">
+                    <i class="fas fa-times me-2"></i>Clear Filters
+                </button>
+
+                {% if filter_applied %}
+                <div class="export-buttons">
+                    <button type="submit" class="btn btn-success" name="export" value="excel">
+                        <i class="fas fa-file-excel me-2"></i>Excel
+                    </button>
+                    <button type="submit" class="btn btn-danger" name="export" value="pdf">
+                        <i class="fas fa-file-pdf me-2"></i>PDF
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Active Filters -->
+            {% if filter_applied %}
+            <div class="filter-section">
+                <h6><i class="fas fa-filter me-2"></i>Active Filters</h6>
+                <div class="active-filters">
+                    {% if selected_stf_ids %}
+                    <span class="filter-badge">Staff: {{ selected_stf_ids|join:", " }}</span>
+                    {% elif user_role == "Staff" %}
+                    <span class="filter-badge">Staff: {{ username }}</span>
+                    {% endif %}
+                    {% if selected_department %}
+                    <span class="filter-badge">Department: {{ selected_department }}</span>
+                    {% endif %}
+                    {% for form in selected_forms %}
+                        {% for form_option in form_options %}
+                            {% if form_option.key == form %}
+                            <span class="filter-badge">Form: {{ form_option.name }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Collapsed State Icons -->
+    <div class="collapsed-icon">
+        <div class="icon-item" onclick="toggleSidebar()" title="Expand Dashboard">
+            <i class="fas fa-filter"></i>
+        </div>
+        <div class="icon-item" onclick="document.getElementById('filterForm').submit()" title="Apply Filters">
+            <i class="fas fa-search"></i>
+        </div>
+        <div class="icon-item" onclick="clearFilters()" title="Clear Filters">
+            <i class="fas fa-times"></i>
+        </div>
+        {% if filter_applied %}
+        <div class="icon-item" onclick="exportData('excel')" title="Export Excel">
+            <i class="fas fa-file-excel"></i>
+        </div>
+        <div class="icon-item" onclick="exportData('pdf')" title="Export PDF">
+            <i class="fas fa-file-pdf"></i>
+        </div>
+        {% endif %}
+    </div>
+</div>

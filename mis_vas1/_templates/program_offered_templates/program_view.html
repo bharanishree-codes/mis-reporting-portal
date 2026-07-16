@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<!-- External Stylesheet for Multi-Select Tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h4 class="fw-bold py-3 mb-4">Workshop/Seminar Details</h4>
+
+<!-- Workshop/Seminar Information -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+
+                <!-- Staff Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" 
+                        value="{{ request.POST.staff_name|default:program.staff_name }}" required disabled>
+                </div>
+
+                <!-- Staff ID -->
+                <div class="mb-3 col-md-3">
+                    <label for="staff_id" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="staff_id" name="staff_id" 
+                        value="{{ request.POST.staff_id|default:program.staff_id }}" required disabled>
+                </div>
+
+                <!-- Department Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="department" class="form-label">Department</label>
+                    <input type="text" class="form-control" id="department" name="department" 
+                        value="{{ request.POST.department|default:program.department }}" required disabled>
+                </div>
+
+                <!-- Programs Offered -->
+                <div class="mb-3 col-md-3">
+                    <label for="programs_offered" class="form-label">Programs Offered</label>
+                    <input type="text" class="form-control" id="programs_offered" name="programs_offered" 
+                        value="{{ request.POST.programs_offered|default:program.programs_offered }}" required disabled>
+                </div>
+
+                <!-- Course Code -->
+                <div class="mb-3 col-md-3">
+                    <label for="course_code" class="form-label">Course Code</label>
+                    <input type="text" class="form-control" id="course_code" name="course_code" 
+                        value="{{ request.POST.course_code|default:program.course_code }}" required disabled>
+                </div>
+
+                <!-- Course Duration -->
+                <div class="mb-3 col-md-3">
+                    <label for="course_duration" class="form-label">Course Duration</label>
+                    <input type="text" class="form-control" id="course_duration" name="course_duration" 
+                        value="{{ request.POST.course_duration|default:program.course_duration }}" required disabled>
+                </div>
+
+                <!-- Times Offered in Year -->
+                <div class="mb-3 col-md-3">
+                    <label for="times_offered_in_year" class="form-label">Times Offered in Year</label>
+                    <input type="text" class="form-control" id="times_offered_in_year" name="times_offered_in_year" 
+                        value="{{ request.POST.times_offered_in_year|default:program.times_offered_in_year }}" required disabled>
+                </div>
+
+                <!-- Students Completed -->
+                <div class="mb-3 col-md-3">
+                    <label for="students_completed" class="form-label">Students Completed</label>
+                    <input type="text" class="form-control" id="students_completed" name="students_completed" 
+                        value="{{ request.POST.students_completed|default:program.students_completed }}" required disabled>
+                </div>
+
+                <!-- Students Enrolled -->
+                <div class="mb-3 col-md-3">
+                    <label for="students_enrolled" class="form-label">Students Enrolled</label>
+                    <input type="text" class="form-control" id="students_enrolled" name="students_enrolled" 
+                        value="{{ request.POST.students_enrolled|default:program.students_enrolled }}" required disabled>
+                </div>
+
+                <!-- Year of Offering -->
+                <div class="mb-3 col-md-3">
+                    <label for="year_of_offering" class="form-label">Year of Offering</label>
+                    <input type="text" class="form-control" id="year_of_offering" name="year_of_offering" 
+                        value="{{ request.POST.year_of_offering|default:program.year_of_offering }}" required disabled>
+                </div>
+
+            </div>
+
+            <!-- Edit and List Buttons -->
+            <div class="text-end">
+                <a class="btn btn-primary" href="{% url 'program_update' program.psk_id %}"><i class="bx bxs-edit">Edit</i></a>
+                <a class="btn btn-primary" href="{% url 'program_list' %}"><span class="tf-icons bx bx-list-plus">List</span></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

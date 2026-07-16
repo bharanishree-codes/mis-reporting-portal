@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- External Stylesheet for Multi-Select Tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h4 class="fw-bold py-3 mb-4">Workshop/Seminar Details</h4>
+
+<!-- Workshop/Seminar Information -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label for="department_name" class="form-label">Department Name</label>
+                        <input type="text" class="form-control" id="department_name" value="{{ career_counseeling.department_name }}" required disabled>
+                    </div>
+    
+                    <div class="mb-3 col-md-4">
+                        <label for="department_code" class="form-label">Department Code</label>
+                        <input type="text" class="form-control" id="department_code" value="{{ career_counseeling.department_code }}" required disabled>
+                    </div>
+    
+
+                <div class="mb-3 col-md-4">
+                    <label for="year_of_activity" class="form-label">Year</label>
+                    <input type="date" class="form-control" id="year_of_activity" value="{{ career_counseeling.year_of_activity }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-4">
+                    <label for="counseling_detail" class="form-label">Details of career counseling</label>
+                    {% comment %} <textarea class="form-control" rows="4" cols="50" name="career_counseling_detail" value="{{ career_counseeling.counseling_detail }}" readonly>
+                    </textarea> {% endcomment %}
+
+                    <input type="text" class="form-control" id="counseling_detail" value="{{ career_counseeling.counseling_detail }}" required disabled>
+                </div>    
+                
+                <div class="mb-3 col-md-4">
+                    <label for="number_of_students_attended" class="form-label">Number of students participated in such activities</label>
+                    <input type="text" class="form-control" id="number_of_students_attended" value="{{ career_counseeling.number_of_students_attended }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-4">
+                    <label for="number_of_students_placed" class="form-label">Number of Beneficiaries</label>
+                    <input type="text" class="form-control" id="number_of_students_placed" value="{{ career_counseeling.number_of_students_placed }}" required disabled>
+                </div>
+                
+            </div>
+            <div class="text-end">
+            <a class="btn btn-primary" href="{% url 'career_counseeling_update' career_counseeling.psk_id %}"><i class="bx bxs-edit">Edit</i></a>
+            <a class="btn btn-primary" href="{% url 'career_counseeling_list' %}"><span class="tf-icons bx bx-list-plus">List</span></a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+
+    <a href="{% url 'project_view' child.participation.id %}">
+        <input type="button" value="Exit" class="btn btn-primary">
+    </a>
+<center><h4 class="fw-bold">Project Work/Field Work/Internship</h4></center>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="mb-3 col-md-6" id="dbCol">
+                    <label for="dbConnection" class="form-label">Year:</label>
+                    <input type="text" class="form-control" id="year" value="{{participation.year}}" required disabled>
+                </div>
+
+
+                <div class="mb-3 col-md-6" id="dbCol">
+                    <label for="dbConnection" class="form-label">Participated in</label>
+                    <select class="form-control" name="items" disabled multiple>
+                        {% for option in selected_options %}
+                        <option value="{{ option }}">{{ option }}</option>    
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                
+    </div>
+    </form>
+    </div>
+    </div>
+
+                <!-- <div class="mb-3">
+                <a href="{% url 'create_participation_child' participation.id %}"><input type="button" value="New" class="btn-primary"></input></a>
+                </div> -->
+
+<div class="card mt-4">
+<div class="table-responsive text-nowrap mt-3">
+<table class="table py-3" id="example">
+<thead>
+<tr>
+{% if 'Board of Studies' in selected_options %}
+<th>Name of the Board / University</th>
+<th>Nature of Post or Designation</th>
+<th>Upload Proof of Document</th>
+{% endif %}
+
+{% if 'Question Paper Setting' in selected_options %}
+<th>Name of the University / College</th>
+<th>Subject</th>
+<th>Upload Communication Letter</th>
+{% endif %}
+
+{% if 'Evaluation' in selected_options %}
+<th>Name of the University / College</th>
+<th>Subject</th>
+<th>Upload Communication Letter</th>
+{% endif %}
+
+{% if 'Design and Development of Curriculum for ADD-On' in selected_options %}
+<th>Name of the University / College</th>
+<th>Name of the Addon</th>
+<th>Upload Proof of Document</th>
+{% endif %}
+
+{% if 'Certificate Courses' in selected_options %}
+<th>Name of the University / College</th>
+<th>Name of the Course</th>
+<th>Upload Proof of Document</th>
+{% endif %}
+
+{% if 'External Examiner' in selected_options %}
+<th>Name of the University / College</th>
+<th>Upload Communication Letter</th>
+{% endif %}
+
+{% if 'Conference' in selected_options %}
+<th>Name of the University / College</th>
+<th>Name of the Conference</th>
+<th>Upload Proof of Document</th>
+{% endif %}
+
+{% if 'Seminar' in selected_options %}
+<th>Name of the University / College</th>
+<th>Name of the Seminar</th>
+<th>Upload Proof of Document</th>
+{% endif %}
+
+{% if 'Workshop' in selected_options %}
+<th>Name of the University / College</th>
+<th>Name of the Workshop</th>
+<th>Upload Proof of Document</th>
+{% endif %}
+
+<th>Actions</th>
+</tr>
+</thead>
+<tbody class="table-border-bottom-0">
+{% for child in children %}
+<tr>
+{% if 'Board of Studies' in selected_options %}
+<td>{{ child.board_university }}</td>
+<td>{{ child.board_designation }}</td>
+<td><a href="{{ child.board_upload.url }}">View</a></td>
+{% endif %}
+
+{% if 'Question Paper Setting' in selected_options %}
+<td>{{ child.qp_university }}</td>
+<td>{{ child.qp_subject }}</td>
+<td><a href="{{ child.qp_upload.url }}">View</a></td>
+{% endif %}
+
+{% if 'Evaluation' in selected_options %}
+<td>{{ child.eval_institute }}</td>
+<td>{{ child.eval_role }}</td>
+<td><a href="{{ child.eval_upload.url }}">View</a></td>
+{% endif %}
+
+{% if 'Design and Development of Curriculum for ADD-On' in selected_options %}
+<td>{{ child.curriculum_institute }}</td>
+<td>{{ child.curriculum_role }}</td>
+<td><a href="{{ child.curriculum_upload.url }}">View</a></td>
+{% endif %}
+
+{% if 'Certificate Courses' in selected_options %}
+<td>{{ child.cert_institute }}</td>
+<td>{{ child.cert_course_name }}</td>
+<td><a href="{{ child.cert_upload.url }}">View</a></td>
+{% endif %}
+
+{% if 'External Examiner' in selected_options %}
+<td>{{ child.external_institute }}</td>
+<td><a href="{{ child.external_upload.url }}">View</a></td>
+{% endif %}
+
+{% if 'Conference' in selected_options %}
+<td>{{ child.conf_name }}</td>
+<td>{{ child.conf_role }}</td>
+<td><a href="{{ child.conf_upload.url }}">View</a></td>
+{% endif %}
+
+{% if 'Seminar' in selected_options %}
+<td>{{ child.seminar_title }}</td>
+<td>{{ child.seminar_role }}</td>
+<td><a href="{{ child.seminar_upload.url }}">View</a></td>
+{% endif %}
+
+{% if 'Workshop' in selected_options %}
+<td>{{ child.workshop_title }}</td>
+<td>{{ child.workshop_role }}</td>
+<td><a href="{{ child.workshop_upload.url }}">View</a></td>
+{% endif %}
+
+<td>
+<a class="btn btn-icon btn-sm btn-primary" href="{% url 'project_child_update' child.id %}"><i class="bx bxs-edit"></i></a>
+<a class="btn btn-icon btn-sm btn-danger" href="{% url 'project_child_delete' child.id %}"><i class="bx bxs-trash"></i></a>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+    </div>
+</div>
+
+{% endblock %}

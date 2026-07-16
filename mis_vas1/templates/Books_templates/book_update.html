@@ -1,0 +1,242 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+<h4 class="fw-bold py-3 mb-4"><center>Books & Chapter Publication</center></h4>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Staff ID -->
+                <div class="mb-3 col-md-3">
+                    <label for="stf_id" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="staff_id" name="staff_id" value="{{ books.staff_id }}">
+                </div>
+
+                <!-- Staff Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="stf_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{ books.staff_name }}">
+                </div>
+
+                <!-- Department Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" name="department_name" value="{{ books.department_name }}">
+                </div>
+
+                <!-- Publication Type -->
+                <div class="mb-3 col-md-3">
+                    <label for="publication_type" class="form-label">Publication Type</label>
+                    <select class="form-control" name="publication_type" id="publication_type" multiple required>
+                        <option value="Book" {% if "Book" in books.publication_type %}selected{% endif %}>Book</option>
+                        <option value="Chapter" {% if "Chapter" in books.publication_type %}selected{% endif %}>Chapter</option>
+                    </select>
+                </div>
+
+                <!-- Title of Book/Chapter -->
+                <div class="mb-3 col-md-3">
+                    <label for="title_of_book_or_chapter" class="form-label">Title of Book / Chapter</label>
+                    <input type="text" class="form-control" id="title_of_book_or_chapter" name="title_of_book_or_chapter" value="{{ books.title_of_book_or_chapter }}" required>
+                </div>
+
+                <!-- Title of Paper -->
+                <div class="mb-3 col-md-3">
+                    <label for="title_of_paper" class="form-label">Title of Paper</label>
+                    <input type="text" class="form-control" id="title_of_paper" name="title_of_paper" value="{{ books.title_of_paper }}">
+                </div>
+
+                <!-- Title of Proceedings -->
+                <div class="mb-3 col-md-3">
+                    <label for="title_of_proceedings" class="form-label">Title of Proceedings</label>
+                    <input type="text" class="form-control" id="title_of_proceedings" name="title_of_proceedings" value="{{ books.title_of_proceedings }}">
+                </div>
+
+                <!-- Name of Conference -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_conference" class="form-label">Name of Conference</label>
+                    <input type="text" class="form-control" id="name_of_conference" name="name_of_conference" value="{{ books.name_of_conference }}">
+                </div>
+
+                <!-- Year of Publication -->
+
+{% comment %}                 
+                <div class="mb-3 col-md-3">
+                    <label for="year_of_publication" class="form-label">Year of Publication</label>
+                    <div class="input-group">
+                        <select class="form-control" id="year_of_publication" name="year_of_publication" required>
+                            <option value="{{ books.year_of_publication }}" disabled selected>{{ books.year_of_publication }}</option> <!-- Default placeholder option -->
+                            </select>
+                    </div>
+                </div> {% endcomment %}
+
+                 <div class="mb-3 col-md-3">
+                    <label for="year_of_publication" class="form-label">Year of Publication</label>
+                    <div class="input-group">
+                        <select class="form-control" id="year_of_publication" name="year_of_publication" required>
+  {% for y in year_of_publication %}
+    <option value="{{ y }}" {% if book.year_of_publication == y %}selected{% endif %}>
+      {{ y }}
+    </option>
+  {% endfor %}
+</select>
+</div>
+</div>
+
+                
+                {% comment %} <div class="mb-3 col-md-3">
+                    <label for="year_of_publication" class="form-label">Year of Publication</label>
+                    <input type="text" class="form-control" id="year_of_publication" name="year_of_publication" value="{{ books.year_of_publication }}" required>
+                </div> {% endcomment %}
+
+                <!-- National or International -->
+                <div class="mb-3 col-md-3">
+                    <label for="national_or_international" class="form-label">National or International</label>
+                    <select class="form-control" name="national_or_international" id="national_or_international" multiple required>
+                        <option value="National" {% if "National" in books.national_or_international %}selected{% endif %}>National</option>
+                        <option value="International" {% if "International" in books.national_or_international %}selected{% endif %}>International</option>
+                    </select>
+                </div>
+
+                <!-- ISBN/ISSN Number -->
+                <div class="mb-3 col-md-3">
+                    <label for="isbn_or_issn_number" class="form-label">ISBN/ISSN Number</label>
+                    <input type="text" class="form-control" id="isbn_or_issn_number" name="isbn_or_issn_number" value="{{ books.isbn_or_issn_number }}">
+                </div>
+
+                <!-- Affiliating Institute -->
+                <div class="mb-3 col-md-3">
+                    <label for="affiliating_institute" class="form-label">Affiliating Institute</label>
+                    <input type="text" class="form-control" id="affiliating_institute" name="affiliating_institute" value="{{ books.affiliating_institute }}" required>
+                </div>
+
+                <!-- Name of Publisher -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_the_publisher" class="form-label">Name of Publisher</label>
+                    <input type="text" class="form-control" id="name_of_the_publisher" name="name_of_the_publisher" value="{{ books.name_of_the_publisher }}" required>
+                </div>
+            </div>
+
+                
+                        <div class="row">
+                            {% comment %} <small class="blink" style="color: red; text-align: center;">(PDF only, Max File Size: 2 MB)</small> {% endcomment %}
+                            {% for child in child_files %}
+                                {% if forloop.counter == 1 %}
+                                    <div class="mb-3 col-md-3">
+                                        <label for="file_{{ child.psk_id }}" class="form-label">Conference Cover Page</label>
+                                        {% comment %} <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child.psk_id }}" 
+                                           class="btn btn-link" target="_blank">
+                                           <input type="button" value="View" class="btn btn-xs btn-outline-primary">
+                                        </a> {% endcomment %}
+                                        <input type="file" name="file_{{ child.psk_id }}_CCP" id="file_{{ child.psk_id }}_CCP" class="form-control" accept="application/pdf">
+                <div class="error-message" id="error-file_{{ child.psk_id }}_CCP" style="color: red;">
+                                <small style="color: grey; text-align: left; margin-left: -10px;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child.psk_id }}" class="btn btn-link" target="_blank">
+                                        {{ child.file_name }}
+                                    </a>
+                                </small>
+                            </div>
+                {% comment %} <small style="color: grey;">(PDF only, Max File Size: 2 MB)</small> {% endcomment %}
+                                    </div>
+                                {% elif forloop.counter == 2 %}
+                                    <div class="mb-3 col-md-3">
+                                        <label for="file_{{ child.psk_id }}" class="form-label">Copy of the Chapters</label>
+                                        {% comment %} <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child.psk_id }}" 
+                                           class="btn btn-link" target="_blank">
+                                           <input type="button" value="View" class="btn btn-xs btn-outline-primary">
+                                        </a> {% endcomment %}
+                                        <input type="file" name="file_{{ child.psk_id }}_CC" id="file_{{ child.psk_id }}_CC" class="form-control" accept="application/pdf">
+                                        <div class="error-message" id="error-file_{{ child.psk_id }}_CC" style="color: red;">
+                                            <small style="color: grey; text-align: left; margin-left: -10px;">
+                                                <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child.psk_id }}" class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                                            </small>
+                                        </div>                
+                                        {% comment %} <small style="color: grey;">(PDF only, Max File Size: 2 MB)</small> {% endcomment %}
+                                    </div>
+                                {% elif forloop.counter == 3 %}
+                                    <div class="mb-3 col-md-3">
+                                        <label for="file_{{ child.psk_id }}" class="form-label">Index Page</label>
+                                        {% comment %} <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child.psk_id }}" 
+                                           class="btn btn-link" target="_blank">
+                                           <input type="button" value="View" class="btn btn-xs btn-outline-primary">
+                                        </a> {% endcomment %}
+                                        <input type="file" name="file_{{ child.psk_id }}_IP" id="file_{{ child.psk_id }}_IP" class="form-control" accept="application/pdf">
+                                        <div class="error-message" id="error-file_{{ child.psk_id }}_IP" style="color: red;">
+                                            <small style="color: grey; text-align: left; margin-left: -10px;">
+                                                <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child.psk_id }}" class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                                            </small>
+                                        </div>                
+                                        {% comment %} <small style="color: grey;">(PDF only, Max File Size: 2 MB)</small> {% endcomment %}
+                                    </div>
+                                {% elif forloop.counter == 4 %}
+                                    <div class="mb-3 col-md-3">
+                                        <label for="file_{{ child.psk_id }}" class="form-label">Proof Of ISBN / ISSN Details</label>
+                                        
+                                        <input type="file" name="file_{{ child.psk_id }}_POI" id="file_{{ child.psk_id }}_POI" class="form-control" accept="application/pdf">
+                                        <div class="error-message" id="error-file_{{ child.psk_id }}_POI" style="color: red;">
+                                            <small style="color: grey; text-align: left; margin-left: -10px;">
+                                                <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child.psk_id }}" class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                                            </small>
+                                        </div>                
+                                        {% comment %} <small style="color: grey;">(PDF only, Max File Size: 2 MB)</small> {% endcomment %}
+                                        
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+                            <p></p>
+                        <div class=text-end>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a class="btn btn-primary" href="{% url 'book_list' %}">
+                                Cancel
+                            </a>
+                    </div>
+                </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <style>
+                @keyframes blink {
+                    50% {
+                        opacity: 0;
+                    }
+                }
+            
+                .blink {
+                    animation: blink 1s step-start 0s infinite;
+                }
+            </style>
+            <!-- Submit Button --><!-- Add MultiSelectTag CSS -->
+<link href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css" rel="stylesheet">
+
+<!-- MultiSelectTag Script -->
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize MultiSelectTag
+        new MultiSelectTag('publication_type');
+        new MultiSelectTag('national_or_international');
+        
+
+        
+
+       
+    // Populate dropdowns with years in descending order
+    
+
+    });
+</script>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

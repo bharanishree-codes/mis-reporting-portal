@@ -1,0 +1,83 @@
+{% extends 'con_menus.html' %}
+
+
+{% block content %}
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+
+<h5 class="fw-bold">Create User Privilege</h5>
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+
+                <div class="mb-3 col-md-6" id="dbCol">
+                    <label for="dbConnection" class="form-label">Menu Privilege</label>
+                    <select class="form-control" id="menupri" name="menupri" required>
+                        <option selected="" value="">--------- Select ---------</option>
+                        {% for obj in menu_privilege_list %}
+                            <option value="{{ obj.psk_id }}">{{ obj.menu_privilege_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+
+{#                <div class="mb-3" id="dbCol">#}
+{#                    <label for="dbConnection" class="form-label">Menu Name</label>#}
+{#                    <div class="">#}
+{#                        <div class="list-group">#}
+{#                            {% for obj in menus_name_list %}#}
+{#                            <label class="list-group-item">#}
+{#                                <input class="form-check-input me-1" name="view_menus" type="checkbox" value="{{ obj.psk_id }}">#}
+{#                                Menu Type : {{ obj.menu_type }} || Menu Name : {{ obj.menu_name }}#}
+{#                            </label>#}
+{#                            {% endfor %}#}
+{##}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+
+            
+            <div class="mb-4" id="dbCol">
+    <label for="dbConnection" class="form-label fw-bold">Select Menus</label>
+    <div class="card border rounded shadow-sm">
+        <div class="card-body p-3">
+            <div class="list-group list-group-flush">
+                {% for obj in menus_name_list %}
+                <label class="list-group-item d-flex align-items-center gap-2">
+                    <input class="form-check-input me-2" name="view_menus" type="checkbox" value="{{ obj.psk_id }}">
+                    <div>
+                        <div>{{ obj.menu_name }}</div>
+                        <small class="text-muted text-primary">Menu Type: {{ obj.menu_type }}</small>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+            <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+    <script>
+    new MultiSelectTag('userrole')  // id
+</script>
+
+
+{% endblock content %}

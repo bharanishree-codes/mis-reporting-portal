@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B2E</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link id="favicon_link"
+          rel="icon"
+          type="image/x-icon"
+          href="{{bundle.favicon_logo.url}}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/fonts/boxicons.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/css/core.css' %}"
+      class="template-customizer-core-css"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/css/theme-default.css' %}"
+      class="template-customizer-theme-css"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/libs/apex-charts/apex-charts.css' %}"
+    />
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+    <script src="{% static 'assets/js/config.js' %}"></script>
+
+      <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+    <style>
+        #example_filter {
+            padding-right: 20px;
+        }
+
+        #example_length {
+            padding-left: 20px;
+        }
+
+        #example_info {
+            padding-left: 20px;
+        }
+
+        .pagination {
+            padding-right: 20px;
+        }
+    </style>
+
+
+  </head>
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+
+            <a href="" class="app-brand-link">
+              <span id="application_name" style="font-size: 22px;" class="app-brand-text demo menu-text fw-bolder"></span>
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+              <i class="bx bx-chevron-left bx-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+            <ul class="menu-inner py-1">
+
+                <li class="menu-item" id="menu-home">
+                    <a href="{% url 'list_participations' %}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bx-food-menu'></i>
+                        <div data-i18n="usermaster">Faculty participation</div>
+                    </a>
+                </li>
+
+                <li class="menu-item" id="menu-settings">
+                    <a href="{% url 'research_list' %}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bxs-right-arrow'></i>
+                        <div data-i18n="usermaster">Research Article</div>
+                    </a>
+                </li>
+
+                <li class="menu-item" id="menu-content">
+                    <a href="{% url 'program_list' %}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bx-layer-plus'></i>
+                        <div data-i18n="usermaster">Certificate Program Offered </div>
+                    </a>
+                </li>
+
+                <li class="menu-item" id="menu-bar">
+                    <a href="{% url 'book_list' %}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bx-book-open'></i>
+                        <div data-i18n="usermaster">Books</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="menu-bars">
+                    <a href="{% url 'project_list' %}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bxs-bank'></i>
+                        <div data-i18n="usermaster">Project Work</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="menu-field">
+                    <a href="{% url 'extension_list' %}" class="menu-link">
+                        <i class='bx bxs-vial'></i>
+                        <div data-i18n="usermaster">Extension</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="menu-data">
+                    <a href="{% url 'seminar_list' %}" class="menu-link">
+                        <i class='bx bxs-send'></i>
+                        <div data-i18n="usermaster">ProjectApi</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="menu-datas">
+                    <a href="{% url 'competitve_examination_list' %}" class="menu-link">
+                        <i class='bx bxs-graduation'></i>
+                        <div data-i18n="usermaster">Competitve Examination</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="menu-icon">
+                    <a href="{% url 'career_counseeling_list' %}" class="menu-link">
+                        <i class='bx bx-layer'></i>
+                        <div data-i18n="usermaster">Career Counseeling</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="menu-element">
+                    <a href="{% url 'faculty_exchange_list' %}" class="menu-link">
+                      <i class='bx bxs-school'></i>
+                        <div data-i18n="usermaster">Faculty Exchange</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="menu-listed">
+                    <a href="{% url 'collaborative_students_list' %}" class="menu-link">
+                    <i class='bx bxs-coin-stack'></i>
+                        <div data-i18n="usermaster">collaborative_students</div>
+                    </a>
+                </li><li class="menu-item" id="menu-grants">
+                    <a href="{% url 'government_grants_list' %}" class="menu-link">
+                    <i class='bx bx-building-house'></i>
+                        <div data-i18n="usermaster">Government Grants</div>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <div class="layout-page">
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="bx bx-menu bx-sm"></i>
+              </a>
+            </div>
+               <button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button>
+          </nav>
+            <div class="content-wrapper">
+              <div class="container-xxl flex-grow-1 container-p-y">
+
+                {% if messages %}
+                  {% for message in messages %}
+                    {% if message.tags == "error" %}
+                      <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" class="bs-toast toast toast-placement-ex m-2 bg-danger top-0 end-0 fade show">
+                        <div class="toast-header">
+                          <i class='bx bxs-error-alt'></i>&nbsp;
+                          <div class="me-auto fw-semibold">Error</div>
+                          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">{{ message }}</div>
+                      </div>
+                    {% elif message.tags == "success" %}
+                    <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" class="bs-toast toast toast-placement-ex m-2 bg-success top-0 end-0 fade show">
+                      <div class="toast-header">
+                        <i class='bx bx-list-check'></i>&nbsp;
+                        <div class="me-auto fw-semibold">Success</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                      </div>
+                      <div class="toast-body">{{ message }}</div>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+
+                {% block content %}
+                {% endblock content %}
+              </div>
+            </div>
+      </div>
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+
+    <div class="modal fade" id="modalToggle" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalToggleLabel">{{ username }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                     <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">Current Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="password"
+                                        class="form-control"
+                                        name="password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                    <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">New Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="new_password"
+                                        class="form-control"
+                                        name="new_password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                    <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">Confirm Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="confirm_password"
+                                        class="form-control"
+                                        name="confirm_password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+                </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let currentMenu = document.getElementById("{{ menu }}");
+        if (currentMenu) {
+            currentMenu.classList.add("active");
+            let parentMenu = currentMenu.closest('.menu-sub');
+            if (parentMenu) {
+                let parentMenuItem = parentMenu.closest('.menu-item');
+                if (parentMenuItem) {
+                    parentMenuItem.classList.add("open");
+                    // Add the active class to the parent menu as well
+                    parentMenuItem.classList.add("active");
+                }
+            }
+        }
+    });
+</script>
+        <script>
+            
+           
+             let user_id = {{ user_id }}
+  function getBundleSettings() {
+    
+    $.ajax({
+        type: 'GET',
+      url: "",
+        data: {'user_id': user_id},
+      dataType: "json",
+      success: function(data) {
+          
+        $('#usernamedata').text(data.username);
+        $('#usertypedata').text(data.user_type);
+
+       
+
+           if (data.photo_url && data.photo_url !== "") {
+                $('#uploadedAvatar').attr('src', data.photo_url);
+                $('#uploadedAvatar2').attr('src', data.photo_url);
+            } else {
+                $('#uploadedAvatar').attr('src', "{% static 'assets/img/avatars/default.png' %}");
+                $('#uploadedAvatar2').attr('src', "{% static 'assets/img/avatars/default.png' %}");
+            }
+
+
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Error:", textStatus, errorThrown);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+      getBundleSettings();
+  });
+</script>
+    <script>
+  function getBundleSettings2() {
+    $.ajax({
+      url: "",
+      dataType: "json",
+      success: function(data) {
+          let newTitle = data.favicon_caption
+           $("#favicon_link").attr("href", data.favicon_logo);
+          document.title = newTitle;
+          $('#application_name').text(data.application_name);
+
+        console.log(data);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Error:", textStatus, errorThrown);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+      getBundleSettings2();
+  });
+</script>
+
+
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/dashboards-analytics.js' %}"></script>
+    <script src="{% static 'assets/js/ui-toasts.js' %}"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+     <script src=" https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+        <script>
+            new DataTable('#example');
+        </script>
+  </body>
+</html>

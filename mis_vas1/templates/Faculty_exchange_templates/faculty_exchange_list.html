@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+                <h4 class="fw-bold py-3 mb-2"><center>Number of Collaborative activities for Faculty Exchange</center></h4>
+{% if not from_dashboard %}
+    <a href="{% url 'faculty_exchange_create' %}" class="btn btn-primary">
+        <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add
+    </a>
+{% endif %}
+<div class="card mt-4">
+    <div class="table-responsive text-nowrap mt-3">
+        <table class="table py-3" id="example">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Department Name</th>
+                    <th>Staff ID</th>
+                    <th>Staff Name</th>
+                    <th>Title of the Activity</th>
+                    <th>Name of the Agency</th>
+                    {% comment %} <th>Phone Number of the Collaborating Agency</th> {% endcomment %}
+                    <th>Name of the Participant</th>
+                    <th>Year</th>
+                    {% comment %} <th>Duration From</th> {% endcomment %}
+                    {% comment %} <th>Duration To</th> {% endcomment %}
+                    <th>Nature of the Activity</th>
+                    {% comment %} <th>Detail</th>
+                    <th>Delete</th> {% endcomment %}
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% for faculty_exchange in faculty_exchanges %}
+                <tr>
+                    <td><div class="btn-group">
+                        <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                data-bs-toggle="dropdown" aria-expanded="true">
+                            <i class="bx bx-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'faculty_exchange_update' faculty_exchange.psk_id %}">Edit</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ faculty_exchange.psk_id }}">Delete</a></li>
+                        </ul>
+                    
+                        <!-- Modal for Delete Confirmation -->
+                        <div class="modal fade" id="modalToggleDelete{{ faculty_exchange.psk_id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Delete</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete this participation child?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <!-- Delete button (calls the extension_delete view with the correct id) -->
+                                        <a href="{% url 'faculty_exchange_delete' faculty_exchange.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div></td>
+                    <td>{{faculty_exchange.staff_name}}</td>
+                    <td>{{faculty_exchange.staff_id}}</td>
+                    <td>{{ faculty_exchange.department_name }}</td>
+                    <td>{{ faculty_exchange.activity_title }}</td>
+                    <td>{{ faculty_exchange.agency_name }}</td>
+                    {% comment %} <td>{{ faculty_exchange.phone_number }}</td> {% endcomment %}
+                    <td>{{ faculty_exchange.participant_name }}</td>
+                    <td>{{ faculty_exchange.collaboration_year }}-{{ faculty_exchange.collaboration_year|add:1 }} </td>
+                    {% comment %} <td>{{ faculty_exchange.date_from }}</td> {% endcomment %}
+                    {% comment %} <td>{{ faculty_exchange.date_to }}</td> {% endcomment %}
+                    <td>{{ faculty_exchange.nature_activity }}</td>
+                    {% comment %} <td><a class="btn btn-icon btn-sm btn-primary" href="{% url 'faculty_exchange_view' faculty_exchange.psk_id %}"><i class="bx bxs-detail"></i></a></td>
+                    <td><a class="btn btn-icon btn-sm btn-danger" href="{% url 'faculty_exchange_delete' faculty_exchange.psk_id %}"><i class="bx bxs-trash"></i></a></td> {% endcomment %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

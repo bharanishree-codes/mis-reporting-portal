@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+
+<center><h4 class="fw-bold">Project Work/Field Work/Internship</h4></center>
+<div class="card mb-4">
+<div class="card-body">
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="row">
+
+
+
+    {% comment %} <div class="mb-3 col-md-4">
+    <label for="staff_id" class="form-label">Staff ID</label>
+                    <div class="input-group">
+                        <select class="form-control" id="staff_id" name="staff_id" required>
+                            <option value="" disabled selected>Select Staff ID</option>
+                            {% for stf in course_data %}
+                                <option value="{{ stf.stf_id }}"
+                                        data-staff-name="{{ stf.stf_name }}"
+                                        data-department="{{ stf.department }}">
+                                    {{ stf.stf_id }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <span class="input-group-text">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </div>
+                </div> {% endcomment %}
+
+                <!-- Staff Name -->
+                <div class="mb-3 col-md-4">
+                    <label for="username" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{username}}" readonly>
+                </div>
+                
+                
+                <div class="mb-3 col-md-4">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{staff_name}}" readonly>
+                </div>
+
+                <!-- Department Name -->
+                <div class="mb-3 col-md-4">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{department}}" readonly>
+                </div>
+
+
+    <div class="mb-3 col-md-4">
+        <label for="publication_type" class="form-label">select options</label>
+        <select class="form-control" name="items" id="publication_type" multiple required>
+            <option value="project">Project Work</option>
+            <option value="field">Field Work</option>
+            <option value="internship">Internship</option>
+        </select>
+    </div>
+</div>
+
+
+
+
+<div class="text-end mb-3">
+<button type="submit" class="btn btn-primary">Submit</button>
+<a href="{% url 'project_list' %}"><input type="button" value="Cancel" class="btn btn-primary">
+</a>
+</div>
+</div>
+</div>
+</form>
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        new MultiSelectTag('publication_type'); // Ensure the ID matches your select element
+    });
+</script>
+
+
+
+
+
+
+<script>
+    document.getElementById('staff_id').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const staffName = selectedOption.getAttribute('data-staff-name');
+        const department = selectedOption.getAttribute('data-department');
+
+        // Populate the respective input fields
+        document.getElementById('staff_name').value = staffName || '';
+        document.getElementById('department_name').value = department || '';
+    });
+</script>
+
+
+{% endblock content %}
+

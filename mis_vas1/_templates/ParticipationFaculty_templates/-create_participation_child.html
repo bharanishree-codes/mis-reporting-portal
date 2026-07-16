@@ -1,0 +1,184 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<div class="d-flex justify-content-between align-items-center py-3 mb-4">
+    <h4 class="fw-bold">Faculty Participation Detail</h4>
+    <div class="demo-inline-spacing">
+        <a href="{% url 'update_participation' participation.id %}">
+            <button type="button" class="btn btn-primary">
+                <i class="bx bxs-edit"></i> Edit
+            </button>
+        </a>
+        <a href="{% url 'list_participations' %}">
+            <input type="button" value="Exit" class="btn btn-primary">
+        </a>
+    </div>
+</div>
+
+<!-- General Details of Participation -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" value="{{ participation.name }}" required disabled>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="year" class="form-label">Year</label>
+                    <input type="text" class="form-control" id="year" value="{{ participation.year }}" required disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="items" class="form-label">Participated in</label>
+                    <select class="form-control" name="items" disabled multiple>
+                        {% for option in selected_options %}
+                        <option value="{{ option }}" {% if option in participation.items %} selected {% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dynamic Fields Based on Selected Options -->
+            {% for option in selected_options %}
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5>{{ option }}</h5>
+                        {% for child in children %}
+                            {% if option == 'Board of Studies' and child == 'Board of Studies' %}
+                                <div class="mb-3">
+                                    <label for="board_university">Name of the Board / University</label>
+                                    <input type="text" name="board_university" class="form-control" value="{{ participation.board_university }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="board_designation">Nature of Post or Designation</label>
+                                    <input type="text" name="board_designation" class="form-control" value="{{ participation.board_designation }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="board_upload">Upload Proof of Document</label>
+                                    <input type="file" name="board_upload" class="form-control" required disabled>
+                                </div>
+                            {% elif option == 'Question Paper Setting' and child == 'Question Paper Setting' %}
+                                <div class="mb-3">
+                                    <label for="qp_university">Name of the University / College</label>
+                                    <input type="text" name="qp_university" class="form-control" value="{{ participation.qp_university }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="qp_subject">Subject</label>
+                                    <input type="text" name="qp_subject" class="form-control" value="{{ participation.qp_subject }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="qp_upload">Upload Communication Letter</label>
+                                    <input type="file" name="qp_upload" class="form-control" required disabled>
+                                </div>
+                            {% elif option == 'Evaluation' and child == 'Evaluation' %}
+                                <div class="mb-3">
+                                    <label for="eval_institute">Name of the University / College</label>
+                                    <input type="text" name="eval_institute" class="form-control" value="{{ participation.eval_institute }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eval_role">Role</label>
+                                    <input type="text" name="eval_role" class="form-control" value="{{ participation.eval_role }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="eval_upload">Upload Proof of Document</label>
+                                    <input type="file" name="eval_upload" class="form-control" required disabled>
+                                </div>
+                            {% elif option == 'Design and Development of Curriculum for ADD-On' and child == 'Design and Development of Curriculum for ADD-On' %}
+                                <div class="mb-3">
+                                    <label for="curriculum_institute">Name of the University / College</label>
+                                    <input type="text" name="curriculum_institute" class="form-control" value="{{ participation.curriculum_institute }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="curriculum_role">Name of the Addon</label>
+                                    <input type="text" name="curriculum_role" class="form-control" value="{{ participation.curriculum_role }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="curriculum_upload">Upload Proof of Document</label>
+                                    <input type="file" name="curriculum_upload" class="form-control" required disabled>
+                                </div>
+                            {% elif option == 'Certificate Courses' and child == 'Certificate Courses' %}
+                                <div class="mb-3">
+                                    <label for="cert_institute">Name of the University / College</label>
+                                    <input type="text" name="cert_institute" class="form-control" value="{{ participation.cert_institute }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cert_course_name">Name of the Course</label>
+                                    <input type="text" name="cert_course_name" class="form-control" value="{{ participation.cert_course_name }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cert_upload">Upload Proof of Document</label>
+                                    <input type="file" name="cert_upload" class="form-control" required disabled>
+                                </div>
+                            {% elif option == 'External Examiner' and child == 'External Examiner' %}
+                                <div class="mb-3">
+                                    <label for="external_institute">Name of the University / College</label>
+                                    <input type="text" name="external_institute" class="form-control" value="{{ participation.external_institute }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="external_upload">Upload Communication Letter</label>
+                                    <input type="file" name="external_upload" class="form-control" required disabled>
+                                </div>
+                            {% elif option == 'Conference' and child == 'Conference' %}
+                                <div class="mb-3">
+                                    <label for="conf_name">Name of the Conference</label>
+                                    <input type="text" name="conf_name" class="form-control" value="{{ participation.conf_name }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="conf_role">Role</label>
+                                    <input type="text" name="conf_role" class="form-control" value="{{ participation.conf_role }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="conf_upload">Upload Proof of Document</label>
+                                    <input type="file" name="conf_upload" class="form-control" required disabled>
+                                </div>
+                            {% elif option == 'Seminar' and child == 'Seminar' %}
+                                <div class="mb-3">
+                                    <label for="seminar_title">Name of the Seminar</label>
+                                    <input type="text" name="seminar_title" class="form-control" value="{{ participation.seminar_title }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="seminar_role">Role</label>
+                                    <input type="text" name="seminar_role" class="form-control" value="{{ participation.seminar_role }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="seminar_upload">Upload Proof of Document</label>
+                                    <input type="file" name="seminar_upload" class="form-control" required disabled>
+                                </div>
+                            {% elif option == 'Workshop' and child == 'Workshop' %}
+                                <div class="mb-3">
+                                    <label for="workshop_title">Name of the Workshop</label>
+                                    <input type="text" name="workshop_title" class="form-control" value="{{ participation.workshop_title }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="workshop_role">Role</label>
+                                    <input type="text" name="workshop_role" class="form-control" value="{{ participation.workshop_role }}" required disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="workshop_upload">Upload Proof of Document</label>
+                                    <input type="file" name="workshop_upload" class="form-control" required disabled>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="mb-3 mt-4">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

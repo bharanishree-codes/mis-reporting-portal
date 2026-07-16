@@ -1,0 +1,137 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="year">Year:</label>
+    <input type="text" name="year" value="{{ participation.year }}" required readonly>
+    <br/>
+    <h3>Participation Types:</h3>
+    <select multiple class="form-select" aria-label="Multiple select example" disabled>
+        {% for option in selected_options %}
+        <option value="{{ option }}">{{ option }}</option>    
+        {% endfor %}
+    </select>
+    <br/>
+    <!-- <a href="{% url 'create_participation_child' participation.id %}"><input type="button" value="Edit"></input></a> -->
+    <br/>
+    <br/>
+    
+
+{% if 'Board of Studies' in selected_options %}
+    <h3>Board Details:</h3>
+    <label for="board_university">University:</label>
+    <input type="text" name="board_university" id="board_university" required>
+    
+    <label for="board_designation">Designation:</label>
+    <input type="text" name="board_designation" id="board_designation" required>
+    
+    <label for="board_upload">Upload Proof of Document:</label>
+    <input type="file" name="board_upload" id="board_upload" required>
+    {% endif %}
+
+    {% if 'Question Paper Setting' in selected_options %}
+    <h3>Question Paper Details:</h3>
+    <label for="qp_university">University:</label>
+    <input type="text" name="qp_university" id="qp_university" required>
+    
+    <label for="qp_subject">Subject:</label>
+    <input type="text" name="qp_subject" id="qp_subject" required>
+    
+    <label for="qp_upload">Upload Communication Letter:</label>
+    <input type="file" name="qp_upload" id="qp_upload" required>
+    {% endif %}
+
+    {% if 'Evaluation' in selected_options %}
+    <h3>Evaluation Details:</h3>
+    <label for="eval_institute">Name of the Institute:</label>
+    <input type="text" name="eval_institute" id="eval_institute" required>
+    
+    <label for="eval_role">Role:</label>
+    <input type="text" name="eval_role" id="eval_role" required>
+    
+    <label for="eval_upload">Upload Evaluation Document:</label>
+    <input type="file" name="eval_upload" id="eval_upload" required>
+    {% endif %}
+
+    {% if 'Design and Development of Curriculum for ADD-On' in selected_options %}
+    <h3>Curriculum Design & Development:</h3>
+    <label for="curriculum_institute">Institution Name:</label>
+    <input type="text" name="curriculum_institute" id="curriculum_institute" required>
+    
+    <label for="curriculum_role">Role:</label>
+    <input type="text" name="curriculum_role" id="curriculum_role" required>
+    
+    <label for="curriculum_upload">Upload Curriculum Document:</label>
+    <input type="file" name="curriculum_upload" id="curriculum_upload" required>
+    {% endif %}
+
+    {% if 'Certificate Courses' in selected_options %}
+    <h3>Certificate Courses Details:</h3>
+    <label for="cert_course_name">Course Name:</label>
+    <input type="text" name="cert_course_name" id="cert_course_name" required>
+    
+    <label for="cert_institute">Institution:</label>
+    <input type="text" name="cert_institute" id="cert_institute" required>
+    
+    <label for="cert_upload">Upload Certificate:</label>
+    <input type="file" name="cert_upload" id="cert_upload" required>
+    {% endif %}
+
+    {% if 'External Examiner' in selected_options %}
+    <h3>External Examiner Details:</h3>
+    <label for="external_institute">Name of the Institution:</label>
+    <input type="text" name="external_institute" id="external_institute" required>
+    
+    <label for="external_subject">Subject:</label>
+    <input type="text" name="external_subject" id="external_subject" required>
+    
+    <label for="external_upload">Upload Document:</label>
+    <input type="file" name="external_upload" id="external_upload" required>
+    {% endif %}
+
+    {% if 'Conference' in selected_options %}
+    <h3>Conference Details:</h3>
+    <label for="conf_name">Conference Name:</label>
+    <input type="text" name="conf_name" id="conf_name" required>
+    
+    <label for="conf_role">Role:</label>
+    <input type="text" name="conf_role" id="conf_role" required>
+    
+    <label for="conf_upload">Upload Conference Document:</label>
+    <input type="file" name="conf_upload" id="conf_upload" required>
+    {% endif %}
+
+    {% if 'Seminar' in selected_options %}
+    <h3>Seminar Details:</h3>
+    <label for="seminar_title">Seminar Title:</label>
+    <input type="text" name="seminar_title" id="seminar_title" required>
+    
+    <label for="seminar_role">Role:</label>
+    <input type="text" name="seminar_role" id="seminar_role" required>
+    
+    <label for="seminar_upload">Upload Seminar Document:</label>
+    <input type="file" name="seminar_upload" id="seminar_upload" required>
+    {% endif %}
+
+    {% if 'Workshop' in selected_options %}
+    <h3>Workshop Details:</h3>
+    <label for="workshop_title">Workshop Title:</label>
+    <input type="text" name="workshop_title" id="workshop_title" required>
+    
+    <label for="workshop_role">Role:</label>
+    <input type="text" name="workshop_role" id="workshop_role" required>
+    
+    <label for="workshop_upload">Upload Workshop Document:</label>
+    <input type="file" name="workshop_upload" id="workshop_upload" required>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+
+{% endblock %}

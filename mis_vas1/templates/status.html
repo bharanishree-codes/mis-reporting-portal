@@ -1,0 +1,632 @@
+{% load static %}
+<style>
+    /* === GENERAL PAGE STYLING === */
+    body {
+        background: linear-gradient(to right, #eef2f3, #8e9eab);
+        font-family: "Poppins", sans-serif;
+        padding: 30px;
+    }
+    
+    /* === MAIN CONTAINER === */
+    .container-xxl {
+        background-color: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 2.5rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease-in-out;
+    }
+    
+    /* === HEADINGS === */
+    h3 {
+        background: linear-gradient(to right, #00416A, #E4E5E6);
+        color: white;
+        padding: 12px 0;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    h4, h5 {
+        color: #333;
+        font-weight: 600;
+    }
+    
+    /* === FORM STYLING === */
+    .form-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #222;
+    }
+    
+    .form-control {
+        background-color: #f8f9fa;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        padding: 0.6rem;
+        transition: all 0.3s ease-in-out;
+    }
+    
+    .form-control:focus {
+        border-color: #2980b9;
+        box-shadow: 0 0 6px rgba(41, 128, 185, 0.4);
+    }
+    
+    /* === CARD DESIGN WITH BORDER COLORS === */
+    .card {
+        border: none;
+        border-top: 4px solid; /* Default border top */
+        border-radius: 0.8rem;
+        background-color: #ffffff;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    /* Apply different border colors to cards in sequence */
+    .card:nth-child(3n+1) {
+        border-top-color: #2980b9; /* Sky Blue */
+    }
+    
+    .card:nth-child(3n+2) {
+        border-top-color: #dc3545; /* Red */
+    }
+    
+    .card:nth-child(3n+3) {
+        border-top-color: #28a745; /* Green */
+    }
+    
+    /* Alternative: Apply border colors based on card position */
+    .col-lg-4:nth-child(3n+1) .card {
+        border-top-color: #2980b9; /* Sky Blue */
+    }
+    
+    .col-lg-4:nth-child(3n+2) .card {
+        border-top-color: #dc3545; /* Red */
+    }
+    
+    .col-lg-4:nth-child(3n+3) .card {
+        border-top-color: #28a745; /* Green */
+    }
+    
+    /* For the faculty participation section cards */
+    .col-lg-4.col-sm-6:nth-child(6n+1) .card,
+    .col-lg-4.col-sm-6:nth-child(6n+4) .card {
+        border-top-color: #2980b9; /* Sky Blue */
+    }
+    
+    .col-lg-4.col-sm-6:nth-child(6n+2) .card,
+    .col-lg-4.col-sm-6:nth-child(6n+5) .card {
+        border-top-color: #dc3545; /* Red */
+    }
+    
+    .col-lg-4.col-sm-6:nth-child(6n+3) .card,
+    .col-lg-4.col-sm-6:nth-child(6n+6) .card {
+        border-top-color: #28a745; /* Green */
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+        text-align: left;
+    }
+    
+    .card-body p {
+        font-size: 0.95rem;
+        color: #444;
+        margin: 0;
+        font-weight: 500;
+    }
+    
+    /* === ICON STYLING (SMALLER & CENTERED) === */
+    .avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        background-color: #eaf2ff;
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+    
+    .avatar i {
+        font-size: 1.1rem; /* smaller icons */
+        color: #2980b9;
+        transition: all 0.3s ease-in-out;
+    }
+    
+    .card:hover .avatar {
+        background-color: #2980b9;
+    }
+    
+    .card:hover .avatar i {
+        color: #fff;
+        transform: scale(1.1);
+    }
+    
+    /* === DASHBOARD CARD SECTION === */
+    .dashboard-cards {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .card-box {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+        padding: 20px 10px;
+        transition: 0.3s ease-in-out;
+        border-top: 4px solid;
+    }
+    
+    /* Top Border Colors for small cards */
+    .card-blue { border-top-color: #2980b9; }
+    .card-red { border-top-color: #dc3545; }
+    .card-green { border-top-color: #28a745; }
+    
+    /* Text inside small cards */
+    .card-box h4 {
+        font-size: 13px;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 10px;
+    }
+    
+    .card-box h2 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #2d2d2d;
+        margin: 5px 0;
+    }
+    
+    .card-box p {
+        font-size: 13px;
+        color: #777;
+        margin: 0;
+    }
+    
+    /* Hover effect for small cards */
+    .card-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* === SECTION TITLES === */
+    h4.section-title {
+        margin-top: 2rem;
+        color: #00416A;
+        font-weight: bold;
+        border-left: 5px solid #00416A;
+        padding-left: 10px;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* === LINKS === */
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .card-link:hover {
+        text-decoration: none;
+    }
+    
+    /* === RESPONSIVENESS === */
+    @media (max-width: 768px) {
+        .container-xxl { padding: 1.5rem; }
+        h3 { font-size: 1.2rem; }
+        .card-body { padding: 1rem; }
+        .avatar { width: 32px; height: 32px; }
+        .avatar i { font-size: 0.9rem; }
+    }
+</style>
+<br><br>
+<div class="container-xxl flex-grow-1 container-p-y rounded">
+        <form method="GET" class="align-items-center">
+            
+            <!-- <h3 style="text-align: center; font-weight: bold; color: white;">Staff Entry</h3> -->
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="staff_id" class="form-label text-dark" style="font-weight: bold;">Staff_ID</label>
+                    <input type="text" class="form-control text-dark" style="font-weight: bold;" id="staff_id" value="{{ staff_id }}" required readonly>
+                </div>
+
+                <div class="mb-3 col-md-4">
+                    <label for="staff_name" class="form-label text-dark" style="font-weight: bold;">Staff Name</label>
+                    <input type="text" class="form-control text-dark" style="font-weight: bold;" id="staff_name" value="{{ staff_name }}" required readonly>
+                </div>
+
+                <div class="mb-3 col-md-4">
+                    <label for="department" class="form-label text-dark" style="font-weight: bold;">Department</label>
+                    <input type="text" class="form-control text-dark" style="font-weight: bold;" id="department" value="{{ department_name }}" required readonly>
+                </div>
+            </div>
+        </form>
+
+        <br><br>
+        
+        <!-- Display Data Blocks -->
+        <div class="row g-6">
+            {% for block in blocks_to_display %}
+                {% if role_name == 'Staff' %}
+                    {% if block == 'total_participation' %}
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'list_participations' %}" class="card-link">
+                                <div class="card h-100 text-dark">
+                                    <div class="card-body text-black">
+                                        <div class="d-flex align-items-center mb-2 text-dark">
+                                            <div class="avatar me-4">
+                                                <i class="bi bi-person-arms-up"></i>
+                                            </div>
+                                            <h4 class="mb-0 text-dark">{{ filtered_data.total_participation|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 text-dark" style="font-weight: bold;">Faculty participation</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_research' %}
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'research_list' %}" class="card-link">
+                                <div class="card h-100 rounded">
+                                    <div class="card-body rounded">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4">
+                                                <i class="bi bi-rocket-takeoff-fill text-dark"></i>
+                                            </div>
+                                            <h4 class="mb-0 text-dark">{{ filtered_data.total_research|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold text-dark">Research Article Publication</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_books' %}
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'book_list' %}" class="card-link">
+                                <div class="card h-100 text-dark">
+                                    <div class="card-body text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4 text-dark">
+                                                <i class="bi bi-journal-medical"></i>
+                                            </div>
+                                            <h4 class="mb-0 text-dark">{{ filtered_data.total_books|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 text-dark" style="font-weight: bold;">Books & Chapter Publication</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    
+                    
+
+                {% endif %}
+            {% endfor %}
+            {% comment %} <p></p> {% endcomment %}
+            {% if role_name == 'Staff' %}
+            <p></p>
+            <h4 style="text-align: left; font-weight: bold; color: white;">Faculty participation</h4>
+            <div class="row">
+                <!-- Board of Studies -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?category=Board of Studies&staff_id={{ username }}" class="card-link">
+                    <div class="card card-border-shadow-primary h-100">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-journal-text"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Board_of_Studies|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold text-black">Board of Studies</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Question Paper Setting -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?category=Question Paper Setting&staff_id={{ username }}" class="card-link">
+                    <div class="card card-border-shadow-primary h-100">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Question_Paper_Setting|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold text-black">Question Paper Setting</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Evaluation -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?category=Evaluation&staff_id={{ username }}" class="card-link">
+                    <div class="card card-border-shadow-primary h-100">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-check2-circle"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Evaluation|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold text-black">Evaluation</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Curriculum Development -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?category=Design and Development&staff_id={{ username }}" class="card-link">
+                    <div class="card card-border-shadow-primary h-100">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-tools"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Design_and_Development|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold text-black">Curriculum Development</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Certificate Courses -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ username }}&category=Certificate Courses" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-award"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Certificate_Courses|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Certificate Courses</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+            
+                <!-- External Examiner -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ username }}&category=External Examiner" class="card-link">
+                    <div class="card card-border-shadow-primary h-100">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-person-check"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.External_Examiner|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">External Examiner</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+                </div>
+            <div class="row">
+                <!-- Conference -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ username }}&category=Conference" class="card-link">
+                    <div class="card card-border-shadow-primary h-100">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-mic"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Conference|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Conference</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Seminar -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ username }}&category=Seminar" class="card-link">
+                    <div class="card card-border-shadow-primary h-100">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Seminar|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Seminar</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Workshop -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ username }}&category=Workshop" class="card-link">
+                    <div class="card card-border-shadow-primary h-100">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-hammer"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Workshop|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Workshop</p>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+            {% endif %}
+
+            {% for block in blocks_to_display %}
+                {% if role_name == 'Hod' %}
+                    {% if block == 'total_certificate' %}
+                        <!-- Add On / Certificate Program -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'program_list' %}?department={{selected_department}}" class="card-link">
+                                <div class="card card-border-shadow-primary h-100">
+                                    <div class="card-body rounded text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-award-fill"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_certificate|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold">ADD ON / Certificate Program Offered</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_courses' %}
+                        <!-- Project / Internship -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'project_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                                <div class="card card-border-shadow-primary h-100">
+                                    <div class="card-body rounded text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-buildings"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_courses|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold">Project work/Field work/Internship</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_gov_and_non_gov' %}
+                        <!-- Grants -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'government_grants_list' %}?department={{selected_department}}" class="card-link">
+                                <div class="card card-border-shadow-primary h-100">
+                                    <div class="card-body rounded text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-globe2"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_gov_and_non_gov|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold">Gov. and Non-Gov. Grants</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_extentions' %}
+                        <!-- Outreach -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'extension_list' %}?department={{selected_department}}" class="card-link">
+                                <div class="card card-border-shadow-primary h-100">
+                                    <div class="card-body rounded text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-file-earmark-code-fill"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_extentions|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold">Extension and Outreach Programs</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_competitive' %}
+                        <!-- Exams -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'competitve_examination_list' %}?department={{selected_department}}" class="card-link">
+                                <div class="card card-border-shadow-primary h-100">
+                                    <div class="card-body rounded text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-fingerprint"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_competitive|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold">Competitive Examination</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_career_counseling' %}
+                        <!-- Counseling -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'career_counseeling_list' %}?department={{selected_department}}" class="card-link">
+                                <div class="card card-border-shadow-primary h-100">
+                                    <div class="card-body rounded text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-suitcase-lg-fill"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_career_counseling|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold">Career Counseling</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_faculty_exchange' %}
+                        <!-- Faculty Collaboration -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'faculty_exchange_list' %}?department={{selected_department}}" class="card-link">
+                                <div class="card card-border-shadow-primary h-100">
+                                    <div class="card-body rounded text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-person-fill-check"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_faculty_exchange|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold">Collaborative for Faculty</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_collaborative_students' %}
+                        <!-- Student Collaboration -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'collaborative_students_list' %}?department={{selected_department}}&staff_id={{selected_staff_id}}" class="card-link">
+                                <div class="card card-border-shadow-primary h-100">
+                                    <div class="card-body rounded text-black">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-microsoft-teams"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_collaborative_students|default:0 }}</h4>
+                                        </div>
+                                        <p class="mb-2 fw-bold">Collaborative for Students</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% elif block == 'total_workshops' %}
+                        <!-- Workshops / Seminars -->
+                        <div class="col-lg-4 col-sm-6">
+                            <a href="{% url 'seminar_list' %}?department={{selected_department}}&staff_id={{selected_staff_id}}" class="card-link">
+                                <div class="card h-100 text-black">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="avatar me-4"><i class="bi bi-box-fill"></i></div>
+                                            <h4 class="mb-0 text-black">{{ filtered_data.total_workshops|default:0 }}</h4>
+                                        </div>
+                                        <p class="fw-bold">Workshops/Seminars</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

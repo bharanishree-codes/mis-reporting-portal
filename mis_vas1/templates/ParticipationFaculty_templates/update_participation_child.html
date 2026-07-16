@@ -1,0 +1,303 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+        <center><h4 class="fw-bold py-3 mb-2">Faculty Participation</h4></center>
+        {% comment %} <a href="{% url 'list_participations' %}">
+            <input type="button" value="Exit" class="btn btn-primary">
+        </a> {% endcomment %}
+    </div>
+    {% comment %} <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+        <label for="year" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ name }}" readonly aria-describedby="yearHelp" />
+            </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+        <label for="year" class="form-label">Year</label>
+                <input type="text" class="form-control" id="year" name="year" value="{{ year }}" readonly aria-describedby="yearHelp" />
+        </div>
+        <div class="row">
+                <div class="mb-3 col-md-4" id="dbCol">
+                <label for="participationSelect" class="form-label">Participated in</label>
+                <select multiple class="form-select" id="participationSelect" name="items" aria-label="Multiple select example" disabled>
+                    {% for option in selected_options %}
+                        <option value="{{ option }}" selected>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    </div>
+    </form>
+    </div> {% endcomment %}
+    {% comment %} </div> {% endcomment %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if 'Board of Studies' in selected_options %}
+    {% if val == 'Board of Studies' %}
+    <h3>Board of Studies:</h3>
+    <div class="row">
+    <div class="mb-3 col-md-4" id="dbCol">
+    <label for="board_university" class="form-label">Name of the Board / University</label>
+    <input type="text" name="board_university" class="form-control" id="board_university" value="{{ child.board_university_college_name }}" required><br>
+    </div>
+    
+    <div class="mb-3 col-md-4" id="dbCol">
+    <label class="form-label" for="board_designation">Nature of Post or Designation</label>
+    <input class="form-control" type="text" name="board_designation" id="board_designation" value="{{ child.board_designation }}" required><br>
+</div>
+
+<div class="mb-3 col-md-4" id="dbCol">    
+    <label class="form-label" for="board_upload">Upload Proof of Document</label>
+    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+    <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+    <div class="error-message" id="error-file" style="color: red;"></div>
+    <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+</div>
+</div>
+    {% endif %}
+    {% endif %}
+
+    {% if 'Question Paper Setting' in selected_options %}
+    {% if val == 'Question Paper Setting' %}
+    <h3>Question Paper Setting</h3>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label for="qp_university" class="form-label">Name of the University / College</label>
+            <input class="form-control" type="text" name="qp_university" id="qp_university" value="{{ child.qp_university_college_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="qp_subject">Subject</label>
+            <input class="form-control" type="text" name="qp_subject" id="qp_subject" value="{{ child.qp_subject }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="qp_upload">Upload Communication Letter</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+{% if 'Evaluation' in selected_options %}
+    {% if val == 'Evaluation' %}
+    <h3>Evaluation</h3>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="eval_institute">Name of the University / College</label>
+            <input class="form-control" type="text" name="eval_institute" id="eval_institute" value="{{ child.eval_university_college_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="eval_role">Subject</label>
+            <input class="form-control" type="text" name="eval_role" id="eval_role" value="{{ child.eval_subject }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="eval_upload">Upload Communication Letter</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+{% if 'Add-On (Other University & College)' in selected_options %}
+    {% if val == 'Add-On (Other University & College)' %}
+    <h3>Add-On (Other University & College)</h3>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="curriculum_institute">Name of the University / College</label>
+            <input class="form-control" type="text" name="curriculum_institute" id="curriculum_institute" value="{{ child.design_development_university_college_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="curriculum_role">Name of the Addon</label>
+            <input class="form-control" type="text" name="curriculum_role" id="curriculum_role" value="{{ child.design_development_addon }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="curriculum_upload">Upload Proof of Document</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+{% if 'Certificate Courses' in selected_options %}
+    {% if val == 'Certificate Courses' %}
+    <h3>Certificate Courses</h3>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="cert_course_name">Name of the University / College</label>
+            <input class="form-control" type="text" name="cert_course_name" id="cert_course_name" value="{{ child.certificate_university_college_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="cert_institute">Name of the Course</label>
+            <input class="form-control" type="text" name="cert_institute" id="cert_institute" value="{{ child.certificate_course }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="cert_upload">Upload Proof of Document</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+{% if 'External Examiner' in selected_options %}
+    {% if val == 'External Examiner' %}
+    <h3>External Examiner</h3>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="external_institute">Name of the University / College</label>
+            <input class="form-control" type="text" name="external_institute" id="external_institute" value="{{ child.external_examiner_university_college_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="external_subject">Upload Communication Letter</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+{% if 'Conference' in selected_options %}
+    {% if val == 'Conference' %}
+    <h3>Conference</h3>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="conf_name">Name of the University / College</label>
+            <input class="form-control" type="text" name="conf_name" id="conf_name" value="{{ child.conference_university_college_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="conf_role">Name of the Conference</label>
+            <input class="form-control" type="text" name="conf_role" id="conf_role" value="{{ child.conference_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="conf_upload">Upload Proof of Document</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+{% if 'Seminar' in selected_options %}
+    {% if val == 'Seminar' %}
+    <h3>Seminar</h3>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="seminar_title">Name of the University / College</label>
+            <input class="form-control" type="text" name="seminar_title" id="seminar_title" value="{{ child.seminar_university_college_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="seminar_role">Name of the Seminar</label>
+            <input class="form-control" type="text" name="seminar_role" id="seminar_role" value="{{ child.seminar_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="seminar_upload">Upload Proof of Document</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+{% if 'Workshop' in selected_options %}
+    {% if val == 'Workshop' %}
+    <h3>Workshop</h3>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="workshop_title">Name of the University / College</label>
+            <input class="form-control" type="text" name="workshop_title" id="workshop_title" value="{{ child.workshop_university_college_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="workshop_role">Name of the Workshop</label>
+            <input class="form-control" type="text" name="workshop_role" id="workshop_role" value="{{ child.workshop_name }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="workshop_upload">Upload Proof of Document</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+
+{% if 'Faculty Development Program' in selected_options %}
+    {% if val == 'Faculty Development Program' %}
+    <h5>Faculty Development Program</h5>
+    <div class="row">
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="name_of_the_resource_person">Name of the University / College</label>
+            <input class="form-control" type="text" name="name_of_the_resource_person" id="name_of_the_resource_person" value="{{ child.name_of_the_resource_person }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="name_of_the_program">Name of the Workshop</label>
+            <input class="form-control" type="text" name="name_of_the_program" id="name_of_the_program" value="{{ child.name_of_the_program }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="date_from">Name of the Workshop</label>
+            <input class="form-control" type="date" name="date_from" id="date_from" value="{{ child.date_from }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="date_to">Name of the Workshop</label>
+            <input class="form-control" type="date" name="date_to" id="date_to" value="{{ child.date_to }}" required><br>
+        </div>
+        <div class="mb-3 col-md-4" id="dbCol">
+            <label class="form-label" for="faculty_upload">Upload Proof of Document</label>
+            <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_faculty_participation_dc2_media/{{ value_id }}" target="_blank"><input type="button" value="{{file_name}}" class="btn btn-xs btn"></a>
+            <input type="file" name="file" id="file" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file" style="color: red;"></div>
+            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small><br>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+    <div class="text-end">
+    <button type="submit" class="btn btn-md btn-primary">Update</button>
+    <a href="{% url 'detail_view' id %}">
+        <button type="button" class="btn btn-md btn-primary">Cancel</button>
+    </a>
+    </div>
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+new MultiSelectTag('userrole')  // id
+</script>
+
+
+{% endblock content %}

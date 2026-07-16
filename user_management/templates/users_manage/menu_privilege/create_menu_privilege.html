@@ -1,0 +1,75 @@
+{% extends 'con_menus.html' %}
+
+{% block content %}
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+
+<h5 class="fw-bold">Add Menu Privilege</h5>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+
+                <div class="mb-13 col-md-13" id="dbCol">
+                    <label class="form-label">Menu Privilege Name</label>
+                    <input type="text" class="form-control" id="menu_privilege_name" name="menu_privilege_name"><br>
+
+                     <label class="form-label">Menu Privilege Start Date</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date"><br>
+
+                    <label class="form-label">Menu Privilege End Date</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date">
+
+
+                </div>
+
+
+{#                <div class="mb-3 col-md-6" id="dbCol">#}
+{#                    <label for="dbConnection" class="form-label">Menu Status </label>#}
+{#                    <select class="form-control" id="active" name="active">#}
+{#                        <option selected="" value="">--------- Select ---------</option>#}
+{##}
+{#                        <option value="Active">Active</option>#}
+{#                        <option value="In Active">In Active</option>#}
+{##}
+{#                    </select>#}
+{#                </div>#}
+
+{#                <div class="mb-3 col-md-6">#}
+{#                    <label class="form-label">Menu Privilege Start Date</label>#}
+{#                    <input type="date" class="form-control" id="start_date" name="start_date">#}
+{#                </div>#}
+
+{#                <div class="mb-3 col-md-6">#}
+{#                    <label class="form-label">Menu Privilege End Date</label>#}
+{#                    <input type="date" class="form-control" id="end_date" name="end_date">#}
+{#                </div>#}
+
+
+            </div><br>
+
+
+
+            <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+    <script>
+    new MultiSelectTag('userrole')  // id
+</script>
+
+
+{% endblock content %}
+

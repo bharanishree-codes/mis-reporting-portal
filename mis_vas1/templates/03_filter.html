@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Faculty Data Filter</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .badge-form {
+            background-color: #6c757d;
+            color: white;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .media-badge {
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .export-buttons {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        .form-check-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+        }
+        .child-table {
+            font-size: 0.8rem;
+        }
+        .parent-table th {
+            font-size: 0.7rem;
+        }
+        .parent-table td {
+            font-size: 0.7rem;
+        }
+        .child-row {
+            background-color: #f8f9fa !important;
+        }
+        .media-section {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .child-details {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        .parent-media-section {
+            background-color: #fff3cd;
+            border-radius: 5px;
+            padding: 8px;
+            margin-top: 8px;
+            border-left: 3px solid #ffc107;
+        }
+        .user-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .role-badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+        .access-alert {
+            border-left: 4px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>Unified Faculty Data Filter
+                    </h2>
+                    <div class="user-info">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="fas fa-user-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">{{ username }}</div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge {% if user_role == 'Hod' %}bg-warning{% elif user_role == 'Naac' %}bg-danger{% else %}bg-info{% endif %} role-badge">
+                                        {{ user_role }}
+                                    </span>
+                                    {% if user_role == "Hod" or user_role == "Naac" %}
+                                    <span class="badge bg-light text-dark role-badge">
+                                        <i class="fas fa-building me-1"></i>
+                                        {% if user_role == "Hod" %}{{ department_name }}{% else %}All Departments{% endif %}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+        <!-- Role-based Access Message -->
+        {% if user_role == "Staff" %}
+        <div class="alert alert-info access-alert">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Access Level:</strong> You have access to Faculty Participation, Research Publications, and Books & Chapters only. You can only view your own data.
+        </div>
+        {% elif user_role == "Hod" %}
+        <div class="alert alert-warning access-alert">
+            <i class="fas fa-shield-alt me-2"></i>
+            <strong>Access Level:</strong> You have full access to all forms for your department ({{ department_name }}). Default view shows your data.
+        </div>
+        {% elif user_role == "Naac" %}
+        <div class="alert alert-danger access-alert">
+            <i class="fas fa-university me-2"></i>
+            <strong>Access Level:</strong> You have full access to all forms across all departments. Default view shows your data.
+        </div>
+        {% endif %}
+
+        <!-- Filter Form -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-filter me-2"></i>Filter Options
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="get" id="filterForm">
+                            <div class="row">
+                                <!-- Department Dropdown (for NAAC only) -->
+                                {% if user_role == "Naac" %}
+                                <div class="col-md-3 mb-3">
+                                    <label for="department" class="form-label">Department</label>
+                                    <select class="form-select" id="department" name="department">
+                                        <option value="">All Departments</option>
+                                        {% for department in departments %}
+                                        <option value="{{ department }}" {% if department == selected_department %}selected{% endif %}>
+                                            {{ department }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <small class="form-text text-muted">Select department to filter staff members</small>
+                                </div>
+                                {% endif %}
+
+                                <!-- Staff ID Dropdown -->
+                                <div class="col-md-3 mb-3">
+                                    <label for="stf_id" class="form-label">Staff Member</label>
+                                    {% if user_role == "Staff" %}
+                                    <input type="text" class="form-control" value="{{ username }}" readonly>
+                                    <input type="hidden" name="stf_id" value="{{ username }}">
+                                    <small class="form-text text-muted">You can only view your own data</small>
+                                    {% else %}
+                                    <select class="form-select" id="stf_id" name="stf_id">
+                                        <option value="">All Staff</option>
+                                        {% for staff_id in staff_ids %}
+                                        <option value="{{ staff_id }}" {% if staff_id == selected_stf_id %}selected{% endif %}>
+                                            {{ staff_id }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    {% if user_role == "Hod" %}
+                                    <small class="form-text text-muted">Staff from {{ department_name }} department</small>
+                                    {% elif user_role == "Naac" %}
+                                    <small class="form-text text-muted">
+                                        {% if selected_department %}
+                                        Staff from {{ selected_department }} department
+                                        {% else %}
+                                        All staff members
+                                        {% endif %}
+                                    </small>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Form Selection -->
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label"><b>Select Forms:</b></label>
+                                    <div class="form-check-grid">
+                                        {% for form in form_options %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="forms" 
+                                                   value="{{ form.key }}" id="form{{ forloop.counter }}"
+                                                   {% if form.key in selected_forms %}checked{% endif %}
+                                                   {% if user_role == "Staff" and form.key not in "participation,research,books" %}disabled{% endif %}>
+                                            <label class="form-check-label" for="form{{ forloop.counter }}">
+                                                {{ form.name }}
+                                                {% if user_role == "Staff" and form.key not in "participation,research,books" %}
+                                                <span class="badge bg-secondary ms-1">Restricted</span>
+                                                {% endif %}
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if user_role == "Staff" %}
+                                    <small class="form-text text-muted">You can only access Faculty Participation, Research Publications, and Books & Chapters</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-search me-1"></i>Apply Filters
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
+                                            <i class="fas fa-times me-1"></i>Clear Filters
+                                        </button>
+                                        {% if filter_applied %}
+                                        <button type="submit" class="btn btn-success" name="export" value="excel">
+                                            <i class="fas fa-file-excel me-1"></i>Export Excel
+                                        </button>
+                                        <button type="submit" class="btn btn-danger" name="export" value="pdf">
+                                            <i class="fas fa-file-pdf me-1"></i>Export PDF
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        {% if filter_applied %}
+        <div class="row">
+            <div class="col-12">
+                <!-- Summary Statistics -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-center bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Forms</h6>
+                                <h3 class="text-primary">{{ all_data|length }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Parent Records</h6>
+                                <h3 class="text-success">{{ total_parent_records }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Child Records</h6>
+                                <h3 class="text-warning">{{ total_child_records }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Selected Filters</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% if selected_stf_id %}
+                                    <span class="badge bg-primary">Staff: {{ selected_stf_id }}</span>
+                                    {% elif user_role == "Staff" %}
+                                    <span class="badge bg-primary">Staff: {{ username }}</span>
+                                    {% endif %}
+                                    {% if user_role == "Naac" and selected_department %}
+                                    <span class="badge bg-info">Department: {{ selected_department }}</span>
+                                    {% endif %}
+                                    {% for form in selected_forms %}
+                                    {% for form_opt in form_options %}
+                                        {% if form_opt.key == form %}
+                                        <span class="badge bg-success">{{ form_opt.name }}</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Display for Each Form -->
+                {% for form_key, data in all_data.items %}
+                {% if data.parents or data.children %}
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list me-2"></i>{{ data.name }} 
+                            <span class="badge bg-light text-dark ms-2">
+                                {{ data.parents|length }} parent{% if data.parents|length != 1 %}s{% endif %}
+                                {% if data.children %}
+                                / {{ data.children|length }} child{% if data.children|length != 1 %}ren{% endif %}
+                                {% endif %}
+                            </span>
+                        </h5>
+                        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="collapse show" id="collapse{{ forloop.counter }}">
+                        <div class="card-body">
+                            <!-- Parent Records Table -->
+                            {% if data.parents %}
+                            <div class="table-responsive mb-4">
+                                <h6>Parent Records</h6>
+                                <table class="table table-striped table-hover parent-table">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Staff ID</th>
+                                            <th>Year</th>
+                                            <th>Details</th>
+                                            <th>Media Files</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for parent in data.parents %}
+                                        <tr>
+                                            <td>{{ parent.stf_id|default:"N/A" }}</td>
+                                            <td>{{ parent.year|default:"N/A" }}</td>
+                                            <td>
+                                                <!-- Display form-specific details -->
+                                                {% for key, value in parent.items %}
+                                                    {% if key not in "stf_id,year,psk_id,media_files,transaction_id" and value %}
+                                                    <div><small><strong>{{ key|title }}:</strong> 
+                                                        {% if value|length > 50 %}
+                                                            {{ value|slice:":50" }}...
+                                                        {% else %}
+                                                            {{ value }}
+                                                        {% endif %}
+                                                    </small></div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+                                            <td>
+                                                <!-- Display parent media files for forms without children -->
+                                                {% if not data.has_children and parent.media_files %}
+                                                <div class="d-flex flex-wrap">
+                                                    {% for media_file in parent.media_files %}
+                                                    <a href="{{ media_file.direct_api_url }}" 
+                                                       target="_blank" 
+                                                       class="badge bg-warning media-badge"
+                                                       data-bs-toggle="tooltip" 
+                                                       title="{{ media_file.file_name }}">
+                                                        <i class="fas fa-file me-1"></i>
+                                                        {{ media_file.file_name|truncatechars:20 }}
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                                {% elif not data.has_children %}
+                                                <span class="text-muted">No media</span>
+                                                {% else %}
+                                                <span class="text-muted">See child records</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if data.children %}
+                                                <button class="btn btn-sm btn-outline-primary" 
+                                                        onclick="toggleChildTable('childTable{{ form_key }}{{ parent.psk_id|default:forloop.counter }}')">
+                                                    <i class="fas fa-eye"></i> Details
+                                                </button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Child Table for this parent -->
+                                        {% if data.children %}
+                                        <tr class="hidden child-row" id="childTable{{ form_key }}{{ parent.psk_id|default:forloop.counter }}">
+                                            <td colspan="5">
+                                                <div class="card bg-light">
+                                                    <div class="card-header bg-light py-2">
+                                                        <h6 class="mb-0">
+                                                            <i class="fas fa-list me-1"></i>
+                                                            Child Records for {{ parent.stf_id|default:"N/A" }} ({{ parent.year|default:"N/A" }})
+                                                        </h6>
+                                                    </div>
+                                                    <div class="card-body p-2">
+                                                        <!-- Get children for this specific parent -->
+                                                        {% with parent_children=data.children %}
+                                                            {% if parent_children %}
+                                                                {% for child in parent_children %}
+                                                                    {% if child.transaction_id == parent.psk_id %}
+                                                                    <div class="child-details mb-3">
+                                                                        <div class="row">
+                                                                            <!-- Child Data Fields -->
+                                                                            {% for key, value in child.items %}
+                                                                            {% if key not in "transaction_id,parent_data,media_files,psk_id" and value %}
+                                                                            <div class="col-md-6 mb-2">
+                                                                                <strong>{{ key|title }}:</strong> 
+                                                                                {% if value|length > 100 %}
+                                                                                    {{ value|slice:":100" }}...
+                                                                                {% else %}
+                                                                                    {{ value }}
+                                                                                {% endif %}
+                                                                            </div>
+                                                                            {% endif %}
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        
+                                                                        <!-- Media Files Section -->
+                                                                        {% if child.media_files %}
+                                                                        <div class="media-section mt-2">
+                                                                            <strong class="text-primary">Media Files:</strong>
+                                                                            <div class="d-flex flex-wrap mt-1">
+                                                                                {% for media_file in child.media_files %}
+                                                                                <a href="{{ media_file.direct_api_url }}" 
+                                                                                   target="_blank" 
+                                                                                   class="badge bg-success media-badge"
+                                                                                   data-bs-toggle="tooltip" 
+                                                                                   title="Click to view {{ media_file.file_name }}">
+                                                                                    <i class="fas fa-file me-1"></i>
+                                                                                    {{ media_file.file_name|truncatechars:30 }}
+                                                                                </a>
+                                                                                {% endfor %}
+                                                                            </div>
+                                                                        </div>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    {% if not forloop.last %}<hr>{% endif %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                            
+                                                            <!-- Check if any children were found for this parent -->
+                                                            {% with has_children=False %}
+                                                                {% for child in parent_children %}
+                                                                    {% if child.transaction_id == parent.psk_id %}
+                                                                        {% with has_children=True %}{% endwith %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                                {% if not has_children %}
+                                                                <div class="text-center text-muted py-3">
+                                                                    <i class="fas fa-info-circle me-1"></i>
+                                                                    No child records found for this parent
+                                                                </div>
+                                                                {% endif %}
+                                                            {% endwith %}
+                                                        {% endwith %}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endif %}
+
+                            <!-- Child Records Only (when no parents but children exist) -->
+                            {% if data.children and not data.parents %}
+                            <div class="table-responsive">
+                                <h6>Child Records</h6>
+                                <table class="table table-striped table-hover child-table">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Staff ID</th>
+                                            <th>Parent Year</th>
+                                            <th>Details</th>
+                                            <th>Media Files</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for child in data.children %}
+                                        <tr>
+                                            <td>{{ child.parent_data.stf_id|default:"N/A" }}</td>
+                                            <td>{{ child.parent_data.year|default:"N/A" }}</td>
+                                            <td>
+                                                {% for key, value in child.items %}
+                                                    {% if key not in "transaction_id,parent_data,media_files,psk_id" and value %}
+                                                    <div><small><strong>{{ key|title }}:</strong> 
+                                                        {% if value|length > 50 %}
+                                                            {{ value|slice:":50" }}...
+                                                        {% else %}
+                                                            {{ value }}
+                                                        {% endif %}
+                                                    </small></div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+                                            <td>
+                                                {% if child.media_files %}
+                                                <div class="d-flex flex-wrap">
+                                                    {% for media_file in child.media_files %}
+                                                    <a href="{{ media_file.direct_api_url }}" 
+                                                       target="_blank" 
+                                                       class="badge bg-success media-badge"
+                                                       data-bs-toggle="tooltip" 
+                                                       title="{{ media_file.file_name }}">
+                                                        <i class="fas fa-file me-1"></i>
+                                                        {{ media_file.file_name|truncatechars:20 }}
+                                                    </a>
+                                                    {% endfor %}
+                                                </div>
+                                                {% else %}
+                                                <span class="text-muted">No media</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">No records found</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endif %}
+
+                            <!-- No Data Message -->
+                            {% if not data.parents and not data.children %}
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle me-2"></i>No records found for {{ data.name }} with the current filters.
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                <!-- No Forms Selected Message -->
+                {% if not all_data %}
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No data found</h4>
+                        <p class="text-muted">No records match the current filter criteria. Try adjusting your filters.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <!-- Welcome/Instruction Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-filter fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">Apply filters to view faculty data</h4>
+                        <p class="text-muted">
+                            {% if user_role == "Staff" %}
+                            Select from available forms (Faculty Participation, Research Publications, Books & Chapters) to see your records.
+                            {% elif user_role == "Hod" %}
+                            Select filters to view records from your department ({{ department_name }}).
+                            {% else %}
+                            Select department and staff filters to view records across all departments.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function clearFilters() {
+            // Clear department dropdown (for NAAC)
+            const departmentSelect = document.getElementById('department');
+            if (departmentSelect) {
+                departmentSelect.value = '';
+            }
+            
+            // Clear staff dropdown (for HOD and NAAC)
+            const staffSelect = document.getElementById('stf_id');
+            if (staffSelect) {
+                staffSelect.value = '';
+            }
+            
+            // Clear checkboxes
+            const checkboxes = document.querySelectorAll('input[name="forms"]');
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.disabled) {
+                    checkbox.checked = false;
+                }
+            });
+            
+            document.getElementById('filterForm').submit();
+        }
+
+        function toggleChildTable(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.toggle('hidden');
+                
+                // Update button text
+                const button = element.previousElementSibling.querySelector('button');
+                if (button) {
+                    if (element.classList.contains('hidden')) {
+                        button.innerHTML = '<i class="fas fa-eye"></i> Details';
+                        button.classList.remove('btn-primary');
+                        button.classList.add('btn-outline-primary');
+                    } else {
+                        button.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Details';
+                        button.classList.remove('btn-outline-primary');
+                        button.classList.add('btn-primary');
+                    }
+                }
+            }
+        }
+
+        // Auto-submit form when export buttons are clicked
+        document.querySelectorAll('[name="export"]').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('filterForm').submit();
+            });
+        });
+
+        // Show loading state on form submission
+        document.getElementById('filterForm').addEventListener('submit', function() {
+            const submitButton = this.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Loading...';
+                submitButton.disabled = true;
+            }
+        });
+
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
+        // Department change handler for NAAC users
+        document.addEventListener('DOMContentLoaded', function() {
+            const departmentSelect = document.getElementById('department');
+            if (departmentSelect) {
+                departmentSelect.addEventListener('change', function() {
+                    // When department changes, auto-submit the form to reload staff list
+                    document.getElementById('filterForm').submit();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

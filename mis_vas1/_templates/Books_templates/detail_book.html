@@ -1,0 +1,124 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<body>
+    <button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+    <h5 class="fw-bold py-3 mb-4">Books & Chapter Publication</h5>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row">
+                <!-- Publication Type -->
+                <div class="mb-3 col-md-3">
+                    <label for="publication_type" class="form-label">Publication Type</label>
+                    <input type="text" class="form-control" id="publication_type" value="{{ object.publication_type }}" required disabled>
+                </div>
+
+                <!-- Title of Book/Chapter -->
+                <div class="mb-3 col-md-3">
+                    <label for="title_of_book_or_chapter" class="form-label">Title of Book / Chapter</label>
+                    <input type="text" class="form-control" id="title_of_book_or_chapter" value="{{ object.title_of_book_or_chapter }}" required disabled>
+                </div>
+
+                <!-- Title of Paper -->
+                <div class="mb-3 col-md-3">
+                    <label for="title_of_paper" class="form-label">Title of Paper</label>
+                    <input type="text" class="form-control" id="title_of_paper" value="{{ object.title_of_paper }}" disabled>
+                </div>
+
+                <!-- Title of Proceedings -->
+                <div class="mb-3 col-md-3">
+                    <label for="title_of_proceedings" class="form-label">Title of Proceedings</label>
+                    <input type="text" class="form-control" id="title_of_proceedings" value="{{ object.title_of_proceedings }}" disabled>
+                </div>
+
+                <!-- Name of Conference -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_conference" class="form-label">Name of Conference</label>
+                    <input type="text" class="form-control" id="name_of_conference" value="{{ object.name_of_conference }}" disabled>
+                </div>
+
+                <!-- Year of Publication -->
+                <div class="mb-3 col-md-3">
+                    <label for="year_of_publication" class="form-label">Year of Publication</label>
+                    <input type="text" class="form-control" id="year_of_publication" value="{{ object.year_of_publication }}" required disabled>
+                </div>
+
+                <!-- National or International -->
+                <div class="mb-3 col-md-3">
+                    <label for="national_or_international" class="form-label">National or International</label>
+                    <input type="text" class="form-control" id="national_or_international" value="{{ object.national_or_international }}" required disabled>
+                </div>
+
+                <!-- ISBN / ISSN Number -->
+                <div class="mb-3 col-md-3">
+                    <label for="isbn_or_issn_number" class="form-label">ISBN/ISSN Number</label>
+                    <input type="text" class="form-control" id="isbn_or_issn_number" value="{{ object.isbn_or_issn_number }}" disabled>
+                </div>
+
+                <!-- Affiliating Institute -->
+                <div class="mb-3 col-md-3">
+                    <label for="affiliating_institute" class="form-label">Affiliating Institute</label>
+                    <input type="text" class="form-control" id="affiliating_institute" value="{{ object.affiliating_institute }}" required disabled>
+                </div>
+
+                <!-- Name of the Publisher -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_the_publisher" class="form-label">Name of the Publisher</label>
+                    <input type="text" class="form-control" id="name_of_the_publisher" value="{{ object.name_of_the_publisher }}" required disabled>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="card">
+    <h5 class="card-header">Documents To Be Uploaded</h5>
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'detail' psk_id=psk_id %}">
+            {% csrf_token %}
+            <input type="hidden" name="parent_psk_id" value="{{ psk_id }}">
+            <div class="row">
+            <div class="mb-3 col-md-4">
+                <label for="journal_cover_page" class="form-label">Conference Cover Page</label>
+                <input type="file" name="file" id="file1" class="form-control" accept="application/pdf" required>
+                <div class="error-message" id="error-file1" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3 col-md-4">
+                <label for="index_page" class="form-label">Copy of the Chapters</label>
+                <input type="file" name="file" id="file2" class="form-control" accept="application/pdf" required>
+                <div class="error-message" id="error-file2" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3 col-md-4">
+                <label for="impact_factor" class="form-label">Index Page</label>
+                <input type="file" name="file" id="file3" class="form-control" accept="application/pdf" required>
+                <div class="error-message" id="error-file3" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3 col-md-4">
+                <label for="citation_index" class="form-label">Proof Of ISBN / ISSN Details</label>
+                <input type="file" name="file" id="file4" class="form-control" accept="application/pdf" required>
+                <div class="error-message" id="error-file4" style="color: red;"></div>
+            </div>
+
+            <div class="mb-3 col-md-4">
+                <label for="citation_index" class="form-label">OtherFile Name</label>
+                <input type="file" name="file" id="file5" class="form-control" accept="application/pdf" required>
+                <div class="error-message" id="error-file5" style="color: red;"></div>
+            </div>
+        </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</div>
+</body>
+
+{% endblock %}

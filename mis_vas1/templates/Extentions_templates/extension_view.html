@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- External Stylesheet for Multi-Select Tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h4 class="fw-bold py-3 mb-4">Workshop/Seminar Details</h4>
+
+<!-- Workshop/Seminar Information -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="mb-3 col-md-3">
+                    <label for="department_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" value="{{ extension.department_name }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="department_code" class="form-label">Department Code</label>
+                    <input type="text" class="form-control" id="department_code" value="{{ extension.department_code }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_the_activity" class="form-label">Name of the activity</label>
+                    <input type="text" class="form-control" id="name_of_the_activity" value="{{ extension.name_of_the_activity }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="organizing_agency_collaborating" class="form-label">Organizing/Agency/Collaborating Agency</label>
+                    <input type="text" class="form-control" id="organizing_agency_collaborating" value="{{ extension.organizing_agency_collaborating }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_the_scheme" class="form-label">Name of the Scheme</label>
+                    <input type="text" class="form-control" id="name_of_the_scheme" value="{{ extension.name_of_the_scheme }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="year_of_activity" class="form-label">Year of activity</label>
+                    <input type="text" class="form-control" id="year_of_activity" value="{{ extension.year_of_activity }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="number_of_students" class="form-label">Number of students participated</label>
+                    <input type="text" class="form-control" id="number_of_students" value="{{ extension.number_of_students }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="number_of_beneficiaries" class="form-label">Number of Beneficiaries</label>
+                    <input type="text" class="form-control" id="number_of_beneficiaries" value="{{ extension.number_of_beneficiaries }}" required disabled>
+                </div>
+                
+            </div>
+            <div class="text-end">
+            <a class="btn btn-primary" href="{% url 'extension_update' extension.psk_id %}"><i class="bx bxs-edit">Edit</i></a>
+            <a class="btn btn-primary" href="{% url 'extension_list' %}"><span class="tf-icons bx bx-list-plus">List</span></a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

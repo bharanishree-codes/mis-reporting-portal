@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<!-- Display error message if any -->
+{{ error }}
+
+<!-- Back Button -->
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+<h4 class="fw-bold py-3 mb-2"><center>Faculty Participation</center></h4>
+{% comment %} <h4 class="fw-bold py-3 mb-4">Faculty Participation</h4> {% endcomment %}
+
+<!-- Form for Faculty Participation -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                
+                <!-- Staff ID Selection -->
+                <div class="mb-3 col-md-4">
+                    <label for="stf_id" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="stf_id" name="stf_id" value="{{ participation.stf_id }}" readonly>
+                </div>
+
+                <!-- Staff Name (auto-filled) -->
+                <div class="mb-3 col-md-4">
+                    <label for="stf_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="stf_name" name="stf_name" value="{{ participation.stf_name }}" readonly>
+                </div>
+
+                <!-- Department Name (auto-filled) -->
+                <div class="mb-3 col-md-4">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{ participation.department }}" readonly>
+                </div>
+
+                <!-- Year of Participation -->
+
+<div class="mb-3 col-md-4">
+    <label for="year" class="form-label">Year</label>
+    <div class="input-group">
+        <select class="form-control" id="year" name="year" required>
+            <option value="" disabled>Select Year</option>
+            {% for y in years %}
+                <option value="{{ y|slice:":4" }}" {% if y|slice:":4" == participation.year|stringformat:"s" %} selected {% endif %}>
+                    {{ y }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+
+                <!-- Participation Items -->
+                <div class="mb-3 col-md-4">
+                    <label for="items" class="form-label">Participated in</label>
+                    <select class="form-select" id="items" name="items" multiple>
+                        {% for option in options %}
+                            <option value="{{ option }}" {% if option in selected_options %} selected {% endif %}>
+                                {{ option }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% comment %} <small class="form-text text-muted">
+                        Hold down the Ctrl (Windows) or Command (Mac) key to select multiple options.
+                    </small> {% endcomment %}
+                </div>
+                
+
+            </div>
+            <div class="mb-3 text-end">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{% url 'detail_view' participation.psk_id %}">
+                    <input type="button" value="Cancel" class="btn btn-primary">
+                </a>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<!-- Multi Select Script -->
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        new MultiSelectTag('items'); // Ensure the 'id' matches your <select> element
+    });
+</script>
+<script>
+    // Update faculty information based on selected staff ID
+    function updateFacultyInfo() {
+        const stf_id = document.getElementById('stf_id').value;
+        const selectedFaculty = {{ faculty_data|safe }}.find(faculty => faculty.stf_id == stf_id);
+
+        // Update fields if faculty is found, else reset them
+        document.getElementById('stf_name').value = selectedFaculty ? selectedFaculty.stf_name : '';
+        document.getElementById('department').value = selectedFaculty ? selectedFaculty.department : '';
+    }
+
+</script>
+
+{% endblock %}

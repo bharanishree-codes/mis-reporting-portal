@@ -1,0 +1,352 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+    
+    {% for option, children_list in children_by_option %}
+    {% if option == "Board of Studies" %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>Board of Studies</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name of the Board / University</th>
+                                <th>Nature of Post or Designation</th>
+                                <th>Upload Proof of Document</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for child in children_list %}
+                                {% if child.board_university_college_name %}
+                                <tr>
+                                    <td>{{ child.board_university_college_name }}</td>
+                                    <td>{{ child.board_designation }}</td>
+                                    <td>
+                                        {% for media in child.media %}
+                                            {{ media }}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+
+
+
+    
+{% for option, children_list in children_by_option %}
+{% if option == "Question Paper Setting" %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Question Paper Setting</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of the University / College</th>
+                            <th>Subject</th>
+                            <th>Upload Communication Letter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children_list %}
+                            {% if child.qp_university_college_name %}
+                            <tr>
+                                <td>{{ child.qp_university_college_name }}</td>
+                                <td>{{ child.qp_subject }}</td>
+                                <td>
+                                    {% for media in child.media %}
+                                        {{ media }}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}
+
+    
+{% for option, children_list in children_by_option %}
+{% if option == "Evaluation" %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Evaluation</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of the University / College</th>
+                            <th>Subject</th>
+                            <th>Upload Communication Letter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children_list %}
+                            {% if child.eval_university_college_name %}
+                            <tr>
+                                <td>{{ child.eval_university_college_name }}</td>
+                                <td>{{ child.eval_subject }}</td>
+                                <td>
+                                    {% for media in child.media %}
+                                        {{ media }}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}
+
+    
+{% for option, children_list in children_by_option %}
+{% if option == "Design and Development of Curriculum for ADD-On" %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Design and Development of Curriculum for ADD-On</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of the University / College</th>
+                            <th>Name of the Addon</th>
+                            <th>Upload Proof of Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children_list %}
+                            {% if child.design_development_university_college_name %}
+                            <tr>
+                                <td>{{ child.design_development_university_college_name }}</td>
+                                <td>{{ child.design_development_addon }}</td>
+                                <td>
+                                    {% for media in child.media %}
+                                        {{ media }}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}
+
+    
+{% for option, children_list in children_by_option %}
+{% if option == "Certificate Courses" %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Certificate Courses</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of the University / College</th>
+                            <th>Name of the Course</th>
+                            <th>Upload Proof of Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children_list %}
+                            {% if child.certificate_university_college_name %}
+                            <tr>
+                                <td>{{ child.certificate_university_college_name }}</td>
+                                <td>{{ child.certificate_course }}</td>
+                                <td>
+                                    {% for media in child.media %}
+                                        {{ media }}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}
+
+    
+{% for option, children_list in children_by_option %}
+{% if option == "External Examiner" %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>External Examiner</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of the University / College</th>
+                            <th>Upload Communication Letter</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children_list %}
+                            {% if child.external_examiner_university_college_name %}
+                            <tr>
+                                <td>{{ child.external_examiner_university_college_name }}</td>
+                                <td>
+                                    {% for media in child.media %}
+                                        {{ media }}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}
+
+{% for option, children_list in children_by_option %}
+{% if option == "Conference" %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Conference</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of the University / College</th>
+                            <th>Name of the Conference</th>
+                            <th>Upload Proof of Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children_list %}
+                            {% if child.conference_university_college_name %}
+                            <tr>
+                                <td>{{ child.conference_university_college_name }}</td>
+                                <td>{{ child.conference_name }}</td>
+                                <td>
+                                    {% for media in child.media %}
+                                        {{ media }}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}
+
+{% for option, children_list in children_by_option %}
+{% if option == "Seminar" %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Seminar</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of the University / College</th>
+                            <th>Name of the Seminar</th>
+                            <th>Upload Proof of Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children_list %}
+                            {% if child.seminar_university_college_name %}
+                            <tr>
+                                <td>{{ child.seminar_university_college_name }}</td>
+                                <td>{{ child.seminar_name }}</td>
+                                <td>
+                                    {% for media in child.media %}
+                                        {{ media }}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}
+
+
+{% for option, children_list in children_by_option %}
+    {% if option == "Workshop" %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>Workshop</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name of the University / College</th>
+                                <th>Name of the Workshop</th>
+                                <th>Upload Proof of Document</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for child in children_list %}
+                                {% if child.workshop_university_college_name %}
+                                <tr>
+                                    <td>{{ child.workshop_university_college_name }}</td>
+                                    <td>{{ child.workshop_name }}</td>
+                                    <td>
+                                        {% for media in child.media %}
+                                            {{ media }}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+</tbody>
+</table>
+
+</tbody>
+</table>
+    </div>
+</div>
+
+{% endblock %}

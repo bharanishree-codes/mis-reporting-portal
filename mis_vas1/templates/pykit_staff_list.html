@@ -1,0 +1,202 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<style>
+#loader-overlay {
+  display: none; /* Set to flex via JS when loading */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.6); /* transparent white */
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+   width: 56px;
+   height: 56px;
+   display: grid;
+   animation: spinner-plncf9 4s infinite;
+}
+
+.spinner::before,
+.spinner::after {
+   content: "";
+   grid-area: 1/1;
+   border: 9px solid;
+   border-radius: 50%;
+   border-color: #474bff #474bff #0000 #0000;
+   mix-blend-mode: darken;
+   animation: spinner-plncf9 1s infinite linear;
+}
+
+.spinner::after {
+   border-color: #0000 #0000 #dbdcef #dbdcef;
+   animation-direction: reverse;
+}
+
+@keyframes spinner-plncf9 {
+   100% {
+      transform: rotate(1turn);
+   }
+}
+</style>
+ 
+<div id="loader-overlay">
+<div class="spinner"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loader = document.getElementById('loader-overlay');
+    const declarationCheckbox = document.getElementById('declarationCheckbox');
+    const checkboxError = document.getElementById('checkboxError');
+
+    function showLoader() {
+      if (loader) loader.style.display = 'flex';
+    }
+
+    function hideLoader() {
+      if (loader) loader.style.display = 'none';
+    }
+
+    // Always hide loader when the page becomes visible again (e.g., back from new tab)
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') {
+        hideLoader();
+      }
+    });
+
+    // Hide loader when page is loaded (e.g., on back-forward cache)
+    window.addEventListener('pageshow', function () {
+      hideLoader();
+    });
+
+    // Handle form submission
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', function (e) {
+        if (!form.checkValidity()) return;
+
+        if (declarationCheckbox && !declarationCheckbox.checked) {
+          e.preventDefault();
+          if (checkboxError) checkboxError.style.display = 'block';
+          return;
+        }
+
+        if (checkboxError) checkboxError.style.display = 'none';
+        showLoader();
+      });
+    });
+
+    // Handle anchor clicks
+    document.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const href = link.getAttribute('href');
+        const target = link.getAttribute('target');
+
+        // Prevent loader if:
+        if (
+          !href ||
+          href.startsWith('#') ||
+          href.startsWith('javascript:') ||
+          (target && target === '_blank') ||
+          href.toLowerCase().endsWith('.pdf')
+        ) {
+          return; // Do nothing
+        }
+
+        showLoader(); // Show loader only for real page navigation
+      });
+    });
+
+    // Just in case: hide loader after 10 seconds max (fallback)
+  
+  });
+</script>
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<h4 class="fw-bold py-3 mb-2"><center>User Management</center></h4>
+<div class="d-flex align-items-center gap-3 mb-3">
+  <a href="{% url 'data_fetch' %}" class="btn btn-rounded btn-warning">
+    <span class="tf-icons bx bx-user-plus"></span>&nbsp; ERP Sync
+  </a>
+  
+  <form method="get" action="{% url 'pykit_staff_list' %}" class="d-flex align-items-center">
+      <select name="filter" id="email_filter" class="form-select bg-secondary text-white" onchange="this.form.submit()">
+          <option value="all" {% if selected_filter == 'all' %}selected{% endif %}>All ERP User</option>
+          <option value="valid" {% if selected_filter == 'valid' %}selected{% endif %}>Valid User</option>
+          <option value="invalid" {% if selected_filter == 'invalid' %}selected{% endif %}>Invalid User</option>
+          <option value="In active" {% if selected_filter == 'In active' %}selected{% endif %}>Inactive Users</option>
+        </select>
+        {% comment %} <button type="submit" class="btn btn-primary">Apply Filter</button> {% endcomment %}
+    </form>
+    <a href="{% url 'hcas_user' %}" class="btn btn-rounded btn-success">
+      <span class="tf-icons bx bx-user-plus"></span>&nbsp; Sync User
+    </a>
+</div>
+
+<div class="card mt-4">
+    
+{% comment %} <form method="get" action="{% url 'pykit_staff_list' %}" class="row g-2 align-items-end">
+    <div class="col-md-4">
+        <label for="email_filter" class="form-label"><strong>Filter by Email Type:</strong></label>
+        <select name="filter" id="email_filter" class="form-select">
+            <option value="all" {% if selected_filter == 'all' %}selected{% endif %}>All Emails</option>
+            <option value="valid" {% if selected_filter == 'valid' %}selected{% endif %}>Valid Emails</option>
+            <option value="invalid" {% if selected_filter == 'invalid' %}selected{% endif %}>Invalid Emails</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Apply Filter</button>
+    </div>
+</form> {% endcomment %}
+    {% comment %} </div> {% endcomment %}
+
+    <div class="table-responsive text-nowrap mt-3">
+        <table class="table py-3" id="example">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email ID</th>
+                    <th>Mobile</th>
+                    <th>Active</th>
+                    <th>Password</th>
+                    {% comment %} <th>Password</th> {% endcomment %}
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% for user in total_pykit_staff %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.user_first_name }}</td>
+                    <td>{{ user.user_last_name }}</td>
+                    <td>{{ user.user_email_id }}</td>
+                    <td>{{ user.user_mobile }}</td>
+                    <td>
+                        {% if user.active %}
+                        Active
+                        {%else%}
+                        In active
+                        {%endif%}
+                    </td>
+                    <td>{{ user.password }}</td>
+                </tr>
+                {% comment %} {% empty %}
+                <tr>
+                    <td colspan="6"><center>No users found for this filter.</center></td>
+                </tr> {% endcomment %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

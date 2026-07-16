@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<!-- Back Button -->
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class="bx bx-arrow-back"></i>
+</button><br><br>
+
+<h4 class="fw-bold py-3 mb-2"><center>Faculty Participation</center></h4>
+
+<!-- Add Participation Button -->
+{% comment %} <div class="text-end"> {% endcomment %}
+<a href="{% url 'create_participation' %}" class="btn btn-primary">
+    <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add
+</a>
+{% comment %} </div> {% endcomment %}
+
+<!-- Table of Participations -->
+<div class="card mt-4">
+    <div class="table-responsive text-nowrap mt-3">
+        <table class="table py-3" id="example">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Year</th>
+                    <th>Types</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% for participation in participations|dictsort:"psk_id" %}
+                <tr>
+                    <!-- Dropdown Menu -->
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-dark btn-xs dropdown-toggle dropdown-toggle-split rounded" 
+                                    data-bs-toggle="dropdown" aria-expanded="true">
+                                <i class="bx bx-cog"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% comment %} <li><a class="dropdown-item" href="{% url 'update_participation' participation.psk_id %}">Edit</a></li> {% endcomment %}
+                                <li><a class="dropdown-item" href="{% url 'detail_view' participation.psk_id %}">View</a></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalToggle{{ participation.psk_id }}">Delete</a></li>
+                            </ul>
+
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="modalToggle{{ participation.psk_id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this participation?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="{% url 'delete_participation' participation.psk_id %}" class="btn btn-danger">Yes</a>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- Table Data -->
+                    <td>{{ participation.stf_name }}</td>
+                    <td>{{ participation.year }}</td>
+                    <td>{{ participation.participation }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

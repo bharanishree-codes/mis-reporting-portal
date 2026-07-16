@@ -1,0 +1,118 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+
+<h4 class="fw-bold py-3 mb-4"><center>Books & Chapter Publication</center></h4>
+{% if not from_dashboard %}
+<a href="{% url 'Create' %}" class="btn btn-primary">
+    <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add
+</a>
+{% endif %}
+<div class="card mt-4">
+    <div class="table-responsive text-nowrap mt-3">
+        <table class="table py-3" id="example">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Publication Type</th>
+                    <th>Title of Book/Chapter</th>
+                    {% comment %} <th>Title of Paper</th>
+                    <th>Title of Conference</th>
+                    <th>Name of Conference</th>
+                    <th>Year of Publication</th> {% endcomment %}
+                    <th>National / International</th>
+                    <th>ISBN/ISSN Number</th>
+                    {% comment %} <th>Affiliating Institute</th> {% endcomment %}
+                    <th>Name of the Publisher</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in list %}
+                    <tr>
+                        <td>
+                            <div class="btn-group">
+                                <!-- Dropdown Button -->
+                                <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                        data-bs-toggle="dropdown" aria-expanded="true">
+                                    <i class="bx bx-cog"></i>
+                                </button>
+                            
+                                <!-- Dropdown Menu -->
+                                <ul class="dropdown-menu">
+                                    <!-- File Update Button -->
+                                    {% comment %} <li>
+                                        <a class="dropdown-item" href="{% url 'file_update_book' obj.psk_id %}">
+                                            File Update
+                                        </a>
+                                    </li> {% endcomment %}
+                            
+                                    <!-- Edit Button -->
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'book_update' obj.psk_id %}">
+                                            Edit
+                                        </a>
+                                    </li>
+                            
+                                    <!-- Delete Button, triggers modal -->
+                                    <li>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggle{{ obj.psk_id }}">
+                                            Delete
+                                        </a>
+                                    </li>
+                                </ul>
+                            
+                                <!-- Delete Confirmation Modal -->
+                                <div class="modal fade" id="modalToggle{{ obj.psk_id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Do you want to delete this article?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <!-- Yes Button, triggers delete action -->
+                                                <a href="{% url 'delete' obj.psk_id %}" class="btn btn-danger">
+                                                    <i class="bx bxs-trash"></i> Yes
+                                                </a>
+                            
+                                                <!-- No Button, closes modal -->
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    <i class="bx bx-x"></i> No
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+    
+                        </td>
+                        <td>{{ obj.publication_type }}</td>
+                        <td>{{ obj.title_of_book_or_chapter }}</td>
+                        {% comment %} <td>{{ obj.title_of_paper }}</td>
+                        <td>{{obj.title_of_proceedings}}</td>
+                        <td>{{ obj.name_of_conference }}</td> {% endcomment %}
+                        {% comment %} <td>{{ obj.year_of_publication }}</td> {% endcomment %}
+                        <td>{{ obj.national_or_international }}</td>
+                        <td>{{ obj.isbn_or_issn_number }}</td>
+                        {% comment %} <td>{{ obj.affiliating_institute }}</td> {% endcomment %}
+                        <td>{{ obj.name_of_the_publisher }}</td>
+
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

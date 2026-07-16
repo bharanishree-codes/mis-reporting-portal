@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Work Filter</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .badge-project {
+            background-color: #6c757d;
+            color: white;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .media-badge {
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .export-buttons {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="fas fa-project-diagram me-2"></i>Project Work Management
+                    </h2>
+                    <div>
+                        <span class="badge bg-secondary me-2">Role: {{ user_role }}</span>
+                        <span class="badge bg-info">User: {{ username }}</span>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+        <!-- Filter Form -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-filter me-2"></i>Filter Options
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="get" id="filterForm">
+                            <div class="row">
+                                <!-- Staff ID Dropdown -->
+                                {% if user_role == "Hod" %}
+                                <div class="col-md-3 mb-3">
+                                    <label for="staff_id" class="form-label">Staff Member</label>
+                                    <select class="form-select" id="staff_id" name="staff_id">
+                                        <option value="">All Staff</option>
+                                        {% for staff_id in staff_ids %}
+                                        <option value="{{ staff_id }}" {% if staff_id == selected_staff_id %}selected{% endif %}>
+                                            {{ staff_id }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endif %}
+
+                                <!-- Year Range -->
+                                <div class="col-md-3 mb-3">
+                                    <label for="from_year" class="form-label">From Year</label>
+                                    <select class="form-select" id="from_year" name="from_year">
+                                        <option value="">All Years</option>
+                                        {% for year in years %}
+                                        <option value="{{ year }}" {% if year == selected_from_year %}selected{% endif %}>
+                                            {{ year }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label for="to_year" class="form-label">To Year</label>
+                                    <select class="form-select" id="to_year" name="to_year">
+                                        <option value="">All Years</option>
+                                        {% for year in years %}
+                                        <option value="{{ year }}" {% if year == selected_to_year %}selected{% endif %}>
+                                            {{ year }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Course Type -->
+                                <!-- <div class="col-md-3 mb-3">
+                                    <label for="course_type" class="form-label">Course Type</label>
+                                    <select class="form-select" id="course_type" name="course_type">
+                                        <option value="">All Course Types</option>
+                                        {% for course_type in course_types %}
+                                        <option value="{{ course_type }}" {% if course_type == selected_course_type %}selected{% endif %}>
+                                            {{ course_type }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div> -->
+
+                                <!-- Project Type -->
+                                <div class="col-md-3 mb-3">
+                                    <label for="project_type" class="form-label">Project Type</label>
+                                    <select class="form-select" id="project_type" name="project_type">
+                                        <option value="all" {% if selected_project_type == "all" %}selected{% endif %}>All Types</option>
+                                        <option value="project" {% if selected_project_type == "project" %}selected{% endif %}>Project Work</option>
+                                        <option value="field" {% if selected_project_type == "field" %}selected{% endif %}>Field Project</option>
+                                        <option value="internship" {% if selected_project_type == "internship" %}selected{% endif %}>Internship</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-search me-1"></i>Apply Filters
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
+                                            <i class="fas fa-times me-1"></i>Clear Filters
+                                        </button>
+                                        {% if filter_applied %}
+                                        <button type="submit" class="btn btn-success" name="export" value="excel">
+                                            <i class="fas fa-file-excel me-1"></i>Export Excel
+                                        </button>
+                                        <button type="submit" class="btn btn-danger" name="export" value="pdf">
+                                            <i class="fas fa-file-pdf me-1"></i>Export PDF
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        {% if filter_applied %}
+        <div class="row">
+            <div class="col-12">
+                <!-- Summary Statistics -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-center bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Courses</h6>
+                                <h3 class="text-primary">{{ parents|length }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Project Records</h6>
+                                <h3 class="text-success">{{ children|length }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Selected Filters</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% if selected_staff_id %}
+                                    <span class="badge bg-primary">Staff: {{ selected_staff_id }}</span>
+                                    {% endif %}
+                                    {% if selected_from_year %}
+                                    <span class="badge bg-info">From: {{ selected_from_year }}</span>
+                                    {% endif %}
+                                    {% if selected_to_year %}
+                                    <span class="badge bg-info">To: {{ selected_to_year }}</span>
+                                    {% endif %}
+                                    {% if selected_course_type %}
+                                    <span class="badge bg-warning">Course: {{ selected_course_type }}</span>
+                                    {% endif %}
+                                    {% if selected_project_type %}
+                                    <span class="badge bg-success">Project Type: {{ selected_project_type }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent Projects -->
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list me-2"></i>Course Records ({{ parents|length }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" style="font-size: 0.875rem;">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th style="font-size: 0.7rem;">Staff ID</th>
+                                        <th style="font-size: 0.7rem;">Name</th>
+                                        <th style="font-size: 0.7rem;">Department</th>
+                                        <th style="font-size: 0.7rem;">Academic Year</th>
+                                        <th style="font-size: 0.7rem;">Course Name</th>
+                                        <th style="font-size: 0.7rem;">Course Code</th>
+                                        <th style="font-size: 0.7rem;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for parent in parents %}
+                                    <tr>
+                                        <td style="font-size: 0.7rem;">{{ parent.staff_id }}</td>
+                                        <td style="font-size: 0.7rem;">{{ parent.staff_name }}</td>
+                                        <td style="font-size: 0.7rem;">{{ parent.department }}</td>
+                                        <td style="font-size: 0.7rem;">{{ parent.academic_year }}</td>
+                                        <td style="font-size: 0.7rem;">{{ parent.course_name }}</td>
+                                        <td style="font-size: 0.7rem;">{{ parent.course_code }}</td>
+                                        <td style="font-size: 0.7rem;">
+                                            <button class="btn btn-sm btn-outline-primary" 
+                                                    onclick="toggleChildTable('childTable{{ forloop.counter }}')"
+                                                    style="font-size: 0.8rem; padding: 0.25rem 0.5rem;">
+                                                <i class="fas fa-eye"></i> View Projects
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!-- Child Table for this parent -->
+                                    <tr class="hidden" id="childTable{{ forloop.counter }}">
+                                        <td colspan="7">
+                                            <div class="card bg-light">
+                                                <div class="card-header bg-light">
+                                                    <h6 class="mb-0" style="font-size: 0.95rem;">Projects for {{ parent.staff_name }} - {{ parent.course_name }}</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-sm" style="font-size: 0.8rem;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="font-size: 0.85rem;">Project Type</th>
+                                                                    <th style="font-size: 0.85rem;">Department</th>
+                                                                    <th style="font-size: 0.85rem;">Program Code</th>
+                                                                    <th style="font-size: 0.85rem;">Course</th>
+                                                                    <th style="font-size: 0.85rem;">Year</th>
+                                                                    <th style="font-size: 0.85rem;">Students</th>
+                                                                    <th style="font-size: 0.85rem;">Attachments</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for child in children %}
+                                                                {% if child.transaction_id == parent.psk_id %}
+                                                                <tr>
+                                                                    <td>
+                                                                        {% if child.pro_name_of_the_course %}
+                                                                            Project Work
+                                                                        {% elif child.field_name_of_the_course %}
+                                                                            Field Project
+                                                                        {% elif child.intern_name_of_the_course %}
+                                                                            Internship
+                                                                        {% else %}
+                                                                            Unknown
+                                                                        {% endif %}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ child.pro_department_name|default:child.field_department_name|default:child.intern_department_name|default:"N/A" }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ child.pro_program_code|default:child.field_program_code|default:child.intern_program_code|default:"N/A" }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ child.pro_name_of_the_course|default:child.field_name_of_the_course|default:child.intern_name_of_the_course|default:"N/A" }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ child.pro_year_of_offering|default:child.field_year_of_offering|default:child.intern_year_of_offering|default:"N/A" }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ child.pro_name_of_students_studied|default:child.field_name_of_students_studied|default:child.intern_name_of_students_studied|default:"N/A" }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {% if child.media_files %}
+                                                                        {% for media in child.media_files %}
+                                                                        <a href="{{ media.direct_api_url }}" 
+                                                                           target="_blank" class="badge bg-info media-badge" style="font-size: 0.7rem;">
+                                                                            <i class="fas fa-file me-1"></i>{{ media.file_name }}
+                                                                        </a>
+                                                                        {% endfor %}
+                                                                        {% else %}
+                                                                        <span class="badge bg-secondary" style="font-size: 0.7rem;">No attachments</span>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted" style="font-size: 0.875rem;">No records found</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Welcome/Instruction Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-filter fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">Apply filters to view project work data</h4>
+                        <p class="text-muted">Select filters from above to see project work records</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function clearFilters() {
+            document.getElementById('staff_id').value = '';
+            document.getElementById('from_year').value = '';
+            document.getElementById('to_year').value = '';
+            document.getElementById('course_type').value = '';
+            document.getElementById('project_type').value = 'all';
+            
+            document.getElementById('filterForm').submit();
+        }
+
+        function toggleChildTable(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('hidden');
+        }
+
+        // Auto-submit form when export buttons are clicked
+        document.querySelectorAll('[name="export"]').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('filterForm').submit();
+            });
+        });
+
+        // Show loading state on form submission
+        document.getElementById('filterForm').addEventListener('submit', function() {
+            const submitButton = this.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Loading...';
+                submitButton.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>

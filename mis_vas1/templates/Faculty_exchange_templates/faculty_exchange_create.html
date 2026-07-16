@@ -1,0 +1,217 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- Include necessary CSS for multi-select -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+{% comment %} <h4 class="fw-bold py-3 mb-4">Collaborative activities for Faculty Exchange</h4> {% endcomment %}
+<h4 class="fw-bold py-3 mb-2"><center>Number of Collaborative activities for Faculty Exchange</center></h4>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" action="{% url 'faculty_exchange_create' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row">
+
+                {% comment %} <div class="mb-1 col-md-3">
+                    <label for="staff_id" class="form-label">Staff ID</label>
+                    <div class="input-group">
+                        <select class="form-control" id="staff_id" name="staff_id" required>
+                            <option value="" disabled selected>Select Staff ID</option>
+                            {% for stf in faculty_data %}
+                                <option value="{{ stf.stf_id }}"
+                                        data-staff-name="{{ stf.stf_name }}"
+                                        data-department="{{ stf.department }}">
+                                    {{ stf.stf_id }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <span class="input-group-text">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </div>
+                </div> {% endcomment %}
+
+
+                <div class="mb-1 col-md-3">
+                    <label for="username" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{username}}" readonly>
+                </div>
+                
+                <div class="mb-1 col-md-3">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{staff_name}}" readonly>
+                </div>
+
+                <!-- Department Name -->
+                <div class="mb-1 col-md-3">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{department}}" readonly>
+                </div>
+
+
+
+                <!-- Title of the Collaborative Activity -->
+                <div class="mb-1 col-md-3">
+                    <label for="activity_title" class="form-label">Title of the Collaborative Activity:</label>
+                    <input type="text" class="form-control" id="activity_title" name="activity_title" required>
+                </div>
+
+                <!-- Name of the Collaborating Agency -->
+                <div class="mb-1 col-md-3">
+                    <label for="agency_name" class="form-label">Name of the Collaborating Agency:</label>
+                    <input type="text" class="form-control" id="agency_name" name="agency_name" required>
+                </div>
+
+                <!-- Phone Number of the Collaborating Agency -->
+                <div class="mb-1 col-md-3">
+                    <label for="phone_number" class="form-label">Phone No. of the Collaborating Agency:</label>
+                    <input type="text" class="form-control" id="phone_number" name="phone_number" required>
+                </div>
+
+                <!-- Name of the Participant -->
+                <div class="mb-1 col-md-3">
+                    <label for="participant_name" class="form-label">Name of the Participant:</label>
+                    <input type="text" class="form-control" id="participant_name" name="participant_name" required>
+                </div>
+
+                <!-- Year of Collaboration -->
+
+                {% comment %} <div class="mb-3 col-md-3">
+                    <label for="collaboration_year" class="form-label">Publication Year</label>
+                    <div class="input-group">
+                        <select class="form-control" id="collaboration_year" name="collaboration_year" required>
+                            <option value="" disabled selected>Select Year</option> <!-- Default placeholder option -->
+                        </select>
+                    </div>
+                </div> {% endcomment %}
+
+                <div class="mb-1 col-md-3">
+    <label for="collaboration_year" class="form-label">Year of Collaboration:</label>
+    <select class="form-control" id="collaboration_year" name="collaboration_year" required>
+        <option value="" disabled selected>Select Year</option>
+        {% for year_option in publication_year %}
+            <option value="{{ year_option }}">{{ year_option }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+                <!-- Duration Date From -->
+                <div class="mb-1 col-md-3">
+                    <label for="date_from" class="form-label">Duration Date From:</label>
+                    <input type="date" class="form-control" id="date_from" name="date_from" required>
+                </div>
+
+                <!-- Duration Date To -->
+                <div class="mb-1 col-md-3">
+                    <label for="date_to" class="form-label">Duration Date To:</label>
+                    <input type="date" class="form-control" id="date_to" name="date_to" required>
+                </div>
+
+                <!-- Nature of the Activity -->
+                <div class="mb-1 col-md-3">
+                    <label for="nature_activity" class="form-label">Nature of the Activity:</label>
+                    <input type="text" class="form-control" id="nature_activity" name="nature_activity" required>
+                </div>
+
+            </div>
+    
+        <div class="row">
+            <!-- Permission Letter -->
+            <div class="mb-2 col-md-4">
+                <label for="journal_cover_page" class="form-label">Permission Letter</label>
+                <input type="file" name="file" id="file1" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file1" style="color: red;"></div>
+            </div>
+
+            <!-- Circular -->
+            <div class="mb-2 col-md-4">
+                <label for="index_page" class="form-label">Internship Certificate</label>
+                <input type="file" name="file" id="file2" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file2" style="color: red;"></div>
+            </div>
+
+            
+            <!-- Objective & Outcome -->
+            <div class="mb-2 col-md-4">
+                <label for="citation_index" class="form-label">Objective & Outcome</label>
+                <input type="file" name="file" id="file3" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file3" style="color: red;"></div>
+            </div>
+
+            <!-- Detailed Report -->
+            <div class="mb-2 col-md-4">
+                <label for="detailed_report" class="form-label">Detailed Report</label>
+                <input type="file" name="file" id="file4" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file4" style="color: red;"></div>
+            </div>
+
+            <!-- Geo Tagged Photos -->
+            <div class="mb-2 col-md-4">
+                <label for="geo_tagged_photos" class="form-label">Geo Tagged Photos</label>
+                <input type="file" name="file" id="file5" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file5" style="color: red;"></div>
+            </div>
+
+            <!-- Student Attendance with Signature -->
+            <div class="mb-2 col-md-4">
+                <label for="student_attendance_signature" class="form-label">Faculty Attendance with signature</label>
+                <input type="file" name="file" id="file6" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file6" style="color: red;"></div>
+            </div>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a href="{% url 'faculty_exchange_list' %}"><button type="button" class="btn btn-primary">Cancel</button></a>
+        </div>
+    </div>
+</div>
+
+<!-- Submit Button -->
+
+</form>
+</div>
+</div>
+
+<!-- Include necessary JS for multi-select -->
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+    new MultiSelectTag('userrole'); // id
+</script>
+
+
+<script>
+    document.getElementById('staff_id').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const staffName = selectedOption.getAttribute('data-staff-name');
+        const department = selectedOption.getAttribute('data-department');
+
+        // Populate the respective input fields
+        document.getElementById('staff_name').value = staffName || '';
+        document.getElementById('department_name').value = department || '';
+    });
+</script>
+
+{% comment %} <script>
+    // Define year range
+    const startYear = 2000; // Start year for the dropdown
+    const endYear = 2030;   // End year for the dropdown (inclusive)
+    const yearSelect = document.getElementById('collaboration_year');
+
+    // Populate the dropdown with years
+    for (let i = startYear; i <= endYear; i++) {
+        const option = new Option(i, i); // Create a new option with the year as both value and text
+        yearSelect.add(option); // Add the option to the dropdown
+    }
+</script> {% endcomment %}
+
+
+
+
+{% endblock %}

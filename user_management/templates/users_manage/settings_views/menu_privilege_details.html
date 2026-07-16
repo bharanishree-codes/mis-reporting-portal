@@ -1,0 +1,63 @@
+{% extends 'con_menus.html' %}
+
+{% block content %}
+
+    <h5 class="fw-bold">Menu Privilege / Details</h5>
+
+<a href="{% url 'menu_privilege_detail_form' user_id %}" class="btn btn-primary">
+    <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add
+</a>
+
+    <div class="card mt-3">
+    <div class="card-datatable table-responsive">
+        <table id="example" class="table" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Uid</th>
+                    <th>Table name</th>
+                    <th>Type</th>
+                    <th>Api Method</th>
+                    <th>Authentication key</th>
+                    <th>Action</th>
+
+            </thead>
+            <tbody class="table-border-bottom-0">
+            {% for obj in objs %}
+                <tr>
+                    <td>{{ obj.uid }}</td>
+                    <td>{{ obj.table_name }}</td>
+                    <td>{{ obj.menu_type }}</td>
+                    <td>
+                        {% for method in obj.api_methods_list %}
+                            {% if method == "get" %}
+                                <span class="badge rounded-pill bg-label-info">{{ method }}</span>
+                            {% elif method == "post" %}
+                                <span class="badge rounded-pill bg-label-success">{{ method }}</span>
+                            {% elif method == "put" %}
+                                <span class="badge rounded-pill bg-label-warning">{{ method }}</span>
+                            {% else %}
+                                <span class="badge rounded-pill bg-label-danger">{{ method }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+
+                    <td>{{ obj.authentication_key_value }}</td>
+                  
+                    
+                    <td>
+                        <a class="btn btn-icon btn-sm btn-primary"
+                           href="{% url 'edit_menu_privilege_detail_form' user_id obj.id %}">
+                            <i class="bx bxs-edit"></i>
+                        </a>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+{% endblock content %}

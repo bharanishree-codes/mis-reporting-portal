@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+
+<div class="card mb-4">
+    <div class="card-body">
+        <button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- templates/delete_participation.html -->
+
+<h5>Delete Book</h5>
+<p class="text-danger">
+    Are you sure you want to delete this book?
+    {{object.psk_id}}
+</p>
+<form method="POST">
+    {% csrf_token %}
+
+    <input type="submit" class="btn btn-primary" value="Delete">
+    <a href="{% url 'list_book' %}"><button type="button" class="btn btn-primary">Cancel</button></a>
+</form>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Faculty Report Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-container { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .button-group { margin-top: 20px; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .format-options { margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Faculty Report Generator</h1>
+        
+        <form id="reportForm" action="{% url 'generate_faculty_report' %}" method="GET">
+            <div class="form-group">
+                <label for="staff_id">Staff ID:</label>
+                <input type="text" id="staff_id" name="staff_id" placeholder="Enter staff ID">
+            </div>
+            
+            <div class="form-group">
+                <label for="staff_name">Staff Name:</label>
+                <input type="text" id="staff_name" name="staff_name" placeholder="Enter staff name">
+            </div>
+            
+            <div class="form-group">
+                <label for="department">Department:</label>
+                <select id="department" name="department">
+                    <option value="">Select Department</option>
+                    {% for department in departments %}
+                        <option value="{{ department }}">{{ department }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="from_year">From Academic Year:</label>
+                <select id="from_year" name="from_year">
+                    <option value="">Select Year</option>
+                    {% for year in academic_years %}
+                        <option value="{{ year|slice:':4' }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="to_year">To Academic Year:</label>
+                <select id="to_year" name="to_year">
+                    <option value="">Select Year</option>
+                    {% for year in academic_years %}
+                        <option value="{{ year|slice:':4' }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="format-options">
+                <label>Report Format:</label>
+                <input type="radio" id="excel" name="format" value="excel" checked>
+                <label for="excel">Excel</label>
+                
+                <input type="radio" id="pdf" name="format" value="pdf">
+                <label for="pdf">PDF</label>
+            </div>
+            
+            <div class="button-group">
+                <button type="submit">Generate Report</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

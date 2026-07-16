@@ -1,0 +1,176 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- External Stylesheet -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<!-- Title and Action Buttons -->
+<div class="d-flex justify-content-between align-items-center py-3 mb-4">
+    <h4 class="fw-bold">Project Work/Field Work/Internship</h4>
+    <div class="demo-inline-spacing">
+        <a href="{% url 'project_view' project  %}">
+            <input type="button" value="Back" class="btn btn-primary">
+        </a>
+    </div>
+</div>
+
+<!-- General Details of Participation -->
+{% comment %} <div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Participation Selection -->
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="items" class="form-label">Project work/Field work/Internship</label>
+                    <select class="form-control" name="items" id="publication_type" multiple required>
+                        <option value="project" {% if 'project' in selected_options %}selected{% endif %}>Project Work</option>
+                        <option value="field" {% if 'field' in selected_options %}selected{% endif %}>Field Work</option>
+                        <option value="internship" {% if 'internship' in selected_options %}selected{% endif %}>Internship</option>
+                    </select>
+                </div>
+            </div> {% endcomment %}
+
+            <!-- Dynamic Fields Based on Selected Options -->
+            {% if val == 'project' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Project Work</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label for="pro_department_code">Department Code</label>
+                            <input type="text" name="pro_department_code" value="{{ child.pro_department_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="pro_department_name">Department Name</label>
+                            <input type="text" name="pro_department_name" value="{{ child.pro_department_name }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="pro_program_code">Program Code</label>
+                            <input type="text" name="pro_program_code" value="{{ child.pro_program_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="pro_name_of_the_course">Name of the Course That include Experiential learning through project work</label>
+                            <input type="text" name="pro_name_of_the_course" value="{{ child.pro_name_of_the_course }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="pro_course_code">Course code</label>
+                            <input type="text" name="pro_course_code" value="{{ child.pro_course_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="pro_year_of_offering">Year of offering</label>
+                            <input type="text" name="pro_year_of_offering" value="{{ child.pro_year_of_offering }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="pro_name_of_students_studied">Name of Students studied course on experiential learning</label>
+                            <input type="text" name="pro_name_of_students_studied" value="{{ child.pro_name_of_students_studied }}" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <a class="btn btn-icon btn-sm btn-primary" href="{% url 'project_file_update' child.psk_id %}">
+                        <i class="bx bxs-edit"></i>
+                    </a>
+                </div>
+            </div>
+
+            {% elif val == 'field' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Field Work</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label for="field_department_code">Department Code</label>
+                            <input type="text" name="field_department_code" value="{{ child.field_department_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="field_department_name">Department Name</label>
+                            <input type="text" name="field_department_name" value="{{ child.field_department_name }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="field_program_code">Program Code</label>
+                            <input type="text" name="field_program_code" value="{{ child.field_program_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="field_name_of_the_course">Name of the Course That include Experiential learning</label>
+                            <input type="text" name="field_name_of_the_course" value="{{ child.field_name_of_the_course }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="field_course_code">Course code</label>
+                            <input type="text" name="field_course_code" value="{{ child.field_course_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="field_year_of_offering">Year of offering</label>
+                            <input type="text" name="field_year_of_offering" value="{{ child.field_year_of_offering }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="field_name_of_students_studied">Name of Students studied course on experiential learning</label>
+                            <input type="text" name="field_name_of_students_studied" value="{{ child.field_name_of_students_studied }}" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <a class="btn btn-icon btn-sm btn-primary" href="{% url 'project_file_update' child.psk_id %}">
+                        <i class="bx bxs-edit"></i>
+                    </a>
+                </div>
+            </div>
+
+            {% elif val == 'internship' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Internship</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label for="intern_department_code">Department Code</label>
+                            <input type="text" name="intern_department_code" value="{{ child.intern_department_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="intern_department_name">Department Name</label>
+                            <input type="text" name="intern_department_name" value="{{ child.intern_department_name }}" class="form-control" readonly> 
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="intern_program_code">Program Code</label>
+                            <input type="text" name="intern_program_code" value="{{ child.intern_program_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="intern_name_of_the_course">Name of the Course That include Experiential learning through internship</label>
+                            <input type="text" name="intern_name_of_the_course" value="{{ child.intern_name_of_the_course }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="intern_course_code">Course code</label>
+                            <input type="text" name="intern_course_code" value="{{ child.intern_course_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="intern_year_of_offering">Year of offering</label>
+                            <input type="text" name="intern_year_of_offering" value="{{ child.intern_year_of_offering }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="intern_name_of_students_studied">Name of Students studied course on experiential learning</label>
+                            <input type="text" name="intern_name_of_students_studied" value="{{ child.intern_name_of_students_studied }}" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <a class="btn btn-icon btn-sm btn-primary" href="{% url 'project_file_update' child.psk_id %}">
+                        <i class="bx bxs-edit"></i>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Submit Button -->
+            {% comment %} <div class="mb-3 mt-4">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="{% url 'project_view' project  %}"><button type="button" class="btn btn-primary">Cancel</button></a>
+            </div> {% endcomment %}
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+new MultiSelectTag('userrole')  // id
+</script>
+
+{% endblock content %}

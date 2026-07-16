@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+                <h4 class="fw-bold py-3 mb-4"><center>Number of extension and outreach programmes conducted by the department</center></h4>
+{% if not from_dashboard %}
+    <a href="{% url 'extension_create' %}" class="btn btn-primary">
+        <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add
+    </a>
+	{% endif %}
+
+    {% comment %} <h5>Extension and outreach programmes</h5> {% endcomment %}
+<div class="card mt-4">
+    <div class="table-responsive text-nowrap mt-3">
+        <table class="table py-3" id="example">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Department Name</th>
+                    {% comment %} <th>Department Code</th> {% endcomment %}
+                    <th>Name of the Activity</th>
+                    <th>Organizing / Collaborating Agency</th>
+                    <th>Name of the Scheme</th>
+                    <th>Year of Activity</th>
+                    {% comment %} <th>Edit</th> {% endcomment %}
+                    {% comment %} <th>Detail</th>
+                    <th>Delete</th> {% endcomment %}
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% for extension in extensions %}
+                <tr>
+                    <td><div class="btn-group">
+                        <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                data-bs-toggle="dropdown" aria-expanded="true">
+                            <i class="bx bx-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'extension_update' extension.psk_id %}">Edit</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ extension.psk_id }}">Delete</a></li>
+                        </ul>
+                    
+                        <!-- Modal for Delete Confirmation -->
+                        <div class="modal fade" id="modalToggleDelete{{ extension.psk_id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Delete</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete this participation child?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <!-- Delete button (calls the extension_delete view with the correct id) -->
+                                        <a href="{% url 'extension_delete' extension.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                    <td>{{ extension.department_name }}</td>
+                    {% comment %} <td>{{ seminar.department_code }}</td> {% endcomment %}
+                    <td>{{ extension.name_of_the_activity }}</td>
+                    <td>{{ extension.name_of_the_scheme }}</td>
+                    <td>{{ extension.organizing_agency_collaborating }}</td>
+                    <td>{{ extension.year_of_activity }}</td>
+                    {% comment %} <td><a class="btn btn-icon btn-sm btn-primary" href="{% url 'seminar_update' seminar.psk_id %}"><i class="bx bxs-edit"></i></a></td> {% endcomment %}
+                    {% comment %} <td><a class="btn btn-icon btn-sm btn-primary" href="{% url 'extension_view' extension.psk_id %}"><i class="bx bxs-detail"></i></a></td>
+                    <td><a class="btn btn-icon btn-sm btn-danger" href="{% url 'extension_delete' extension.psk_id %}"><i class="bx bxs-trash"></i></a></td> {% endcomment %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

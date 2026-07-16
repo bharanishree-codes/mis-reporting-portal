@@ -1,0 +1,547 @@
+<!doctype html>
+{% load static %}
+{% load customtags %}
+<html
+  lang="en"
+  class="light-style layout-navbar-fixed layout-menu-fixed layout-compact"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="{% static 'assets/' %}"
+  data-template="vertical-menu-template"
+  data-style="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+        <title>{{ favicon_caption}}</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ favicon_logo }}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/fontawesome.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/flag-icons.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/rtl/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/rtl/theme-default.css' %}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/typeahead-js/typeahead.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/flatpickr/flatpickr.css' %}" />
+    <!-- Row Group CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+    <!-- Form Validation -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/@form-validation/form-validation.css' %}" />
+
+    <!-- Page CSS -->
+      <!-- botstrap datatables using CSS -->
+
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables Bootstrap CSS -->
+    <link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" rel="stylesheet">
+
+    <!-- jQuery (necessary for DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.1.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
+
+
+    <!-- Helpers -->
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+    <!-- Template customizer & Theme config files -->
+    <script src="{% static 'assets/vendor/js/template-customizer.js' %}"></script>
+    <script src="{% static 'assets/js/config.js' %}"></script>
+
+      <style>
+    #template-customizer {
+    display: none !important;  /* Ensures it's not visible */
+}
+
+</style>
+
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="index.html" class="app-brand-link">
+               <a href="{% url 'home_page' %}" class="app-brand-link">
+              <img id="app_bar" src="{{ app_bar_logo }}" alt="Application Logo" style="height: 40px; width: auto; display: block;"/>
+              <img id="home_logo" src="{{ homepage_logo_img }}" alt="Application Logo" style="height: 40px; width: auto;display: none;"/>
+            </a>
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto" onclick="toggleImages()">
+              <i class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1">
+            <!-- Dashboards -->
+{#             <li class="menu-item" id="menu-0">#}
+{#                    <a href="{% url 'home_page' home_page_url %}" class="menu-link">#}
+{#                        <i class='menu-icon tf-icons bx bxs-home'></i>#}
+{#                        <div>Home</div>#}
+{#                    </a>#}
+{#                </li>#}
+
+
+
+              <li  class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                      <i class="menu-icon tf-icons bx bx-home-smile"></i>
+                      <div class="text-truncate" data-i18n="Dashboards">Dashboards</div>
+
+                  </a>
+
+
+
+                  <ul class="menu-sub">
+
+                      {% if home_page_url %}
+                          <li id="menu-home" class="menu-item">
+                              <a href="{% url 'get_home_page_url' %}" class="menu-link">
+                                  <div class="text-truncate">{{ home_page_name }}</div>
+                              </a>
+                          </li>
+
+                      {% elif first_dash_menu %}
+                          <li id="menu-home" class="menu-item">
+                              <a href="{% url 'menu_iframe' first_dash_menu.psk_id %}" class="menu-link">
+                                  <div class="text-truncate">{{ first_dash_menu.menu_name }}</div>
+                              </a>
+                          </li>
+
+
+                          <script>
+                              window.addEventListener('DOMContentLoaded', function () {
+                                  var menuHome = document.getElementById("menu-home");
+                                  if (menuHome) {
+                                      var menuLink = menuHome.querySelector("a");
+                                      if (menuLink && menuLink.href) {
+                                          window.location.href = menuLink.href;
+                                      }
+                                  }
+                              });
+                          </script>
+
+                      {% endif %}
+
+
+                      {% if menus %}
+                          {% for menu in menus %}
+
+                              {% if menu.menu_type == "dash" %}
+
+                              <li class="menu-item" id="menu-{{ menu.psk_id }}">
+                                  <a href="{% url 'menu_iframe' menu.psk_id %}" class="menu-link">
+
+                                      <div data-i18n="{{ menu.menu_name }}">{{ menu.menu_name }}</div>
+                                  </a>
+                              </li>
+
+                              {% endif %}
+
+                          {% endfor %}
+
+                      {% endif %}
+
+
+
+
+
+
+                  </ul>
+              </li>
+
+
+              {% include 'dropdown.html' %}
+                {% include 'not_dropdown.html' %}
+
+          </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+                 <nav
+            class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+            id="layout-navbar">
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
+                <i class="bx bx-menu bx-md"></i>
+              </a>
+            </div>
+
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <!-- Search -->
+              <div class="navbar-nav align-items-center">
+                <div class="nav-item navbar-search-wrapper mb-0">
+
+
+                </div>
+              </div>
+
+
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+                <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <i class="bx bx-md"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);" data-theme="light">
+                        <span><i class="bx bx-sun bx-md me-3"></i>Light</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="javascript:void(0);" data-theme="dark">
+                        <span><i class="bx bx-moon bx-md me-3"></i>Dark</span>
+                      </a>
+                    </li>
+{#                    <li>#}
+{#                      <a class="dropdown-item" href="javascript:void(0);" data-theme="system">#}
+{#                        <span><i class="bx bx-desktop bx-md me-3"></i>System</span>#}
+{#                      </a>#}
+{#                    </li>#}
+                  </ul>
+                </li>
+
+
+                <!-- / Space using this-->
+                  <li class="nav-item"><a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                                          data-bs-toggle="dropdown">
+                      <i class="bx bx-md"></i>
+                  </a></li>
+                  <li class="nav-item">
+                      <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                         data-bs-toggle="dropdown">
+                          <i class="bx bx-md"></i>
+                      </a>
+                  </li>
+
+ <!-- / Space using end-->
+
+                <!-- User -->
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a
+                    class="nav-link dropdown-toggle hide-arrow p-0"
+                    href="javascript:void(0);"
+                    data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+{#                      <img src="{% static 'assets/img/avatars/1.png' %}" alt class="w-px-40 h-auto rounded-circle" />#}
+                         {% if photo_url %}
+                                <img src="{{ photo_url }}" alt="user-avatar"  class="w-px-40 h-auto rounded-circle">
+                            {% else %}
+                                <img src="{% static 'assets/img/avatars/default.png' %}" alt="user-avatar"
+                                     class="w-px-40 h-auto rounded-circle">
+                            {% endif %}
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                                {% if photo_url %}
+                                    <img src="{{ photo_url }}" alt class="w-px-40 h-auto rounded-circle"/>
+                                {% else %}
+                                    <img src="{% static 'assets/img/avatars/default.png' %}" alt="user-avatar"
+                                         class="w-px-40 h-auto rounded-circle">
+                                {% endif %}
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-0">{{ request.user.username }}</h6>
+                            <small class="text-muted">{{ request.user.first_name }}</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider my-1"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'user_profile' %}">
+                        <i class="bx bx-user bx-md me-3"></i><span>My Profile</span>
+                      </a>
+                    </li>
+                    {% if request.user.is_superuser or request.user.first_name == "admin" or request.user.first_name == "power" %}
+              <li>
+                <a class="dropdown-item" href="{% url 'settings_screen' request.user.id %}">
+                  <i class="bx bx-cog me-2"></i>
+                  <span class="align-middle">Configuration</span>
+                </a>
+              </li>
+                 {% endif %}
+
+
+                    <li>
+                      <div class="dropdown-divider my-1"></div>
+                    </li>
+                      <li>
+                          <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalReset">
+                  <span class="d-flex align-items-center align-middle">
+                    <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                    <span class="flex-grow-1 align-middle ms-1">Reset Password</span>
+                  </span>
+                          </a>
+                      </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'user_login' %}">
+                        <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!--/ User -->
+              </ul>
+            </div>
+
+            <!-- Search Small Screens -->
+            <div class="navbar-search-wrapper search-input-wrapper d-none">
+              <input
+                type="text"
+                class="form-control search-input container-xxl border-0"
+                placeholder="Search..."
+                aria-label="Search..." />
+              <i class="bx bx-x bx-md search-toggler cursor-pointer"></i>
+            </div>
+          </nav>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+           <div class="container-xxl flex-grow-1 container-p-y">
+           {% if messages %}
+                  {% for message in messages %}
+                    {% if message.tags == "error" %}
+                      <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" class="bs-toast toast toast-placement-ex m-2 bg-danger top-0 end-0 fade show">
+                        <div class="toast-header">
+                          <i class='bx bxs-error-alt'></i>&nbsp;
+                          <div class="me-auto fw-semibold">Error</div>
+                          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">{{ message }}</div>
+                      </div>
+                    {% elif message.tags == "success" %}
+                    <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" class="bs-toast toast toast-placement-ex m-2 bg-success top-0 end-0 fade show">
+                      <div class="toast-header">
+                        <i class='bx bx-list-check'></i>&nbsp;
+                        <div class="me-auto fw-semibold">Success</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                      </div>
+                      <div class="toast-body">{{ message }}</div>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+
+{% block content %}
+{% endblock content %}
+           </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+            
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+
+      <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+      <div class="drag-target"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+
+     <div class="modal fade" id="modalReset" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalToggleLabel">Do you want to reset your password ? </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'reset_password' request.user.id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">Current Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="password"
+                                        class="form-control"
+                                        name="password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">New Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="new_password"
+                                        class="form-control"
+                                        name="new_password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">Confirm Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="confirm_password"
+                                        class="form-control"
+                                        name="confirm_password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Access the active menu UID from Django context
+        let activeMenuUid = "{{ active_menu_uid }}";
+
+        if (activeMenuUid) {
+            let currentMenu = document.getElementById("menu-" + activeMenuUid);
+            if (currentMenu) {
+                currentMenu.classList.add("active");
+
+                // Recursive function to activate parent menus
+                function activateParentMenu(menuItem) {
+                    let parentMenu = menuItem.closest('.menu-sub');
+                    if (parentMenu) {
+                        let parentMenuItem = parentMenu.closest('.menu-item');
+                        if (parentMenuItem) {
+                            parentMenuItem.classList.add("open", "active");
+                            activateParentMenu(parentMenuItem);  // Recursively activate parent
+                        }
+                    }
+                }
+
+                // Start activating parents from the current menu item
+                activateParentMenu(currentMenu);
+            }
+        }
+
+    });
+</script>
+
+
+  <script>
+function toggleImages() {
+    const appBar = document.getElementById('app_bar');
+    const homeLogo = document.getElementById('home_logo');
+
+    if (appBar.style.display === 'none') {
+        appBar.style.display = 'block'; // Show app_bar
+        homeLogo.style.display = 'none'; // Hide home_logo
+    } else {
+        appBar.style.display = 'none'; // Hide app_bar
+        homeLogo.style.display = 'block'; // Show home_logo
+    }
+}
+</script>
+
+
+ <!-- Core JS -->
+<script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+<script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/hammer/hammer.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/i18n/i18n.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/typeahead-js/typeahead.js' %}"></script>
+<script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script src="{% static 'assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<!-- Flat Picker -->
+<script src="{% static 'assets/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<!-- Form Validation -->
+<script src="{% static 'assets/vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/@form-validation/auto-focus.js' %}"></script>
+
+<!-- Main JS -->
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+<!-- Page JS -->
+<script src="{% static 'assets/js/tables-datatables-basic.js' %}"></script>
+
+  </body>
+</html>

@@ -1,0 +1,203 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+<h4 class="fw-bold py-3 mb-2"><center>Number of Collaborative activities for Faculty Exchange</center></h4>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                {% comment %} <h5>Update Collaborative activities for Faculty Exchange</h5> {% endcomment %}
+
+                <!-- Department Name -->
+                {% comment %} <div class="mb-3 col-md-3">
+                    <label for="staff_id" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="staff_id" name="staff_id" value="{{ faculty_exchange.staff_id }}">
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label for="staff_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{ faculty_exchange.staff_name }}">
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label for="department_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" name="department_name" value="{{ faculty_exchange.department_name }}">
+                </div> {% endcomment %}
+
+                {% comment %} <!-- Department Code -->
+                <div class="mb-3 col-md-3">
+                    <label for="department_code" class="form-label">Department Code</label>
+                    <input type="text" class="form-control" id="department_code" name="department_code" value="{{ faculty_exchange.department_code }}">
+                </div> {% endcomment %}
+
+                <!-- Activity Title -->
+                <div class="mb-3 col-md-3">
+                    <label for="activity_title" class="form-label">Activity Title</label>
+                    <input type="text" class="form-control" id="activity_title" name="activity_title" value="{{ faculty_exchange.activity_title }}">
+                </div>
+
+                <!-- Collaborating Agency -->
+                <div class="mb-3 col-md-3">
+                    <label for="agency_name" class="form-label">Collaborating Agency</label>
+                    <input type="text" class="form-control" id="agency_name" name="agency_name" value="{{ faculty_exchange.agency_name }}">
+                </div>
+
+                <!-- Phone Number -->
+                <div class="mb-3 col-md-3">
+                    <label for="phone_number" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ faculty_exchange.phone_number }}">
+                </div>
+
+                <!-- Participant Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="participant_name" class="form-label">Participant Name</label>
+                    <input type="text" class="form-control" id="participant_name" name="participant_name" value="{{ faculty_exchange.participant_name }}">
+                </div>
+
+                <!-- Collaboration Year -->
+<div class="mb-3 col-md-3">
+    <label for="collaboration_year" class="form-label">Year of Collaboration</label>
+    <div class="input-group">
+        <select class="form-control" id="collaboration_year" name="collaboration_year" required>
+            <option value="" disabled>Select Year</option>
+            {% for year_option in publication_year %}
+                <option value="{{ year_option }}" {% if year_option == faculty_exchange.year_range %}selected{% endif %}>
+                    {{ year_option }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+                {% comment %} <div class="mb-3 col-md-3">
+                    <label for="collaboration_year" class="form-label">Year of Collaboration</label>
+                    <input type="number" class="form-control" id="collaboration_year" name="collaboration_year" value="{{ faculty_exchange.collaboration_year }}">
+                </div> {% endcomment %}
+
+                <!-- Date From -->
+                <div class="mb-3 col-md-3">
+                    <label for="date_from" class="form-label">Date From</label>
+                    <input type="date" class="form-control" id="date_from" name="date_from" value="{{ faculty_exchange.date_from }}">
+                </div>
+
+                <!-- Date To -->
+                <div class="mb-3 col-md-3">
+                    <label for="date_to" class="form-label">Date To</label>
+                    <input type="date" class="form-control" id="date_to" name="date_to" value="{{ faculty_exchange.date_to }}">
+                </div>
+
+                <!-- Nature of Activity -->
+                <div class="mb-3 col-md-3">
+                    <label for="nature_activity" class="form-label">Nature of the Activity</label>
+                    <input type="text" class="form-control" id="nature_activity" name="nature_activity" value="{{ faculty_exchange.nature_activity }}">
+                </div>
+
+            {% comment %} </div> {% endcomment %}
+        {% comment %} </div>
+    </div>
+            
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5><b>Uploaded Documents</b></h5> {% endcomment %}
+        {% comment %} <div class="row"> {% endcomment %}
+            {% for child in child_files|dictsort:"psk_id" %}
+    {% if forloop.counter == 1 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_PL" class="form-label">Permission Letter</label>
+            <input type="file" name="file_{{ child.psk_id }}_PL" id="file_{{ child.psk_id }}_1" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_1" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_collaborative_activities_for_faculty_exchange_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 2 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_circular" class="form-label">Circular</label>
+            <input type="file" name="file_{{ child.psk_id }}_Circular" id="file_{{ child.psk_id }}_2" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_2" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_collaborative_activities_for_faculty_exchange_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 3 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_Brochure" class="form-label">Brochure</label>
+            <input type="file" name="file_{{ child.psk_id }}_Brochure" id="file_{{ child.psk_id }}_3" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_3" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_collaborative_activities_for_faculty_exchange_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 4 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_Obj_outcome" class="form-label">Objective & Outcome</label>
+            <input type="file" name="file_{{ child.psk_id }}_Obj_outcome" id="file_{{ child.psk_id }}_4" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_4" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_collaborative_activities_for_faculty_exchange_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 5 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_DR" class="form-label">Detailed Report</label>
+            <input type="file" name="file_{{ child.psk_id }}_DR" id="file_{{ child.psk_id }}_5" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_5" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_collaborative_activities_for_faculty_exchange_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 6 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_GTP" class="form-label">Geo Tagged Photos</label>
+            <input type="file" name="file_{{ child.psk_id }}_GTP" id="file_{{ child.psk_id }}_6" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_6" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_collaborative_activities_for_faculty_exchange_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+        {% endif %}
+{% endfor %}
+        </div>
+        <div class="text-end mt-4">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{% url 'faculty_exchange_list' %}"><button type="button" class="btn btn-primary">Cancel</button></a>
+        </div>
+    </div>
+</div>
+
+<!-- Move Submit Button Inside the Form -->
+
+</form>  <!-- Closing the form tag after the submit button -->
+
+{% comment %} <script>
+    // Define year range
+    const startYear = 2000; // Start year for the dropdown
+    const endYear = 2030;   // End year for the dropdown (inclusive)
+    const yearSelect = document.getElementById('collaboration_year');
+
+    // Populate the dropdown with years
+    for (let i = startYear; i <= endYear; i++) {
+        const option = new Option(i, i); // Create a new option with the year as both value and text
+        yearSelect.add(option); // Add the option to the dropdown
+    }
+</script> {% endcomment %}
+
+
+{% endblock %}

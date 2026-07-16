@@ -1,0 +1,257 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            {% comment %} <h5>Update program and outreach programmes</h5> {% endcomment %}
+
+            <!-- Programs Offered -->
+
+            <div class="mb-3 col-md-3">
+                <label for="staff_id" class="form-label">Staff ID</label>
+                <input type="text" class="form-control" id="staff_id" name="staff_id" value="{{ program.staff_id }}" readonly>
+            </div>
+
+            <!-- Staff Name (auto-filled) -->
+            <div class="mb-3 col-md-3">
+                <label for="stf_name" class="form-label">Staff Name</label>
+                <input type="text" class="form-control" id="stf_name" name="stf_name" value="{{ program.staff_name }}" readonly>
+            </div>
+
+            <!-- Department Name (auto-filled) -->
+            <div class="mb-3 col-md-3">
+                <label for="department" class="form-label">Department Name</label>
+                <input type="text" class="form-control" id="department" name="department" value="{{ program.department }}" readonly>
+            </div>
+        </div>
+        <div class="row">
+<div class="mb-3 col-md-3">
+    <label for="programs_offered" class="form-label">Programs Offered</label>
+    <input type="text" class="form-control" id="programs_offered" name="programs_offered" value="{{ program.programs_offered }}">
+</div>
+
+<!-- Course Code -->
+<div class="mb-3 col-md-3">
+    <label for="course_code" class="form-label">Course Code</label>
+    <input type="text" class="form-control" id="course_code" name="course_code" value="{{ program.course_code }}" readonly>
+</div>
+
+<!-- Course Duration -->
+<div class="mb-3 col-md-3">
+    <label for="course_duration" class="form-label">Course Duration</label>
+    <input type="text" class="form-control" id="course_duration" name="course_duration" value="{{ program.course_duration }}">
+</div>
+
+<!-- Times Offered in Year -->
+
+<div class="mb-3 col-md-3">
+    <label for="times_offered_in_year" class="form-label">Times Offered in Year</label>
+<input type="number" class="form-control" id="times_offered_in_year" name="times_offered_in_year" value="{{ program.times_offered_in_year }}" required>
+</div>
+
+
+
+{% comment %} <div class="mb-3 col-md-3">
+    <label for="times_offered_in_year" class="form-label">Times Offered in Year</label>
+    <input type="number" class="form-control" id="times_offered_in_year" name="times_offered_in_year" value="{{ program.times_offered_in_year }}">
+</div> {% endcomment %}
+
+<!-- Students Completed -->
+<div class="mb-3 col-md-3">
+    <label for="students_completed" class="form-label">Students Completed</label>
+    <input type="number" class="form-control" id="students_completed" name="students_completed" value="{{ program.students_completed }}">
+</div>
+
+<!-- Students Enrolled -->
+<div class="mb-3 col-md-3">
+    <label for="students_enrolled" class="form-label">Students Enrolled</label>
+    <input type="number" class="form-control" id="students_enrolled" name="students_enrolled" value="{{ program.students_enrolled }}">
+</div>
+
+<!-- Year of Offering -->
+
+<div class="mb-3 col-md-3">
+    <label for="year_of_offering" class="form-label">Year of Offering</label>
+    <div class="input-group">
+        <select class="form-control" id="year_of_offering" name="year_of_offering" required>
+            <option value="{{program.year_of_offering}}" disabled selected>Select Year</option> <!-- Default placeholder option -->
+        </select>
+    </div>
+</div>
+
+{% comment %} <div class="mb-3 col-md-3">
+    <label for="year_of_offering" class="form-label">Year of Offering</label>
+    <input type="number" class="form-control" id="year_of_offering" name="year_of_offering" value="{{ program.year_of_offering }}">
+</div> {% endcomment %}
+
+{% comment %} </div>
+<div class="row"> {% endcomment %}
+            <!-- File Uploads -->
+            {% for child in child_files|dictsort:"psk_id" %}
+    {% if forloop.counter == 1 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_circular" class="form-label">Circular</label>
+            <input type="file" name="file_{{ child.psk_id }}_circular" id="file_{{ child.psk_id }}_1" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_1" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 2 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_brochure" class="form-label">Brochure</label>
+            <input type="file" name="file_{{ child.psk_id }}_brochure" id="file_{{ child.psk_id }}_2" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_2" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 3 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_syllabus" class="form-label">Syllabus</label>
+            <input type="file" name="file_{{ child.psk_id }}_syllabus" id="file_{{ child.psk_id }}_3" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_3" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 4 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_RPP" class="form-label">Resource person profile</label>
+            <input type="file" name="file_{{ child.psk_id }}_rpp" id="file_{{ child.psk_id }}_4" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_4" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 5 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_attendance" class="form-label">Attendance</label>
+            <input type="file" name="file_{{ child.psk_id }}_attendance" id="file_{{ child.psk_id }}_5" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_5" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 6 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_certificate" class="form-label">Certificate</label>
+            <input type="file" name="file_{{ child.psk_id }}_certificate" id="file_{{ child.psk_id }}_6" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_6" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 7 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_feedback" class="form-label">Feedback</label>
+            <input type="file" name="file_{{ child.psk_id }}_feedback" id="file_{{ child.psk_id }}_7" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_7" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 8 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_QP" class="form-label">Question paper</label>
+            <input type="file" name="file_{{ child.psk_id }}_qp" id="file_{{ child.psk_id }}_8" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_8" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% elif forloop.counter == 9 %}
+        <div class="mb-3 col-md-4">
+            <label for="file_{{ child.psk_id }}_AS" class="form-label">Answer scripts</label>
+            <input type="file" name="file_{{ child.psk_id }}_as" id="file_{{ child.psk_id }}_9" class="form-control" accept="application/pdf">
+            <div class="error-message" id="error-file_{{ child.psk_id }}_9" style="color: red;">
+                <small style="color: grey; text-align: left; margin-left: -10px;">
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_add_on_certificate_dc1_media/{{ child.psk_id }}" 
+                       class="btn btn-link" target="_blank">{{ child.file_name }}</a>
+                </small>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+        
+
+
+        
+
+
+
+<div class="text-end mt-4">
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a href="{% url 'program_list' %}"><button type="button" class="btn btn-primary">Cancel</button></a>
+</div>
+</div>
+    </div>
+</div>
+
+<!-- Move Submit Button Inside the Form -->
+
+</form>  <!-- Closing the form tag after the submit button -->
+
+
+
+{% comment %} <script>
+    // Populate the "Times Offered in Year" dropdown with years
+    const startYear = 2000, endYear = 2030;
+    const selectedYear = "{{ program.times_offered_in_year }}" || null; // Preselected year
+    const yearSelect = document.getElementById("times_offered_in_year");
+
+    // Populate the dropdown
+    for (let i = startYear; i <= endYear; i++) {
+        yearSelect.add(new Option(i, i, false, i == selectedYear));
+    }
+</script> {% endcomment %}
+
+<script>
+    const startYear = 2000, endYear = 2030;
+
+    // Populate years for dropdown and input field
+    const populateYears = (id, selectedYear) => {
+        const field = document.getElementById(id);
+        if (field.tagName === "SELECT") {
+            for (let i = startYear; i <= endYear; i++) {
+                field.add(new Option(i, i, false, i == selectedYear));
+            }
+        } else if (field.tagName === "INPUT" && selectedYear) {
+            field.value = selectedYear;
+            field.addEventListener("input", () => {
+                field.value = Math.max(startYear, Math.min(endYear, field.value));
+            });
+        }
+    };
+
+    populateYears("times_offered_in_year", "{{ program.times_offered_in_year }}");
+    populateYears("year_of_offering", "{{ program.year_of_offering }}");
+</script>
+
+
+{% endblock %}

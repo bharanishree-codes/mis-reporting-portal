@@ -1,0 +1,332 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+
+<div class="d-flex justify-content-between align-items-center py-3 mb-4">
+    <h4 class="fw-bold">Faculty Participation Detail</h4>
+    {% comment %} <div class="demo-inline-spacing">
+        <a href="{% url 'update_participation' participation.psk_id %}">
+            <button type="button" class="btn btn-primary">
+                <i class="bx bxs-edit"></i> Edit
+            </button>
+        </a>
+        <a href="{% url 'list_participations' %}">
+            <input type="button" value="Exit" class="btn btn-primary">
+        </a>
+    </div> {% endcomment %}
+</div>
+<p>{{obj}}</p>
+<!-- General Details of Participation -->
+{% comment %} <div class="card mb-4">
+    <div class="card-body"> {% endcomment %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% comment %} <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" value="{{ participation.name }}" required disabled>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="year" class="form-label">Year</label>
+                    <input type="text" class="form-control" id="year" value="{{ participation.year }}" required disabled>
+                </div>
+            </div> {% endcomment %}
+
+            {% comment %} <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="items" class="form-label">Participated in</label>
+                    <select class="form-control" name="items" disabled multiple>
+                        {% for option in selected_options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div> {% endcomment %}
+
+
+
+            <!-- Dynamic Fields Based on Selected Options -->
+            {% for option in selected_options %}
+    {% if option == 'Board of Studies' %}
+        {% if val == 'Board of Studies' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Board of Studies</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="board_university">Name of the Board / University</label>
+                            <input type="text" name="board_university" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="board_designation">Nature of Post or Designation</label>
+                            <input type="text" name="board_designation" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="board_upload">Upload Proof of Document</label>
+                            <input type="file" name="file" id="file-board" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-board" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% elif option == 'Question Paper Setting' %}
+        {% if val == 'Question Paper Setting' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Question Paper Setting</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="qp_university">Name of the University / College</label>
+                            <input type="text" name="qp_university" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="qp_subject">Subject</label>
+                            <input type="text" name="qp_subject" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="qp_upload">Upload Communication Letter</label>
+                            <input type="file" name="file" id="file-qp" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-qp" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% elif option == 'Evaluation' %}
+        {% if val == 'Evaluation' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Evaluation</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="eval_institute">Name of the University / College</label>
+                            <input type="text" name="eval_institute" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="eval_role">Role</label>
+                            <input type="text" name="eval_role" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="eval_upload">Upload Proof of Document</label>
+                            <input type="file" name="file" id="file-eval" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-eval" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% elif option == 'Add-On (Other University & College)' %}
+        {% if val == 'Add-On (Other University & College)' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Add-On (Other University & College)</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="curriculum_institute">Name of the University / College</label>
+                            <input type="text" name="curriculum_institute" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="curriculum_role">Name of the Addon</label>
+                            <input type="text" name="curriculum_role" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="curriculum_upload">Upload Proof of Document</label>
+                            <input type="file" name="file" id="file-curriculum" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-curriculum" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% elif option == 'Certificate Courses' %}
+        {% if val == 'Certificate Courses' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Certificate Courses</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="cert_institute">Name of the University / College</label>
+                            <input type="text" name="cert_institute" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="cert_course_name">Name of the Course</label>
+                            <input type="text" name="cert_course_name" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="cert_upload">Upload Proof of Document</label>
+                            <input type="file" name="file" id="file-cert" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-cert" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% elif option == 'External Examiner' %}
+        {% if val == 'External Examiner' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>External Examiner</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="external_institute">Name of the University / College</label>
+                            <input type="text" name="external_institute" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="external_upload">Upload Communication Letter</label>
+                            <input type="file" name="file" id="file-external" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-external" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% elif option == 'Conference' %}
+        {% if val == 'Conference' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Conference</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="conf_name">Name of the Conference</label>
+                            <input type="text" name="conf_name" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="conf_role">Role</label>
+                            <input type="text" name="conf_role" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="conf_upload">Upload Proof of Document</label>
+                            <input type="file" name="file" id="file-conf" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-conf" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% elif option == 'Seminar' %}
+        {% if val == 'Seminar' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Seminar</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="seminar_title">Name of the Seminar</label>
+                            <input type="text" name="seminar_title" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="seminar_role">Role</label>
+                            <input type="text" name="seminar_role" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="seminar_upload">Upload Proof of Document</label>
+                            <input type="file" name="file" id="file-seminar" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-seminar" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% elif option == 'Workshop' %}
+        {% if val == 'Workshop' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Workshop</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="workshop_title">Name of the Workshop</label>
+                            <input type="text" name="workshop_title" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="workshop_role">Role</label>
+                            <input type="text" name="workshop_role" class="form-control" required>
+                        </div>
+                        <div class="mb-3 col-md-4" id="dbCol">
+                            <label for="workshop_upload">Upload Proof of Document</label>
+                            <input type="file" name="file" id="file-workshop" class="form-control" accept="application/pdf, image/jpeg" required>
+                            <div class="error-message" id="error-file-workshop" style="color: red;"></div>
+                            <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    
+    
+    
+        {% elif option == 'Faculty Development Program' %}
+    {% if val == 'Faculty Development Program' %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>Faculty Development Program</h5>
+                <div class="row">
+                    <div class="mb-3 col-md-4" id="dbCol">
+                        <label for="name_of_the_resource_person">Name of the Resource Person</label>
+                        <input type="text" name="name_of_the_resource_person" class="form-control" required>
+                    </div>
+                    <div class="mb-3 col-md-4" id="dbCol">
+                        <label for="name_of_the_program">Name of the Program</label>
+                        <input type="text" name="name_of_the_program" class="form-control" required>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label for="date_from">From Date</label>
+                        <input type="date" name="date_from" class="form-control" required>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label for="date_to">To Date</label>
+                        <input type="date" name="date_to" class="form-control" required>
+                    </div>
+                    <div class="mb-3 col-md-4" id="dbCol">
+                        <label for="faculty_upload">Upload Proof of Document</label>
+                        <input type="file" name="file" id="file-faculty" class="form-control" accept="application/pdf, image/jpeg" required>
+                        <div class="error-message" id="error-file-faculty" style="color: red;"></div>
+                        <small style="color: grey;">(PDF or JPG, Max File Size: 2 MB)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    
+
+        {% endif %}
+
+
+
+
+{% endfor %}
+                    <br/>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a href="{% url 'detail_view' participation.psk_id %}">
+                            <button type="button" class="btn btn-md btn-primary">Cancel</button>
+                        </a>
+                    </div>
+
+                    
+                    
+            
+        </form>
+    </div>
+</div>
+
+
+
+
+
+{% endblock content %}

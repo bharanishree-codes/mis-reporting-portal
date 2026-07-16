@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- External Stylesheet for Multi-Select Tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h4 class="fw-bold py-3 mb-4">Students Competitve examination</h4>
+
+<!-- Workshop/Seminar Information -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                
+
+                <div class="mb-3 col-md-3">
+                    <label for="year_of_activity" class="form-label">Year</label>
+                    <input type="date" class="form-control" id="year_of_activity" value="{{ competitve_examination.year_of_activity }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_the_activity" class="form-label">Name of the activity</label>
+                    <input type="text" class="form-control" id="name_of_the_activity" value="{{ competitve_examination.name_of_the_activity }}" required disabled>
+                </div>    
+                
+                <div class="mb-3 col-md-3">
+                    <label for="number_of_students_attended" class="form-label">Number of students Attended/participated</label>
+                    <input type="text" class="form-control" id="number_of_students_attended" value="{{ competitve_examination.number_of_students_attended }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="number_of_students_placed" class="form-label">Number of students placement</label>
+                    <input type="text" class="form-control" id="number_of_students_placed" value="{{ competitve_examination.number_of_students_placed }}" required disabled>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+            <div class="text-end">
+            <a class="btn btn-primary" href="{% url 'competitve_examination_update' competitve_examination.psk_id %}"><i class="bx bxs-edit">Edit</i></a>
+            <a class="btn btn-primary" href="{% url 'competitve_examination_list' %}"><span class="tf-icons bx bx-list-plus">List</span></a>
+            </div>
+        </form>
+    
+{% endblock %}

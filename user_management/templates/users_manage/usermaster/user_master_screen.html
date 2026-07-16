@@ -1,0 +1,86 @@
+{% extends 'con_menus.html' %}
+
+{% block content %}
+
+
+    
+    
+<h5 class="fw-bold">User Master</h5>
+    
+    {% if create_user_config  %}
+    
+<a href="{% url 'create_user_master' user_id %}" class="btn btn-primary">
+    <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add New
+</a>
+
+    {% endif %}
+
+
+    
+
+    <div class="card mt-3">
+    <div class="card-datatable table-responsive">
+        <table id="example" class="table" style="width:100%">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>First Name</th>
+                    <th>User Type</th>
+                    <th>Email</th>
+                    <th>Reporting To</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% for obj in response_json %}
+                    <tr>
+                        <td>{{obj.username}}</td>
+                        <td>{{obj.first_name}}</td>
+                        <td>{{obj.user_type}}</td>
+                        <td>{{obj.email}}</td>
+                        <td>{{obj.reporting_to}}</td>
+                        <td>
+                            <a class="btn btn-icon btn-sm btn-primary" href="{% url 'update_user_master' user_id obj.psk_id %}">
+                                <i class="bx bxs-edit"></i>
+                            </a>
+                                {% if create_user_config  %}
+                             <a class="btn btn-icon btn-sm btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#modalToggle{{ obj.psk_id }}">
+                                <i class="bx bxs-trash"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+
+
+                         <div class="modal fade" id="modalToggle{{obj.psk_id}}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalToggleLabel">Delete</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                       Do you want to delete the user?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                            No
+                                        </button>
+                                        <a href="{% url 'delete_user_master' user_id obj.psk_id %}" class="btn btn-danger">Yes</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+         
+
+    
+
+{% endblock content %}

@@ -1,0 +1,217 @@
+{% load static %}
+{% comment %} <!DOCTYPE html>
+<html lang="en"> {% endcomment %}
+{% comment %} <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOD Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head> {% endcomment %}
+{% comment %} <body> {% endcomment %}
+
+<div class="container-xxl flex-grow-1 container-p-y rounded">
+    <form method="GET" class="align-items-center" id="filterForm">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0 text-black"><u><i><b>HOD DASHBOARD</b></i></u></h3>
+        </div>
+        
+        <div class="row">
+            <!-- Department Dropdown -->
+            <div class="mb-3 col-md-6 d-flex justify-content-between align-items-center mb-3">
+                <select name="department" id="department" class="form-select" style="font-weight: bold; color: black;" onchange="this.form.submit()">
+                    <option value="">-- Select Department --</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept }}" {% if dept == selected_department %}selected{% endif %}>{{ dept }}</option>
+                    {% endfor %}
+                </select>
+                <a href="{% url 'admin_hod_dash' %}"><button type="button" class="btn btn-dark ms-6" style="width: 100px;">Clear</button></a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Display blocks -->
+    {% if selected_department %}
+    <div class="row g-4 mt-3">
+        {% for block in blocks_to_display %}
+            {% comment %} {% if block == 'total_research' %}
+                <div class="col-lg-4 col-sm-6">
+                                    <a href="{% url 'research_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg, #6a11cb, #2575fc);">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-journal-text"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_research|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Research Publications</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_participation' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'list_participations' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg, #6a11cb, #2575fc);">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-person-arms-up"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_participation|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Faculty Participation</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_books' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'book_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg, #6a11cb, #2575fc);">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-journal-medical"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_books|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Books & Chapters</p>
+                            </div>
+                        </div>
+                    </a>
+                </div> {% endcomment %}
+            {% if block == 'total_certificate' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'program_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card h-100 rounded" style="background: linear-gradient(45deg, #ff512f, #dd2476);">
+                            <div class="card-body rounded text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-award-fill"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_certificate|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Add On/Certificate Programs</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_courses' %}
+                <div class="col-lg-4 col-sm-6">
+                <a href="{% url 'project_list' %}?department={{selected_department}}" class="card-link">                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg, #6a11cb,rgb(139, 14, 77));">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-buildings"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_courses|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Project Work/Internship</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_gov_and_non_gov' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'government_grants_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card h-100 text-white" style="background: linear-gradient(45deg,rgb(5, 110, 102),rgb(1, 163, 74));">
+                            <div class="card-body rounded text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-globe2"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_gov_and_non_gov|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Gov. and Non-Gov. Grants</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_workshops' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'seminar_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg,rgb(8, 83, 212), rgb(12, 171, 245));">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-box-fill"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_workshops|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Workshops/Seminars</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_extentions' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'extension_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg,rgb(53, 73, 4),rgb(63, 151, 5));">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-file-earmark-code-fill"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_extentions|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Extension Programs</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_competitive' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'competitve_examination_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg, #6a11cb, #2575fc);">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-fingerprint"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_competitive|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Competitive Exams</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_career_counseling' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'career_counseeling_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg,rgb(136, 6, 6),rgb(132, 134, 3));">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-suitcase-lg-fill"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_career_counseling|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Career Counseling</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_faculty_exchange' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'faculty_exchange_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg,rgb(5, 97, 109),rgb(12, 219, 255));">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-person-fill-check"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_faculty_exchange|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Faculty Exchange</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_collaborative_students' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'collaborative_students_list' %}?department={{selected_department}}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100">
+                            <div class="card-body rounded text-white" style="background: linear-gradient(45deg,rgb(150, 105, 9),rgb(199, 11, 168));">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4"><i class="bi bi-microsoft-teams"></i></div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_collaborative_students|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2 fw-bold">Student Collaborations</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function clearFilters() {
+        document.getElementById("department").selectedIndex = 0;
+        document.getElementById("filterForm").submit();
+    }
+</script>
+</body>
+</html>

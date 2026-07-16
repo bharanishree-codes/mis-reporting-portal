@@ -1,0 +1,19 @@
+
+    {% for menu in menus %}
+        {% if menu.menu_type == "dropdown" and menu.menu_parent_id == 0 %}
+            <li class="menu-item" id="menu-{{ menu.psk_id }}">
+                <a href="{% url 'menu_iframe' menu.psk_id %}" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx {{ menu.icon_class }}"></i>
+                    <div data-i18n="{{ menu.menu_name }}">{{ menu.menu_name }}</div>
+                </a>
+
+                <ul class="menu-sub">
+                    {% for child in child_menus %}
+                        {% if child.menu_parent_id == menu.psk_id %}
+                            {% include 'child_menu.html' with child=child %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endif %}
+    {% endfor %}

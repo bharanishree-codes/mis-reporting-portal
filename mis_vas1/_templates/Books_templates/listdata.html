@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+
+<div class="card mb-4">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="paper_title" class="form-label"> Title of the paper </label>
+                        <input type="text" class="form-control" id="paper_title" value="{{object.paper_title }}" required disabled>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="author_name" class="form-label"> Name of the author </label>
+                        <input type="text" class="form-control" id="author_name" value="{{ object.author_name }}" required disabled>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="journal_name" class="form-label">  Name of the journal </label>
+                        <input type="text" class="form-control" id="journal_name" value="{{ object.journal_name }}" required disabled>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="publication_year" class="form-label"> Year of publication  </label>
+                        <input type="text" class="form-control" id="publication_year" value="{{ object.publication_year }}" required disabled>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="issn_number" class="form-label"> ISSN Number </label>
+                        <input type="text" class="form-control" id="issn_number" value="{{ object.issn_number }}" required disabled>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="ugc_recognition_link" class="form-label"> Link to the Recognition in UGC enlistment of the journal </label>
+                        <input type="text" class="form-control" id="ugc_recognition_link" value="{{ object.ugc_recognition_link }}" required disabled>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="issue_date" class="form-label">  Date of Issue  </label>
+                        <input type="text" class="form-control" id="issue_date" value="{{ object.issue_date }}" required disabled>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="journal_nature" class="form-label"> Nature </label>
+                        <input type="text" class="form-control" id="journal_nature" value="{{ object.journal_nature }}" required disabled>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

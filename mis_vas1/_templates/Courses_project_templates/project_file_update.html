@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<h4 class="fw-bold py-3 mb-4">Upload Documents</h4>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data" action="">
+            {% csrf_token %}
+            <div class="row">
+                {% for child_file in child_files %}
+                    <div class="mb-3 col-md-4">
+                        <label for="file_{{ child_file.psk_id }}" class="form-label">
+                            {% if forloop.counter == 1 %}
+                                Project Letter
+                            {% elif forloop.counter == 2 %}
+                                Completion
+                            {% elif forloop.counter == 3 %}
+                                Detailed Report with Photograph
+                            {% else %}
+                                File for {{ child_file.file_name|default:"No Name" }}
+                            {% endif %}
+                        </label>
+
+                        <!-- Link to view the current file (if exists) -->
+                        <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" 
+                           class="btn btn-link" target="_blank">
+                           {% if child_file.file_name %}
+                               View Current File
+                           {% else %}
+                               No File Uploaded Yet
+                           {% endif %}
+                        </a>
+
+                        <!-- File Input -->
+                        <input class="form-control" type="file" id="file_{{ child_file.psk_id }}" name="file_{{ child_file.psk_id }}">
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Upload</button>
+            <a class="btn btn-secondary" href="{% url 'project_list' %}">Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

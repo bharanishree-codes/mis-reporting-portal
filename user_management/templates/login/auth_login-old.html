@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+{% load static %}
+<html
+        lang="en"
+        class="light-style customizer-hide"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="{% static '/assets/' %}"
+        data-template="vertical-menu-template-free"
+>
+<head>
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Log in</title>
+
+    <meta name="description" content=""/>
+
+    <!-- Favicon -->
+    <link id="favicon_link" rel="icon" type="image/x-icon" href="{% static '/assets/img/favicon/favicon.ico' %}"/>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static '/assets/vendor/fonts/boxicons.css' %}"/>
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static '/assets/vendor/css/core.css' %}" class="template-customizer-core-css"/>
+    <link rel="stylesheet" href="{% static '/assets/vendor/css/theme-default.css' %}"
+          class="template-customizer-theme-css"/>
+    <link rel="stylesheet" href="{% static '/assets/css/demo.css' %}"/>
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static '/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}"/>
+
+    <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="{% static '/assets/vendor/css/pages/page-auth.css' %}"/>
+    <!-- Helpers -->
+    <script src="{% static '/assets/vendor/js/helpers.js' %}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{% static '/assets/js/config.js' %}"></script>
+</head>
+
+
+<body>
+<!-- Content -->
+
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <!-- Register -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="app-brand justify-content-center">
+                        <span class="app-brand-text demo text-body fw-bolder">api studio</span>
+                    </div>
+                   <p>Please sign-in to your account</p>
+
+                    <form id="formAuthentication" class="mb-3" method="POST">
+                        {% csrf_token %}
+
+
+
+                      <div class="mb-3">
+                            <label for="email" class="form-label">UserName</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   placeholder="Enter your username"
+                                   autofocus
+                            />
+                        </div>
+{#                        <div class="mb-3 form-password-toggle">#}
+{#                            <div class="d-flex justify-content-between">#}
+{#                                <label class="form-label" for="password">Password</label>#}
+{#                                <a href="">#}
+{#                                    <small>Forgot Password?</small>#}
+{#                                </a>#}
+{#                            </div>#}
+{#                            <div class="input-group input-group-merge">#}
+{#                                <input#}
+{#                                        type="password"#}
+{#                                        id="password"#}
+{#                                        class="form-control"#}
+{#                                        name="password"#}
+{#                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"#}
+{#                                        aria-describedby="password"#}
+{#                                />#}
+{#                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>#}
+{#                            </div>#}
+{#                        </div>#}
+
+
+{#                          <div class="mb-3 form-password-toggle">#}
+{#                            <div class="d-flex justify-content-between">#}
+{#                                <label class="form-label" for="password">Password</label>#}
+{##}
+{#                            </div>#}
+{#                            <div class="input-group input-group-merge">#}
+{#                                <input#}
+{#                                        type="password"#}
+{#                                        id="password"#}
+{#                                        class="form-control"#}
+{#                                        name="password"#}
+{#                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"#}
+{#                                        aria-describedby="password"#}
+{#                                />#}
+{#                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>#}
+{#                            </div>#}
+{#                               <a style="padding-left: 230px;" href="">#}
+{#                                     <a href="{% url 'reset_password_view' %}">Forgot Password</a>#}
+{#                                </a>#}
+{#                        </div>#}
+
+                        <div class="mb-3 form-password-toggle">
+                                <div class="d-flex justify-content-between">
+                                    <label class="form-label" for="password">Password</label>
+                                    <!-- Align the forgot password link to the right -->
+                                    <a href="{% url 'reset_password_view' %}" tabindex="-1">
+                                        Forgot Password
+                                    </a>
+                                </div>
+                                <div class="input-group input-group-merge">
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        class="form-control"
+                                        name="password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                    />
+                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                        </div>
+
+                    </form>
+
+
+
+
+                </div>
+            </div>
+            <!-- /Register -->
+        </div>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == "error" %}
+                <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000"
+                     class="bs-toast toast toast-placement-ex m-2 bg-danger top-0 end-0 fade show">
+                    <div class="toast-header">
+                        <i class='bx bxs-error-alt'></i>&nbsp;
+                        <div class="me-auto fw-semibold">Error</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">{{ message }}</div>
+                </div>
+                {% elif message.tags == "success" %}
+                <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000"
+                     class="bs-toast toast toast-placement-ex m-2 bg-success top-0 end-0 fade show">
+                    <div class="toast-header">
+                        <i class='bx bx-list-check'></i>&nbsp;
+                        <div class="me-auto fw-semibold">Success</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">{{ message }}</div>
+                </div>
+                {% elif message.tags == "info" %}
+                <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000"
+                     class="bs-toast toast toast-placement-ex m-2 bg-info top-0 end-0 fade show">
+                    <div class="toast-header">
+                        <i class='bx bx-list-check'></i>&nbsp;
+                        <div class="me-auto fw-semibold">info</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">{{ message }}</div>
+                </div>
+
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+    </div>
+</div>
+
+
+<!-- / Content -->
+        <script>
+  function getBundleSettings2() {
+    $.ajax({
+      url: "{% url 'get_settings_ajax' %}",
+      dataType: "json",
+      success: function(data) {
+          let newTitle = data.favicon_caption
+           $("#favicon_link").attr("href", data.favicon_logo);
+          document.title = newTitle;
+          $('#application_name').text(data.application_name);
+
+        console.log(data);
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Error:", textStatus, errorThrown);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+      getBundleSettings2();
+  });
+</script>
+
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script src="{% static 'assets/vendor/libs/jquery/jquery.js' %} "></script>
+<script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+<script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+<script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+
+<script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+
+<!-- Main JS -->
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+<!-- Page JS -->
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+
+
+</html>

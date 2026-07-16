@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<!-- External Stylesheet for Multi-Select Tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h4 class="fw-bold py-3 mb-4">Research Publication Details</h4>
+
+<!-- Research Publication Information -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="mb-3 col-md-3">
+                    <label for="employee_id" class="form-label">Employee ID</label>
+                    <input type="text" class="form-control" id="employee_id" value="{{ research.employee_id }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="department_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" value="{{ research.department_name }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" value="{{ research.staff_name }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="paper_title" class="form-label">Paper Title</label>
+                    <input type="text" class="form-control" id="paper_title" value="{{ research.paper_title }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="author_name" class="form-label">Author Name</label>
+                    <input type="text" class="form-control" id="author_name" value="{{ research.author_name }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="journal_name" class="form-label">Journal Name</label>
+                    <input type="text" class="form-control" id="journal_name" value="{{ research.journal_name }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="publication_year" class="form-label">Publication Year</label>
+                    <input type="text" class="form-control" id="publication_year" value="{{ research.publication_year }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="issn_number" class="form-label">ISSN Number</label>
+                    <input type="text" class="form-control" id="issn_number" value="{{ research.issn_number }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="ugc_recognition_link" class="form-label">UGC Recognition Link</label>
+                    <input type="text" class="form-control" id="ugc_recognition_link" value="{{ research.ugc_recognition_link }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="issue_date" class="form-label">Issue Date</label>
+                    <input type="text" class="form-control" id="issue_date" value="{{ research.issue_date }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="journal_nature" class="form-label">Journal Nature</label>
+                    <input type="text" class="form-control" id="journal_nature" value="{{ research.journal_nature }}" required disabled>
+                </div>
+
+            </div>
+            <div class="text-end">
+                <a class="btn btn-primary" href="{% url 'research_update' research.psk_id %}"><i class="bx bxs-edit">Edit</i></a>
+                <a class="btn btn-primary" href="{% url 'research_list' %}"><span class="tf-icons bx bx-list-plus">List</span></a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ERP AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            height: 80vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        
+        .chat-header {
+            background: white;
+            padding: 25px 30px;
+            border-bottom: 1px solid #eef2f7;
+            text-align: center;
+        }
+        
+        .chat-header h1 {
+            color: #2d3748;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .chat-header p {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .chat-box {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .user-message {
+            justify-content: flex-end;
+        }
+        
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .user-avatar {
+            background: #4299e1;
+            color: white;
+        }
+        
+        .ai-avatar {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 16px 20px;
+            border-radius: 18px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        
+        .user-content {
+            background: #4299e1;
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+        
+        .ai-content {
+            background: white;
+            color: #2d3748;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            white-space: pre-line;
+        }
+        
+        .chat-input-container {
+            padding: 20px 25px;
+            background: white;
+            border-top: 1px solid #eef2f7;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        #prompt-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+        
+        #prompt-input:focus {
+            border-color: #4299e1;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+        
+        #send-button {
+            padding: 14px 24px;
+            background: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #send-button:hover {
+            background: #3182ce;
+            transform: translateY(-1px);
+        }
+        
+        #send-button:active {
+            transform: translateY(0);
+        }
+        
+        #status {
+            padding: 12px 20px;
+            margin: 10px 25px;
+            border-radius: 10px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+        }
+        
+        .status-loading {
+            background: #fffaf0;
+            color: #d69e2e;
+            border: 1px solid #faf089;
+            display: block !important;
+        }
+        
+        .status-error {
+            background: #fed7d7;
+            color: #c53030;
+            border: 1px solid #feb2b2;
+            display: block !important;
+        }
+        
+        .status-success {
+            background: #f0fff4;
+            color: #38a169;
+            border: 1px solid #9ae6b4;
+            display: block !important;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 30px 20px;
+            color: #718096;
+        }
+        
+        .welcome-message h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .example-prompts {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .example-prompt {
+            padding: 10px 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .example-prompt:hover {
+            background: #f7fafc;
+            border-color: #4299e1;
+        }
+        
+        /* Scrollbar styling */
+        .chat-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-box::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 3px;
+        }
+        
+        .chat-box::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .chat-container {
+                height: 90vh;
+                border-radius: 15px;
+            }
+            
+            .chat-header {
+                padding: 20px;
+            }
+            
+            .chat-header h1 {
+                font-size: 20px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .chat-box {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1> AI Assistant</h1>
+        </div>
+        
+        <div id="status"></div>
+        
+        <div class="chat-box" id="chat-box">
+            <div class="welcome-message">
+                <h3>👋 Welcome!</h3>
+                <p>I’m here to help you quickly find the informations you need.</p>
+                <!-- <div class="example-prompts">
+                    <div class="example-prompt" onclick="insertExample('Get student details for ID 21654')">🎓 "Get student details for ID 21654"</div>
+                    <div class="example-prompt" onclick="insertExample('Show staff information for AC-NT001')">👨‍🏫 "Show staff information for AC-NT001"</div>
+                    <div class="example-prompt" onclick="insertExample('Display payment transactions')">💳 "Display payment transactions"</div>
+                    <div class="example-prompt" onclick="insertExample('Show media files')">📁 "Show media files"</div>
+                </div> -->
+            </div>
+        </div>
+        
+        <div class="chat-input-container">
+            <div class="input-group">
+                <input type="text" id="prompt-input" placeholder="Ask about students, staff, payments, or media..." autocomplete="off">
+                <button id="send-button" onclick="sendPrompt()">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        const csrftoken = getCookie('csrftoken');
+
+        function updateStatus(message, type = '') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = type;
+        }
+
+        function insertExample(text) {
+            const input = document.getElementById('prompt-input');
+            input.value = text;
+            input.focus();
+        }
+
+        async function sendPrompt() {
+            const input = document.getElementById('prompt-input');
+            const prompt = input.value.trim();
+            const chatBox = document.getElementById('chat-box');
+
+            if (!prompt) return;
+
+            // Remove welcome message if it's the first user message
+            const welcomeMessage = chatBox.querySelector('.welcome-message');
+            if (welcomeMessage) {
+                welcomeMessage.remove();
+            }
+
+            // Display user message
+            const userMessageHTML = `
+                <div class="message user-message">
+                    <div class="message-content user-content">${prompt}</div>
+                    <div class="message-avatar user-avatar">You</div>
+                </div>
+            `;
+            chatBox.innerHTML += userMessageHTML;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            updateStatus('Searching for information...', 'status-loading');
+
+            try {
+                const response = await fetch('/api/prompt/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+
+                const data = await response.json();
+
+                // Display AI response
+                const aiMessageHTML = `
+                    <div class="message">
+                        <div class="message-avatar ai-avatar">AI</div>
+                        <div class="message-content ai-content">${data.response || data.error || 'No response received'}</div>
+                    </div>
+                `;
+                chatBox.innerHTML += aiMessageHTML;
+
+                if (response.ok) {
+                    updateStatus('Request completed', 'status-success');
+                } else {
+                    updateStatus('Request failed', 'status-error');
+                }
+                
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                // Clear status after 3 seconds
+                setTimeout(() => {
+                    updateStatus('', '');
+                }, 3000);
+
+            } catch (error) {
+                const errorMessageHTML = `
+                    <div class="message">
+                        <div class="message-avatar ai-avatar">AI</div>
+                        <div class="message-content ai-content">Network Error: ${error}</div>
+                    </div>
+                `;
+                chatBox.innerHTML += errorMessageHTML;
+                updateStatus('Network error occurred', 'status-error');
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                setTimeout(() => {
+                    updateStatus('', '');
+                }, 3000);
+            }
+        }
+
+        // Allow sending with Enter key
+        document.getElementById('prompt-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendPrompt();
+            }
+        });
+
+        // Auto-focus input on page load
+        document.getElementById('prompt-input').focus();
+    </script>
+</body>
+</html>

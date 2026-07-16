@@ -1,0 +1,186 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<!-- Include necessary CSS for multi-select -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+
+<h4 class="fw-bold py-3 mb-4"><center>Students Competitve examination</center></h4>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" action="{% url 'competitve_examination_create' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row">
+                {% comment %} <h5 class="fw-bold py-3 mb-4">Number of Students benefited by Guidance for Competitve examination</h5> {% endcomment %}
+                {% comment %} <div class="mb-3 col-md-3">
+                    <label for="staff_id" class="form-label">Staff ID</label>
+                    <div class="input-group">
+                        <select class="form-control" id="staff_id" name="staff_id" required>
+                            <option value="" disabled selected>Select Staff ID</option>
+                            {% for stf in competive_data %}
+                                <option value="{{ stf.stf_id }}"
+                                        data-staff-name="{{ stf.stf_name }}"
+                                        data-department="{{ stf.department }}">
+                                    {{ stf.stf_id }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <span class="input-group-text">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </div>
+                </div> {% endcomment %}
+
+                <!-- Staff Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="username" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{username}}" readonly>
+                </div>
+                
+                
+                <div class="mb-3 col-md-3">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{staff_name}}" readonly>
+                </div>
+                
+                <!-- Department Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{department}}" readonly>
+                </div>
+
+
+                {% comment %} <div class="mb-3 col-md-3">
+                    <label for="year_of_activity" class="form-label">Year</label>
+                    <div class="input-group">
+                        <select class="form-control" id="year_of_activity" name="year_of_activity" required>
+                            <option value="{{ request.POST.year_of_activity }}" disabled selected>Select Year</option> <!-- Default placeholder option -->
+                        </select>
+                    </div>
+                </div> {% endcomment %}
+
+               <div class="mb-3 col-md-3">
+    <label for="year_of_activity" class="form-label">Year</label>
+    <select class="form-control" id="year_of_activity" name="year_of_activity" required>
+        <option value="" disabled selected>Select Year</option>
+        {% for year_option in publication_year %}
+            <option value="{{ year_option }}">{{ year_option }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+                <!-- Name of the Activity -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_the_activity" class="form-label">Name of the Activity:</label>
+                    <input type="text" class="form-control" id="name_of_the_activity" name="name_of_the_activity" required>
+                </div>
+
+
+                <!-- Year of Activity -->
+
+                <!-- Number of Students -->
+                <div class="mb-3 col-md-3">
+                    <label for="number_of_students_attended" class="form-label">Number of students Attended/participated:</label>
+                    <input type="number" class="form-control" id="number_of_students_attended" name="number_of_students_attended" required>
+                </div>
+
+                <!-- Number of Beneficiaries -->
+                <div class="mb-3 col-md-3">
+                    <label for="number_of_students_placed" class="form-label">Number of students placement:</label>
+                    <input type="number" class="form-control" id="number_of_students_placed" name="number_of_students_placed" required>
+                </div>
+            {% comment %} </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <h5 class="card-header">Upload Documents</h5>
+    <div class="card-body">
+        <div class="row"> {% endcomment %}
+            <!-- Permission Letter -->
+            <div class="mb-3 col-md-3">
+                <label for="journal_cover_page" class="form-label">Permission Letter</label>
+                <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file" style="color: red;"></div>
+            </div>
+
+            <!-- Circular -->
+            <div class="mb-3 col-md-3">
+                <label for="index_page" class="form-label">Circular</label>
+                <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file" style="color: red;"></div>
+            </div>
+
+            <!-- Brochure -->
+            <div class="mb-3 col-md-3">
+                <label for="impact_factor" class="form-label">Brochure</label>
+                <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file" style="color: red;"></div>
+            </div>
+
+            <!-- Objective & Outcome -->
+            <div class="mb-3 col-md-3">
+                <label for="citation_index" class="form-label">Resource person profile</label>
+                <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file" style="color: red;"></div>
+            </div>
+
+            <!-- Detailed Report -->
+            <div class="mb-3 col-md-3">
+                <label for="citation_index" class="form-label">Detailed Report-Objective & Outcome</label>
+                <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file" style="color: red;"></div>
+            </div>
+
+            <!-- Geo Tagged Photos -->
+            <div class="mb-3 col-md-3">
+                <label for="citation_index" class="form-label">Geo Tagged Photos</label>
+                <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file" style="color: red;"></div>
+            </div>
+
+            <!-- Student Attendance with Signature -->
+            <div class="mb-3 col-md-3">
+                <label for="citation_index" class="form-label">Students Attendance with Authorised signature</label>
+                <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file" style="color: red;"></div>
+            </div>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-primary" href="{% url 'collaborative_students_list' %}">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<!-- Submit Button -->
+
+</form>
+</div>
+</div>
+
+<!-- Include necessary JS for multi-select -->
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+    new MultiSelectTag('userrole'); // id
+</script>
+
+
+<script>
+    document.getElementById('staff_id').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const staffName = selectedOption.getAttribute('data-staff-name');
+        const department = selectedOption.getAttribute('data-department');
+
+        // Populate the respective input fields
+        document.getElementById('staff_name').value = staffName || '';
+        document.getElementById('department_name').value = department || '';
+    });
+</script>
+
+
+
+{% endblock %}

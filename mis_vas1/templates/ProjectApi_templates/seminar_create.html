@@ -1,0 +1,199 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<h4 class="fw-bold py-3 mb-4">Number of Events/Seminars Conducted for Students</h4>
+<div class="card mb-4">
+    <div class="card-body">
+
+        <form method="POST" action="{% url 'seminar_create' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                {% comment %} <div class="mb-3 col-md-4">
+                    <label for="staff_id" class="form-label">Staff ID</label>
+                    <div class="input-group">
+                        <select class="form-control" id="staff_id" name="staff_id" required>
+                            <option value="" disabled selected>Select Staff ID</option>
+                            {% for stf in project_data %}
+                                <option value="{{ stf.stf_id }}"
+                                        data-staff-name="{{ stf.stf_name }}"
+                                        data-department="{{ stf.department }}">
+                                    {{ stf.stf_id }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <span class="input-group-text">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </div>
+                </div> {% endcomment %}
+
+                <!-- Staff Name -->
+                <div class="mb-3 col-md-4">
+                    <label for="username" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{username}}" readonly>
+                </div>
+                
+                
+                <div class="mb-3 col-md-4">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{staff_name}}" readonly>
+                </div>
+
+                <!-- Department Name -->
+                <div class="mb-3 col-md-4">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{department}}" readonly>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_the_workshop" class="form-label">Name of the Event:</label>
+                    <select class="form-control" name="name_of_the_workshop" id="name_of_the_workshop" multiple required>
+                        <option value="Conference">Conference</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Event">Event</option>
+                        <option value="Seminar">Seminar</option>
+                        <option value="Others">Others</option>
+                    </select>
+                    {% comment %} <input type="text" class="form-control" id="name_of_the_workshop" name="name_of_the_workshop" required> {% endcomment %}
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="number_of_participants" class="form-label">Number of Participants:</label>
+                    <input type="number" class="form-control" id="number_of_participants" name="number_of_participants" required>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label for="duration_from" class="form-label">Duration From</label>
+                    <input type="date" class="form-control" id="duration_from" name="duration_from" value="{{ duration_from }}">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <div class="alert alert-danger mt-2">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label for="duration_to" class="form-label">Duration To</label>
+                    <input type="date" class="form-control" id="duration_to" name="duration_to" value="{{ duration_to }}">
+                </div>
+           
+                        <!-- Journal Cover Page -->
+                        <div class="mb-3 col-md-3">
+                            <label for="journal_cover_page" class="form-label">Permission letter</label>
+                            <input type="file" name="file" id="file1" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file1" style="color: red;"></div>
+                        </div>
+
+                        <!-- Index Page & First Page of the Article -->
+                        <div class="mb-3 col-md-3">
+                            <label for="index_page" class="form-label">Circular</label>
+                            <input type="file" name="file" id="file2" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file2" style="color: red;"></div>
+                        </div>
+
+                        <!-- Impact Factor -->
+                        <div class="mb-3 col-md-3">
+                            <label for="impact_factor" class="form-label">Invitation</label>
+                            <input type="file" name="file" id="file3" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file3" style="color: red;"></div>
+                        </div>
+
+                        <!-- Citation Index -->
+                        <div class="mb-3 col-md-3">
+                            <label for="citation_index" class="form-label">Resource person profile</label>
+                            <input type="file" name="file" id="file4" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file4" style="color: red;"></div>
+                        </div>
+
+                        <div class="mb-3 col-md-3">
+                            <label for="citation_index" class="form-label">Detailed Report-Objective & Outcome</label>
+                            <input type="file" name="file" id="file5" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file5" style="color: red;"></div>
+                        </div>
+
+                        <div class="mb-3 col-md-3">
+                            <label for="citation_index" class="form-label">Geo Tagged Photos</label>
+                            <input type="file" name="file" id="file6" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file6" style="color: red;"></div>
+                        </div>
+
+                        <div class="mb-3 col-md-3">
+                            <label for="citation_index" class="form-label">Student Attendance with Signature</label>
+                            <input type="file" name="file" id="file7" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file7" style="color: red;"></div>
+                        </div>
+                    
+
+<div class="mb-3 col-md-3">
+                            <label for="citation_index" class="form-label">Feedback</label>
+                            <input type="file" name="file" id="file6" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file6" style="color: red;"></div>
+                        </div>
+</div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="{% url 'seminar_list' %}"><button type="button" class="btn btn-primary">Cancel</button></a>    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- Submit Button for Both Form and File Upload -->
+            
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+    new MultiSelectTag('userrole'); // id
+</script>
+
+<script>
+    document.getElementById('staff_id').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const staffName = selectedOption.getAttribute('data-staff-name');
+        const department = selectedOption.getAttribute('data-department');
+
+        // Populate the respective input fields
+        document.getElementById('staff_name').value = staffName || '';
+        document.getElementById('department_name').value = department || '';
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize MultiSelectTag
+        new MultiSelectTag('name_of_the_workshop');
+        
+
+        // Autofill staff details
+        document.getElementById('staff_id').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            document.getElementById('staff_name').value = selectedOption.getAttribute('data-staff-name') || '';
+            document.getElementById('department_name').value = selectedOption.getAttribute('data-department') || '';
+        });
+
+        // Populate year dropdown dynamically
+        const currentYear = new Date().getFullYear();
+        const yearSelect = document.getElementById('year_of_publication');
+        for (let year = 2000; year <= currentYear; year++) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.text = year;
+            yearSelect.appendChild(option);
+        }
+    });
+</script>
+
+{% endblock %}

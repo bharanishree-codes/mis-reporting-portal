@@ -1,0 +1,171 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<!-- Include necessary CSS for multi-select -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" action="{% url 'research_create' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5>Research Article Publication</h5>
+            <div class="row">
+                <!-- Staff ID (hidden) -->
+                <div class="mb-3 col-md-3">
+                    <label for="staff_id" class="form-label">Staff ID</label>
+                    {% comment %} <input type="hidden" name="employee_id" id="employee_id" value="employee_id">{{username}}</input> {% endcomment %}
+                    <input type="text" class="form-control" id="username" name="username" value="{{ username }}" readonly>
+                </div>
+
+                <!-- Staff Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{ staff_name }}" readonly>
+                </div>
+                
+                <!-- Department Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="department_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" name="department_name" value="{{ department_name }}" readonly>
+                </div>
+
+                <!-- Paper Title -->
+                <div class="mb-3 col-md-3">
+                    <label for="paper_title" class="form-label">Paper Title</label>
+                    <input type="text" class="form-control" id="paper_title" name="paper_title" required>
+                </div>
+
+                <!-- Author Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="author_name" class="form-label">Author Name</label>
+                    <input type="text" class="form-control" id="author_name" name="author_name" required>
+                </div>
+
+                <!-- Journal Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="journal_name" class="form-label">Journal Name</label>
+                    <input type="text" class="form-control" id="journal_name" name="journal_name" required>
+                </div>
+
+                <!-- Publication Year -->
+                <div class="mb-3 col-md-3">
+                    <label for="publication_year" class="form-label">Publication Year</label>
+                    <div class="input-group">
+                        <select class="form-control" id="publication_year" name="publication_year" required>
+                            <option value="" disabled selected>Select Year</option> <!-- Default placeholder option -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ISSN Number -->
+                <div class="mb-3 col-md-3">
+                    <label for="issn_number" class="form-label">ISSN Number</label>
+                    <input type="text" class="form-control" id="issn_number" name="issn_number" required>
+                </div>
+
+                <!-- UGC Recognition Link -->
+                <div class="mb-3 col-md-3">
+                    <label for="ugc_recognition_link" class="form-label">UGC Recognition Link</label>
+                    <input type="url" class="form-control" id="ugc_recognition_link" name="ugc_recognition_link" required>
+                </div>
+
+                <!-- Issue Date -->
+                <div class="mb-3 col-md-3">
+                    <label for="issue_date" class="form-label">Issue Date</label>
+                    <input type="date" class="form-control" id="issue_date" name="issue_date" required>
+                </div>
+
+                <!-- Journal Nature -->
+                <div class="mb-3 col-md-3">
+                    <label for="journal_nature" class="form-label">Journal Nature</label>
+                    <input type="text" class="form-control" id="journal_nature" name="journal_nature" required>
+                </div>
+            </div>
+
+            <!-- File Upload Section -->
+            <div class="card">
+                <h5 class="card-header">Upload Documents</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Journal Cover Page -->
+                        <div class="mb-3 col-md-3">
+                            <label for="file_JCP" class="form-label">Journal Cover Page</label>
+                            <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+                            <div class="error-message" id="error-file_JCP" style="color: red;"></div>
+                        </div>
+
+                        <!-- Index Page -->
+                        <div class="mb-3 col-md-3">
+                            <label for="file_IP" class="form-label">Index Page</label>
+                            <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+                            <div class="error-message" id="error-file_IP" style="color: red;"></div>
+                        </div>
+
+                        <!-- Impact Factor -->
+                        <div class="mb-3 col-md-3">
+                            <label for="file_IF" class="form-label">Impact factor</label>
+                            <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+                            <div class="error-message" id="error-file_IF" style="color: red;"></div>
+                        </div>
+
+                        <!-- Citation Index -->
+                        <div class="mb-3 col-md-3">
+                            <label for="file_CI" class="form-label">Citation Index</label>
+                            <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
+                            <div class="error-message" id="error-file_CI" style="color: red;"></div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="{% url 'research_list' %}">
+                                <button type="button" class="btn btn-primary">Cancel</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Include necessary JS for multi-select -->
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+    new MultiSelectTag('userrole'); // id
+</script>
+
+<script>
+    document.getElementById('employee_id').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const staffName = selectedOption.getAttribute('data-staff-name');
+        const department = selectedOption.getAttribute('data-department');
+
+        // Populate the respective input fields
+        document.getElementById('staff_name').value = staffName || '';
+        document.getElementById('department_name').value = department || '';
+    });
+</script>
+
+
+<script>
+    // Populate dropdowns with years in descending order
+    const populateYears = (id, start, end, selected) => {
+        for (let i = end; i >= start; i--) {
+            document.getElementById(id).add(new Option(i, i, false, i == selected));
+        }
+    };
+
+    // Populate "year_of_activity"
+    const startYear = 2000, endYear = 2026;
+    populateYears("publication_year", startYear, endYear, "{{ request.POST.publication_year }}");
+</script>
+
+
+
+{% endblock %}

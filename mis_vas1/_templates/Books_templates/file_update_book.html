@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<h4 class="fw-bold py-3 mb-4">Update Documents</h4>
+<form method="POST" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                
+                <!-- Conference Cover Page -->
+                <div class="mb-3 col-md-4">
+                    <label for="file_conference_cover_page" class="form-label">Conference Cover Page</label>
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child_data.0.psk_id }}" 
+                       class="btn btn-link" target="_blank"><input type="button" value="View" class="btn btn-xs btn-outline-primary"></a>
+                    <input type="file" name="file_conference_cover_page" id="file_conference_cover_page" class="form-control" accept="application/pdf" required>
+                    <div class="error-message" id="error-file_conference_cover_page" style="color: red;"></div>
+                </div>
+
+                <!-- Copy of the Chapters -->
+                <div class="mb-3 col-md-4">
+                    <label for="file_copy_of_the_chapters" class="form-label">Copy of the Chapters</label>
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child_data.1.psk_id }}" 
+                       class="btn btn-link" target="_blank"><input type="button" value="View" class="btn btn-xs btn-outline-primary"></a>
+                    <input type="file" name="file_copy_of_the_chapters" id="file_copy_of_the_chapters" class="form-control" accept="application/pdf" required>
+                    <div class="error-message" id="error-file_copy_of_the_chapters" style="color: red;"></div>
+                </div>
+
+                <!-- Index Page -->
+                <div class="mb-3 col-md-4">
+                    <label for="file_index_page" class="form-label">Index Page</label>
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child_data.2.psk_id }}" 
+                       class="btn btn-link" target="_blank"><input type="button" value="View" class="btn btn-xs btn-outline-primary"></a>
+                    <input type="file" name="file_index_page" id="file_index_page" class="form-control" accept="application/pdf" required>
+                    <div class="error-message" id="error-file_index_page" style="color: red;"></div>
+                </div>
+
+                <!-- Proof Of ISBN / ISSN Details -->
+                <div class="mb-3 col-md-4">
+                    <label for="file_proof_isbn_issn" class="form-label">Proof Of ISBN / ISSN Details</label>
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child_data.3.psk_id }}" 
+                       class="btn btn-link" target="_blank"><input type="button" value="View" class="btn btn-xs btn-outline-primary"></a>
+                    <input type="file" name="file_proof_isbn_issn" id="file_proof_isbn_issn" class="form-control" accept="application/pdf" required>
+                    <div class="error-message" id="error-file_proof_isbn_issn" style="color: red;"></div>
+                </div>
+
+                <!-- Other Files -->
+                <div class="mb-3 col-md-4">
+                    <label for="file_other_files" class="form-label">Other Files</label>
+                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_books_and_chapter_dc1_media/{{ child_data.4.psk_id }}" 
+                       class="btn btn-link" target="_blank"><input type="button" value="View" class="btn btn-xs btn-outline-primary"></a>
+                    <input type="file" name="file_other_files" id="file_other_files" class="form-control" accept="application/pdf" required>
+                    <div class="error-message" id="error-file_other_files" style="color: red;"></div>
+                </div>
+
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Upload</button>
+                <a class="btn btn-primary" href="{% url 'list_book' %}">
+                    Cancel
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

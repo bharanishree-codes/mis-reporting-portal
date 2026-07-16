@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+<center><h4 class="fw-bold">Project Work/Field Work/Internship</h4></center>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Staff ID -->
+                <div class="mb-3 col-md-4">
+                    <label for="staff_id" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="staff_id" name="staff_id" value="{{ project.staff_id }}" readonly>
+                </div>
+
+                <!-- Staff Name -->
+                <div class="mb-3 col-md-4">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{ project.staff_name }}" readonly>
+                </div>
+
+                <!-- Department Name -->
+                <div class="mb-3 col-md-4">
+                    <label for="department_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" name="department_name" value="{{ project.department_name }}" readonly>
+                </div>
+
+                <!-- Multi-Select for Options -->
+                <div class="mb-3 col-md-4">
+                    <label for="publication_type" class="form-label">Update Project work/Field work/Internship</label>
+                    <select class="form-control" name="items" id="publication_type" multiple required>
+                        <option value="project" {% if 'project' in selected_options %}selected{% endif %}>Project Work</option>
+                        <option value="field" {% if 'field' in selected_options %}selected{% endif %}>Field Work</option>
+                        <option value="internship" {% if 'internship' in selected_options %}selected{% endif %}>Internship</option>
+                    </select>
+                </div>
+
+                <!-- Submit & Cancel Buttons -->
+                <div class="text-end mb-3">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a class="btn btn-primary" href="{% url 'project_view' project.psk_id %}">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Include Multi-Select Library -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize multi-select dropdown for 'items'
+        new MultiSelectTag('publication_type');
+    });
+
+    // Set the current year for the select dropdown dynamically using JavaScript
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentYear = new Date().getFullYear();
+        const yearSelect = document.getElementById('year');
+        
+        // Populate the dropdown with years from 2000 to current year
+        for (let i = 2000; i <= currentYear; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            yearSelect.appendChild(option);
+        }
+    });
+</script>
+
+{% endblock %}

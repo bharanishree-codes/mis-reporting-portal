@@ -1,0 +1,363 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+<center><h4 class="fw-bold">Project Work/Field Work/Internship</h4></center>
+<!-- External Stylesheet -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+<div class="card mt-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if val == 'project' %}
+                <h5>Project Work</h5>
+                <div class="row">
+                    <div class="mb-3 col-md-3">
+                        <label for="pro_department_code">Department Code</label>
+                        <input type="text" name="pro_department_code" value="{{ child_data.pro_department_code }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="pro_department_name">Department Name</label>
+                        <input type="text" name="pro_department_name" value="{{ child_data.pro_department_name }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="pro_program_code">Program Code</label>
+                        <input type="text" name="pro_program_code" value="{{ child_data.pro_program_code }}" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="pro_name_of_the_course">Experiential Learning</label>
+                        <input type="text" name="pro_name_of_the_course" value="{{ child_data.pro_name_of_the_course }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="pro_course_code">Course code</label>
+                        <input type="text" name="pro_course_code" value="{{ child_data.pro_course_code }}" class="form-control">
+                    </div>
+
+                    <div class="mb-3 col-md-3">
+    <label for="pro_year_of_offering" class="form-label">Year of Offering</label>
+    <div class="input-group">
+        <select class="form-control" id="pro_year_of_offering" name="pro_year_of_offering" required>
+            <option value="" disabled>Select Year</option>
+            {% for year in year_of_offering %}
+                <option value="{{ year|slice:':4' }}" 
+                        {% if child_data.pro_year_of_offering|stringformat:"s" == year|slice:':4' %}selected{% endif %}>
+                    {{child_data.pro_year_of_offering}}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+
+                    
+                    <div class="mb-3 col-md-3">
+                        <label for="pro_name_of_students_studied">No. of Students studied</label>
+                        <input type="number" name="pro_name_of_students_studied" value="{{ child_data.pro_name_of_students_studied }}" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    {% for child_file in child_files|dictsort:'psk_id' %}
+                        <!-- Project-related fields -->
+                        {% if forloop.counter == 1 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_Project" class="form-label">
+                                    Project Letter
+                                </label>
+                                <input type="file" name="file_{{ child_file.psk_id }}_Project" id="file1" class="form-control" accept="application/pdf">
+                                <div class="error-message" id="error-file1" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small>{{ child_file.file_name }}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+        
+                        <!-- Completion field -->
+                        {% if forloop.counter == 2 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_Permission" class="form-label">
+                                    Permission Letter
+                                </label>
+                                <input type="file" name="file_{{ child_file.psk_id }}_Permission" id="file2" class="form-control" accept="application/pdf">
+                                <div class="error-message" id="error-file2" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small>{{ child_file.file_name }}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+        
+                        <!-- Detailed Report with Photograph field -->
+                        {% if forloop.counter == 3 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_Compilation" class="form-label">
+                                    Completion
+                                </label>
+                                <input type="file" name="file_{{ child_file.psk_id }}_Compilation" id="file3" class="form-control" accept="application/pdf">
+                                <div class="error-message" id="error-file3" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small>{{ child_file.file_name }}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+        
+                        <!-- Fields for other documents (if any) -->
+                        {% if forloop.counter == 4 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_DRP" class="form-label">
+                                    Detailed Report with Photograph
+                                </label>
+                                <input type="file" name="file_{{ child_file.psk_id }}_DRP" id="file4" class="form-control" accept="application/pdf">
+                                <div class="error-message" id="error-file4" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small>{{ child_file.file_name }}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            {% elif val == 'field' %}
+                <h5><b>Field Work</b></h5>
+                <div class="row">
+                    <div class="mb-3 col-md-3">
+                        <label for="field_department_code">Department Code</label>
+                        <input type="text" name="field_department_code" value="{{ child_data.field_department_code }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="field_department_name">Department Name</label>
+                        <input type="text" name="field_department_name" value="{{ child_data.field_department_name }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="field_program_code">Program Code</label>
+                        <input type="text" name="field_program_code" value="{{ child_data.field_program_code }}" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="field_name_of_the_course">Experiential Learning</label>
+                        <input type="text" name="field_name_of_the_course" value="{{ child_data.field_name_of_the_course }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="field_course_code">Course code</label>
+                        <input type="text" name="field_course_code" value="{{ child_data.field_course_code }}" class="form-control">
+                    </div>
+
+
+
+
+                    <div class="mb-3 col-md-3">
+                        <label for="field_year_of_offering" class="form-label">Year of Offering</label>
+                        <div class="input-group">
+                            <select class="form-control" id="field_year_of_offering" name="field_year_of_offering" required>
+                                <option value="" disabled>Select Year</option>
+                                {% for year in year_of_offering %}
+                                    <option value="{{ year|slice:':4' }}" {% if child_data.field_year_of_offering == year|slice:':4' %}selected{% endif %}>
+                                        {{ child_data.field_year_of_offering }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-md-3">
+                        <label for="field_name_of_students_studied">No. of Students studied</label>
+                        <input type="number" name="field_name_of_students_studied" value="{{ child_data.field_name_of_students_studied }}" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    {% for child_file in child_files|dictsort:'psk_id' %}
+                        {% if forloop.counter == 1 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_PL" class="form-label">
+                                    Permission Letter
+                                </label>
+                                <!-- File Input -->
+                                <input type="file" name="file_{{ child_file.psk_id }}_PL" id="file5" class="form-control" accept="application/pdf" required>
+                                <div class="error-message" id="error-file5" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small style="text-align: left; margin-left: -10px;">{{child_file.file_name}}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Objective & Outcome -->
+                        {% if forloop.counter == 2 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_Obj_Outcome" class="form-label">
+                                    Objective & Outcome
+                                </label>
+                                <!-- File Input -->
+                                <input type="file" name="file_{{ child_file.psk_id }}_Obj_Outcome" id="file6" class="form-control" accept="application/pdf" required>
+                                <div class="error-message" id="error-file6" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small style="text-align: left; margin-left: -10px;">{{child_file.file_name}}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Attendance Report -->
+                        {% if forloop.counter == 3 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_Attendance Report" class="form-label">
+                                    Attendance Report
+                                </label>
+                                <!-- File Input -->
+                                <input type="file" name="file_{{ child_file.psk_id }}_AR" id="file7" class="form-control" accept="application/pdf" required>
+                                <div class="error-message" id="error-file7" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small style="text-align: left; margin-left: -10px;">{{child_file.file_name}}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Detailed Report -->
+                        {% if forloop.counter == 4 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_DR" class="form-label">
+                                    Detailed Report
+                                </label>
+                                <!-- File Input -->
+                                <input type="file" name="file_{{ child_file.psk_id }}_DR" id="file8" class="form-control" accept="application/pdf" required>
+                                <div class="error-message" id="error-file8" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small style="text-align: left; margin-left: -10px;">{{child_file.file_name}}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            {% elif val == 'internship' %}
+                <h5><b>Internship</b></h5>
+                <div class="row">
+                    <div class="mb-3 col-md-3">
+                        <label for="intern_department_code">Department Code</label>
+                        <input type="text" name="intern_department_code" value="{{ child_data.intern_department_code }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="intern_department_name">Department Name</label>
+                        <input type="text" name="intern_department_name" value="{{ child_data.intern_department_name }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="intern_program_code">Program Code</label>
+                        <input type="text" name="intern_program_code" value="{{ child_data.intern_program_code }}" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="intern_name_of_the_course">Experiential Learning</label>
+                        <input type="text" name="intern_name_of_the_course" value="{{ child_data.intern_name_of_the_course }}" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="intern_course_code">Course code</label>
+                        <input type="text" name="intern_course_code" value="{{ child_data.intern_course_code }}" class="form-control">
+                    </div>
+
+                    <div class="mb-3 col-md-3">
+                        <label for="intern_year_of_offering" class="form-label">Year of Offering</label>
+                        <div class="input-group">
+                            <select class="form-control" id="intern_year_of_offering" name="intern_year_of_offering" required>
+                                <option value="" disabled>Select Year</option>
+                                {% for year in year_of_offering %}
+                                    <option value="{{ year|slice:':4' }}" {% if child_data.intern_year_of_offering == year|slice:':4' %}selected{% endif %}>
+                                        {{ child_data.intern_year_of_offering }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-md-3">
+                        <label for="intern_name_of_students_studied">No. of Students studied</label>
+                        <input type="number" name="intern_name_of_students_studied" value="{{ child_data.intern_name_of_students_studied }}" class="form-control">
+                    </div>
+                </div>
+                <!-- Internship Letter -->
+                <div class="row">
+                    {% for child_file in child_files|dictsort:'psk_id' %}
+                        <!-- Acceptance Letter -->
+                        {% if forloop.counter == 1 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_JCP" class="form-label">
+                                    Acceptance Letter
+                                </label>
+                                <input type="file" name="file_{{ child_file.psk_id }}_JCP" id="file_{{ child_file.psk_id }}_acceptance" class="form-control" accept="application/pdf" required>
+                                <div class="error-message" id="error-file_{{ child_file.psk_id }}_acceptance" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small>{{ child_file.file_name }}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Evaluation Sheet -->
+                        {% if forloop.counter == 2 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_IP" class="form-label">
+                                    Evaluation Sheet
+                                </label>
+                                <input type="file" name="file_{{ child_file.psk_id }}_IP" id="file_{{ child_file.psk_id }}_evaluation" class="form-control" accept="application/pdf" required>
+                                <div class="error-message" id="error-file_{{ child_file.psk_id }}_evaluation" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small>{{ child_file.file_name }}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Completion Letter -->
+                        {% if forloop.counter == 3 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_IF" class="form-label">
+                                    Completion Letter
+                                </label>
+                                <input type="file" name="file_{{ child_file.psk_id }}_IF" id="file_{{ child_file.psk_id }}_completion" class="form-control" accept="application/pdf" required>
+                                <div class="error-message" id="error-file_{{ child_file.psk_id }}_completion" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small>{{ child_file.file_name }}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Detailed Report -->
+                        {% if forloop.counter == 4 %}
+                            <div class="mb-3 col-md-3">
+                                <label for="file_{{ child_file.psk_id }}_CI" class="form-label">
+                                    Detailed Report
+                                </label>
+                                <input type="file" name="file_{{ child_file.psk_id }}_CI" id="file_{{ child_file.psk_id }}_detailed_report" class="form-control" accept="application/pdf" required>
+                                <div class="error-message" id="error-file_{{ child_file.psk_id }}_detailed_report" style="color: red;">
+                                    <a href="https://api.hcaschennai.edu.in/crudapp/view/media/naac01_project_work_dc2_media/{{ child_file.psk_id }}" class="btn btn-link" target="_blank">
+                                        <small>{{ child_file.file_name }}</small>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Submit Button -->
+            <div class="text-end mb-3 mt-4">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="{% url 'project_view' project %}">
+                    <button type="button" class="btn btn-primary">Cancel</button>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+new MultiSelectTag('userrole')  // id
+</script>
+{% endblock content %}

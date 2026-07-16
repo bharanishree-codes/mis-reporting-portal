@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- External Stylesheet for Multi-Select Tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h4 class="fw-bold py-3 mb-4">Workshop/Seminar Details</h4>
+
+<!-- Workshop/Seminar Information -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="department_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" value="{{ seminar.department_name }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="department_code" class="form-label">Department Code</label>
+                    <input type="text" class="form-control" id="department_code" value="{{ seminar.department_code }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="name_of_the_workshop" class="form-label">Name of the Workshop</label>
+                    <input type="text" class="form-control" id="name_of_the_workshop" value="{{ seminar.name_of_the_workshop }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="number_of_participants" class="form-label">Number of Participants</label>
+                    <input type="number" class="form-control" id="number_of_participants" value="{{ seminar.number_of_participants }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="duration_from" class="form-label">Duration From</label>
+                    <input type="text" class="form-control" id="duration_from" value="{{ seminar.duration_from }}" required disabled>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="duration_to" class="form-label">Duration To</label>
+                    <input type="text" class="form-control" id="duration_to" value="{{ seminar.duration_to }}" required disabled>
+                </div>
+                
+            </div>
+            <div class="text-end">
+            <a class="btn btn-primary" href="{% url 'seminar_update' seminar.psk_id %}"><i class="bx bxs-edit">Edit</i></a>
+            <a class="btn btn-primary" href="{% url 'seminar_list' %}"><span class="tf-icons bx bx-list-plus">List</span></a>
+            </div>
+        </form>
+    </div>
+</div>
+{% comment %} <a href="{% url 'seminar_create' %}" class="btn btn-primary">
+    <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add
+</a> {% endcomment %}
+{% comment %} 
+<h4 class="fw-bold py-3 mb-4">Documents To Be Uploaded</h4>
+<div class="card">
+    <h5 class="card-header">File input</h5>
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data" action="">
+            {% csrf_token %}
+            <input type="hidden" name="parent_psk_id" value="{{ psk_id }}">
+
+            <!-- Journal Cover Page -->
+            <div class="mb-3">
+                <label for="journal_cover_page" class="form-label">Journal Cover Page</label>
+                <input class="form-control" type="file" id="journal_cover_page" name="file" multiple>
+            </div>
+
+            <!-- Index Page & First Page of the Article -->
+            <div class="mb-3">
+                <label for="index_page" class="form-label">Index Page & First Page of the Article</label>
+                <input class="form-control" type="file" id="index_page" name="file" multiple>
+            </div>
+
+            <!-- Impact Factor -->
+            <div class="mb-3">
+                <label for="impact_factor" class="form-label">Impact Factor</label>
+                <input class="form-control" type="file" id="impact_factor" name="file" multiple>
+            </div>
+
+            <!-- Citation Index -->
+            <div class="mb-3">
+                <label for="citation_index" class="form-label">Citation Index</label>
+                <input class="form-control" type="file" id="citation_index" name="file" multiple>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Upload Documents</button>
+        </form>
+    </div>
+</div> {% endcomment %}
+
+{% endblock %}

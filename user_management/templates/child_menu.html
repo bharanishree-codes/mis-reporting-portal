@@ -1,0 +1,25 @@
+{% if child.menu_type == "link" %}
+    <!-- Render a link type child menu -->
+    <li class="menu-item" id="menu-{{ child.psk_id }}">
+        <a href="{% url 'menu_iframe' child.psk_id %}" class="menu-link">
+            <div data-i18n="{{ child.menu_name }}">{{ child.menu_name }}</div>
+        </a>
+    </li>
+{% elif child.menu_type == "dropdown" %}
+    <!-- Render a dropdown type child menu -->
+    <li class="menu-item">
+        <a href="{% url 'menu_iframe' child.psk_id %}" class="menu-link menu-toggle">
+{#            <i class="menu-icon tf-icons bx {{ child.icon_class }}"></i>#}
+            <div data-i18n="{{ child.menu_name }}">{{ child.menu_name }}</div>
+        </a>
+
+        <ul class="menu-sub">
+            {% for sub_child in child_menus %}
+                {% if sub_child.menu_parent_id == child.psk_id %}
+                    <!-- Recursively include this template for sub-children -->
+                    {% include 'child_menu.html' with child=sub_child %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </li>
+{% endif %}

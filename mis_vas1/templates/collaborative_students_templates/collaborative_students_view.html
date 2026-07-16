@@ -1,0 +1,92 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- External Stylesheet for Multi-Select Tag -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<h4 class="fw-bold py-3 mb-4">Collaborative activities for students Details</h4>
+
+<!-- Collaborative Activity Information -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Department Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="department_name" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department_name" value="{{ collaborative_students.department_name }}" required disabled>
+                </div>
+
+                <!-- Department Code -->
+                <div class="mb-3 col-md-3">
+                    <label for="department_code" class="form-label">Department Code</label>
+                    <input type="text" class="form-control" id="department_code" value="{{ collaborative_students.department_code }}" required disabled>
+                </div>
+
+                <!-- Title of the Collaborative Activity -->
+                <div class="mb-3 col-md-3">
+                    <label for="activity_title" class="form-label">Title of the Collaborative Activity</label>
+                    <input type="text" class="form-control" id="activity_title" value="{{ collaborative_students.activity_title }}" required disabled>
+                </div>
+
+                <!-- Collaborating Agency Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="agency_name" class="form-label">Name of the Collaborating Agency</label>
+                    <input type="text" class="form-control" id="agency_name" value="{{ collaborative_students.agency_name }}" required disabled>
+                </div>
+
+                <!-- Phone Number of the Collaborating Agency -->
+                <div class="mb-3 col-md-3">
+                    <label for="phone_number" class="form-label">Phone Number of the Collaborating Agency</label>
+                    <input type="text" class="form-control" id="phone_number" value="{{ collaborative_students.phone_number }}" required disabled>
+                </div>
+
+                <!-- Name of the Participant -->
+                <div class="mb-3 col-md-3">
+                    <label for="participant_name" class="form-label">Name of the Participant</label>
+                    <input type="text" class="form-control" id="participant_name" value="{{ collaborative_students.participant_name }}" required disabled>
+                </div>
+
+                <!-- Year of Collaboration -->
+                <div class="mb-3 col-md-3">
+                    <label for="year" class="form-label">Year of Collaboration</label>
+                    <input type="date" class="form-control" id="year" value="{{ collaborative_students.year }}" required disabled>
+                </div>
+
+                <!-- Duration Date From -->
+                <div class="mb-3 col-md-3">
+                    <label for="date_from" class="form-label">Duration Date From</label>
+                    <input type="date" class="form-control" id="date_from" value="{{ collaborative_students.date_from }}" required disabled>
+                </div>
+
+                <!-- Duration Date To -->
+                <div class="mb-3 col-md-3">
+                    <label for="date_to" class="form-label">Duration Date To</label>
+                    <input type="date" class="form-control" id="date_to" value="{{ collaborative_students.date_to }}" required disabled>
+                </div>
+
+                <!-- Nature of the Activity -->
+                <div class="mb-3 col-md-3">
+                    <label for="activity_name" class="form-label">Nature of the Activity</label>
+                    <input type="text" class="form-control" id="activity_name" value="{{ collaborative_students.activity_name }}" required disabled>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+            <!-- Action Buttons -->
+            <div class="text-end">
+                <a class="btn btn-primary" href="{% url 'collaborative_students_update' collaborative_students.psk_id %}"><i class="bx bxs-edit">Edit</i></a>
+                <a class="btn btn-primary" href="{% url 'collaborative_students_list' %}"><span class="tf-icons bx bx-list-plus">List</span></a>
+            </div>
+        </form>
+    
+
+{% endblock %}

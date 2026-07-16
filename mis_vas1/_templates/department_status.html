@@ -1,0 +1,356 @@
+{% load static %}
+
+<style>
+    body {
+        background-color:rgb(0, 0, 0); /* light gray-blue tone for a clean, pro vibe */
+    }
+
+    .container-xxl {
+        background-color:rgb(0, 0, 0); /* white card-like background */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* soft shadow to lift the container */
+        padding: 2rem;
+        border-radius: 1rem;
+    }
+
+    .card {
+        border: none; /* get rid of default border */
+    }
+
+    .card:hover {
+        transform: scale(1.02);
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+        font-size: 1rem;
+    }
+</style>
+
+{% comment %} <body style="margin: 0; padding: 0; height: 100vh; background-image: url('{% static 'images/imagesaa.jpg' %}'); background-size: cover; background-position: center center; background-attachment: fixed; color: #fff;"> {% endcomment %}
+
+    <div class="container-xxl flex-grow-1 container-p-y rounded">
+        <form method="GET" class="align-items-center">
+            <h3 style="text-align: center; font-weight: bold; color: white;">Staff Entry</h3>
+            <div class="row">
+                {% if user_role == "Hod" %}
+                    <div class="mb-3 col-md-4">
+                        <label for="department" class="form-label text-white" style="font-weight: bold;">Department</label>
+                        <input type="text" class="form-control" id="department" style="font-weight: bold; color: red;" value="{{ department_name }}" readonly />
+                    </div>
+
+                    {% if not selected_staff %}
+					
+					
+					<!-- Staff Name Dropdown -->
+                        <div class="mb-3 col-md-4">
+                            <label for="staff_name" class="form-label text-white" style="font-weight: bold;">Staff Name</label>
+                            <select class="form-select" style="font-weight: bold; color: red;" name="staff_name" id="staff_name" class="select2 form-select form-select-lg text-white" data-allow-clear="true" onchange="this.form.submit()">
+                                <option value="" selected disabled>Select Staff Name</option>
+                                {% for staff in department_staff %}
+                                    <option value="{{ staff.stf_name }}" {% if staff.stf_name == staff_name %} selected {% endif %}>{{ staff.stf_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+						
+                        <!-- Staff ID Dropdown -->
+                        <div class="mb-3 col-md-4">
+                            <label for="staff_id" class="form-label text-white" style="font-weight: bold;">Staff ID</label>
+                            <select class="form-select" style="font-weight: bold; color: red;" name="staff_id" id="staff_id" class="select2 form-select form-select-lg text-white" data-allow-clear="true" onchange="this.form.submit()">
+                                <option value="" selected disabled>Select Staff ID</option>
+                                {% for staff in department_staff %}
+                                    <option value="{{ staff.stf_id }}" {% if staff.stf_id == staff_id %} selected {% endif %}>{{ staff.stf_id }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        
+                    {% else %}
+                        <!-- Display the selected staff's information -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="staff_selected" class="form-label text-white" style="font-weight: bold;">Selected Staff</label>
+                                <input type="text" class="form-control text-white" id="staff_selected" value="ID: {{ selected_staff.stf_id }} - Name: {{ selected_staff.stf_name }}" readonly />
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </form>
+
+        <br/><br/>
+        <!-- Display Data Blocks based on selected staff -->
+        <div class="row g-6">
+            {% for block in blocks_to_display %}
+            {% if block == 'total_participation' %}
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participations' %}?staff_id={{ staff_id }}&from=dashboard" class="card-link">
+                        <div class="card h-100 text-white" style="background: linear-gradient(45deg, #6a11cb, #2575fc);">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        <i class="bi bi-person-arms-up"></i>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ total.total_participation|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2" style="font-weight: bold;">Faculty participation</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% elif block == 'total_books' %}
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'book_list' %}?staff_id={{ staff_id }}&from=dashboard" class="card-link">
+                        <div class="card h-100 rounded" style="background: linear-gradient(45deg, #ff512f, #dd2476);">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        <i class="bi bi-journal-medical"></i>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ total.total_books|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2" style="font-weight: bold;">Books & Chapter Publication</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% elif block == 'total_research' %}
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'research_list' %}?staff_id={{ staff_id }}&from=dashboard" class="card-link">
+                        <div class="card h-100 text-white" style="background: linear-gradient(45deg, #00c6ff, #0072ff);">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        <i class="bi bi-rocket-takeoff-fill"></i>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ total.total_research|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2" style="font-weight: bold;">Research Article Publication</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+            {% endfor %}
+            </div>
+<p></p>
+<h4 style="text-align: left; font-weight: bold; color: white;">Faculty participation</h4>
+        {% if role_name == 'Hod' %}
+            <div class="row">
+                <!-- Board of Studies -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?category=Board of Studies&staff_id={{ staff_id }}" class="card-link">
+                    <div class="card card-border-shadow-primary h-100"  style="background: linear-gradient(45deg, #00c6ff, #0072ff);">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-journal-text"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Board_of_Studies|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold text-black">Board of Studies</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Question Paper Setting -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?category=Question Paper Setting&staff_id={{ staff_id }}" class="card-link">
+                    <div class="card card-border-shadow-primary h-100"  style="background: linear-gradient(45deg, #0D9488, #CCFBF1);">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Question_Paper_Setting|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold text-black">Question Paper Setting</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Evaluation -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?category=Evaluation&staff_id={{ staff_id }}" class="card-link">
+                    <div class="card card-border-shadow-primary h-100"  style="background: linear-gradient(45deg, #10B981, #D1FAE5);">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-check2-circle"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Evaluation|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold text-black">Evaluation</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Curriculum Development -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?category=Design and Development&staff_id={{ staff_id }}" class="card-link">
+                    <div class="card card-border-shadow-primary h-100" style="background: linear-gradient(45deg, #0EA5E9, #E0F2FE);">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-tools"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Design_and_Development|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold text-black">Curriculum Development</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Certificate Courses -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ staff_id }}&category=Certificate Courses" class="card-link">
+                        <div class="card card-border-shadow-primary h-100" style="background: linear-gradient(45deg, #F59E0B, #FEF3C7);">
+                            <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-award"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Certificate_Courses|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Certificate Courses</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+            
+                <!-- External Examiner -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ staff_id }}&category=External Examiner" class="card-link">
+                    <div class="card card-border-shadow-primary h-100" style="background: linear-gradient(45deg, #64748B, #F1F5F9);">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-person-check"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.External_Examiner|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">External Examiner</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+                </div>
+            <div class="row">
+                <!-- Conference -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ staff_id }}&category=Conference" class="card-link">
+                    <div class="card card-border-shadow-primary h-100" style="background: linear-gradient(45deg, #8B5CF6, #EDE9FE);">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-mic"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Conference|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Conference</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Seminar -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ staff_id }}&category=Seminar" class="card-link">
+                    <div class="card card-border-shadow-primary h-100" style="background: linear-gradient(45deg, 	#F43F5E, #FFE4E6);">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Seminar|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Seminar</p>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            
+                <!-- Workshop -->
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <a href="{% url 'list_participation_children' %}?staff_id={{ staff_id }}&category=Workshop" class="card-link">
+                    <div class="card card-border-shadow-primary h-100" style="background: linear-gradient(45deg, #F97316, #FFEDD5);">
+                        <div class="card-body text-black">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-hammer"></i>
+                                </div>
+                                <h4 class="mb-0 text-black">{{ participation_counts.Workshop|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Workshop</p>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+            {% endif %}
+    
+
+
+
+            
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // JavaScript to update staff list based on selected department
+        function updateStaffList() {
+            const department = document.getElementById("department").value;
+            const staffIdSelect = document.getElementById("staff_id");
+            const staffNameSelect = document.getElementById("staff_name");
+    
+            // Clear previous options
+            staffIdSelect.innerHTML = '<option value="" selected disabled>Select Staff ID</option>';
+            staffNameSelect.innerHTML = '<option value="" selected disabled>Select Staff Name</option>';
+    
+            {% for department in department_staff %}
+                if (department.name == department) {
+                    {% for staff in department.staffs %}
+                        // Add Staff ID and Name to dropdowns dynamically
+                        const staffIdOption = document.createElement("option");
+                        staffIdOption.value = "{{ staff.stf_id }}";
+                        staffIdOption.text = "{{ staff.stf_id }}";
+                        staffIdSelect.appendChild(staffIdOption);
+    
+                        const staffNameOption = document.createElement("option");
+                        staffNameOption.value = "{{ staff.stf_name }}";
+                        staffNameOption.text = "{{ staff.stf_name }}";
+                        staffNameSelect.appendChild(staffNameOption);
+                    {% endfor %}
+                }
+            {% endfor %}
+        }
+    
+        // JavaScript to update the staff name based on selected staff ID
+        document.getElementById("staff_id").addEventListener("change", function () {
+            const staffId = this.value;
+            const staffNameSelect = document.getElementById("staff_name");
+            
+            // Loop through all staff names and find the corresponding name for the selected ID
+            {% for staff in department_staff %}
+                if ("{{ staff.stf_id }}" === staffId) {
+                    staffNameSelect.value = "{{ staff.stf_name }}";
+                }
+            {% endfor %}
+        });
+    
+        // JavaScript to update the staff ID based on selected staff name
+        document.getElementById("staff_name").addEventListener("change", function () {
+            const staffName = this.value;
+            const staffIdSelect = document.getElementById("staff_id");
+            
+            // Loop through all staff IDs and find the corresponding ID for the selected name
+            {% for staff in department_staff %}
+                if ("{{ staff.stf_name }}" === staffName) {
+                    staffIdSelect.value = "{{ staff.stf_id }}";
+                }
+            {% endfor %}
+        });
+    </script>

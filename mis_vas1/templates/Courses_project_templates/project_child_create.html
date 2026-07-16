@@ -1,0 +1,336 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- External Stylesheet -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+<center><h4 class="fw-bold">Project Work/Field Work/Internship</h4></center>
+<!-- Title and Action Buttons -->
+{% comment %} <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+    <h4 class="fw-bold">Project Work/Field Work/Internship</h4>
+    <div class="demo-inline-spacing">
+        <a href="{% url 'project_update' project.psk_id %}">
+            <button type="button" class="btn btn-primary">
+                <i class="bx bxs-edit"></i> Edit
+            </button>
+        </a>
+        <a href="{% url 'project_list' %}">
+            <input type="button" value="Exit" class="btn btn-primary">
+        </a>
+    </div>
+</div>
+
+<!-- General Details of Participation -->
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <!-- Participation Selection -->
+            <div class="row">
+                <div class="mb-3 col-md-3">
+                    <label for="items" class="form-label">Courses</label>
+                    <select class="form-control" name="items" id="publication_type" multiple required>
+                        <option value="project" {% if 'project' in selected_options %}selected{% endif %}>Project Work</option>
+                        <option value="field" {% if 'field' in selected_options %}selected{% endif %}>Field Work</option>
+                        <option value="internship" {% if 'internship' in selected_options %}selected{% endif %}>Internship</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+    {% comment %} <div class="card mb-4">
+        <div class="card-body"> {% endcomment %}
+
+            <!-- Dynamic Fields Based on Selected Options -->
+            {% if val == 'project' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Project Work</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label for="pro_department_code">Department Code</label>
+                            <input type="text" name="pro_department_code" value="{{ request.POST.pro_department_code }}" class="form-control"  required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="pro_department_name">Department Name</label>
+                            <input type="text" name="pro_department_name" value="{{ request.POST.pro_department_name }}" class="form-control"  required>
+                            </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="pro_program_code">Program Code</label>
+                            <input type="text" name="pro_program_code" value="{{ request.POST.pro_program_code }}" class="form-control" readonly>
+                            </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="pro_name_of_the_course">Experiential Learning</label>
+                            <input type="text" name="pro_name_of_the_course" value="{{ request.POST.pro_name_of_the_course }}" class="form-control"  required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="pro_course_code">Course code</label>
+                            <input type="text" name="pro_course_code" value="{{ request.POST.pro_course_code }}" class="form-control">
+                        </div>
+                        {% comment %} <div class="mb-3 col-md-3">
+                            <label for="pro_year_of_offering">Year of offering</label>
+                            <input type="date" name="pro_year_of_offering" value="{{ request.POST.pro_year_of_offering }}" class="form-control"  required>
+                        </div> {% endcomment %}
+
+                        <div class="mb-3 col-md-3">
+                            <label for="pro_year_of_offering" class="form-label">Year of offering</label>
+                            <div class="input-group">
+                                <select name="pro_year_of_offering" class="form-control">
+                                <option value="" disabled selected>Select Year</option>
+                                {% for y in year_of_offering %}
+                                    <option value="{{ y }}">{{ y }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3 col-md-3">
+                            <label for="pro_name_of_students_studied">No. of Students studied</label>
+                            <input type="number" name="pro_name_of_students_studied" value="{{ request.POST.pro_name_of_students_studied }}" class="form-control"  required>
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label for="board_upload">Permission Letter Letter</label>
+                            <input type="file" name="file" id="file4" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file4" style="color: red;"></div>
+                            {% comment %} <label for="pro_department_code">Employee Code +project letter+ Current Year</label> {% endcomment %}
+                        </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="board_upload">Project Letter</label>
+                        <input type="file" name="file" id="file1" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file1" style="color: red;"></div>
+                        {% comment %} <label for="pro_department_code">Employee Code +project letter+ Current Year</label> {% endcomment %}
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="board_upload">Completion</label>
+                        <input type="file" name="file" id="file2" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file2" style="color: red;"></div>
+                        {% comment %} <label for="pro_department_code">Employee Code +Syllabus + Current Year</label> {% endcomment %}
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="board_upload">Detailed Report with photograph</label>
+                        <input type="file" name="file" id="file3" class="form-control" accept="application/pdf" required>
+                        <div class="error-message" id="error-file3" style="color: red;"></div>
+                        {% comment %} <label for="pro_department_code">Employee Code +Detailed Report with photograph+ Current Year</label> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            
+            {% elif val == 'field' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Field Work</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label for="field_department_code">Department Code</label>
+                            <input type="text" name="field_department_code" value="{{ request.POST.field_department_code }}" class="form-control"  required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="field_department_name">Department Name</label>
+                            <input type="text" name="field_department_name" value="{{ request.POST.field_department_name }}" class="form-control"  required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="field_program_code">Program Code</label>
+                            <input type="text" name="field_program_code" value="{{ request.POST.field_program_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="field_name_of_the_course">Experiential Learning</label>
+                            <input type="text" name="field_name_of_the_course" value="{{ request.POST.field_name_of_the_course }}" class="form-control"  required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="field_course_code">Course code</label>
+                            <input type="text" name="field_course_code" value="{{ request.POST.field_course_code }}" class="form-control">
+                        </div>
+
+                        
+                        <div class="mb-3 col-md-3">
+                            <label for="field_year_of_offering" class="form-label">Year of offering</label>
+                            <div class="input-group">
+                            <select name="field_year_of_offering" class="form-control">
+                                <option value="" disabled selected>Select Year</option>
+                                {% for y in year_of_offering %}
+                                    <option value="{{ y }}">{{ y }}</option>
+                                {% endfor %}
+                            </select>
+
+                                {% comment %} <select class="form-control" id="field_year_of_offering" name="field_year_of_offering" required>
+                                    <option value="" disabled selected>Select Year</option>
+                                </select> {% endcomment %}
+                            </div>
+                        </div>
+
+
+                        {% comment %} <div class="mb-3 col-md-3">
+                            <label for="field_year_of_offering">Year of offering</label>
+                            <input type="text" name="field_year_of_offering" value="{{ request.POST.field_year_of_offering }}" class="form-control"  required>
+                        </div> {% endcomment %}
+                        <div class="mb-3 col-md-3">
+                            <label for="field_name_of_students_studied">No. of Students studied</label>
+                            <input type="number" name="field_name_of_students_studied" value="{{ request.POST.field_name_of_students_studied }}" class="form-control"  required>
+                        </div>
+                    </div>
+                
+                        <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label for="board_upload">Permission Letter Letter</label>
+                            <input type="file" name="file" id="file4" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file4" style="color: red;"></div>
+                            {% comment %} <label for="pro_department_code">Employee Code +project letter+ Current Year</label> {% endcomment %}
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="board_upload">Objective & outcome</label>
+                            <input type="file" name="file" id="file5" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file5" style="color: red;"></div>
+                            {% comment %} <label for="pro_department_code">Employee Code +Syllabus + Current Year</label> {% endcomment %}
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="board_upload">Attendance Report</label>
+                            <input type="file" name="file" id="file6" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file6" style="color: red;"></div>
+                            {% comment %} <label for="pro_department_code">Employee Code +Detailed Report with photograph+ Current Year</label> {% endcomment %}
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="board_upload">Detailed Report</label>
+                            <input type="file" name="file" id="file7" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file7" style="color: red;"></div>
+                            {% comment %} <label for="pro_department_code">Employee Code +Detailed Report with photograph+ Current Year</label> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+                
+            {% comment %} </div> {% endcomment %}
+        </div>
+            {% elif val == 'internship' %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5>Internship</h5>
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <label for="intern_department_code">Department Code</label>
+                            <input type="text" name="intern_department_code" value="{{ request.POST.intern_department_code }}" class="form-control"  required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="intern_department_name">Department Name</label>
+                            <input type="text" name="intern_department_name" value="{{ request.POST.intern_department_name }}" class="form-control"  required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="intern_program_code">Program Code</label>
+                            <input type="text" name="intern_program_code" value="{{ request.POST.intern_program_code }}" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="intern_name_of_the_course">Experiential Learning</label>
+                            <input type="text" name="intern_name_of_the_course" value="{{ request.POST.intern_name_of_the_course }}" class="form-control"  required>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label for="intern_course_code">Course code</label>
+                            <input type="text" name="intern_course_code" value="{{ request.POST.intern_course_code }}" class="form-control">
+                        </div>
+
+                        <div class="mb-3 col-md-3">
+                            <label for="intern_year_of_offering" class="form-label">Year of offering</label>
+                            <div class="input-group">
+                                <select name="intern_year_of_offering" class="form-control">
+                                    <option value="" disabled selected>Select Year</option>
+                                {% for y in year_of_offering %}
+                                    <option value="{{ y }}">{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                                {% comment %} <select class="form-control" id="intern_year_of_offering" name="intern_year_of_offering" required>
+                                    <option value="" disabled selected>Select Year</option>
+                                </select> {% endcomment %}
+                            </div>
+                        </div>
+                        
+                        {% comment %} <div class="mb-3 col-md-3">
+                            <label for="intern_year_of_offering">Year of offering</label>
+                            <input type="text" name="intern_year_of_offering" value="{{ request.POST.intern_year_of_offering }}" class="form-control"  required>
+                        </div> {% endcomment %}
+                        <div class="mb-3 col-md-3">
+                            <label for="intern_name_of_students_studied">No. of Students studied</label>
+                            <input type="number" name="intern_name_of_students_studied" value="{{ request.POST.intern_name_of_students_studied }}" class="form-control"  required>
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                    <div class="mb-3 col-md-3">
+                        <label for="board_upload">Acceptance Letter</label>
+                        <input type="file" name="file" id="file8" class="form-control" accept="application/pdf" required>
+                        <div class="error-message" id="error-file8" style="color: red;"></div>
+                        {% comment %} <label for="pro_department_code">Employee Code +project letter+ Current Year</label> {% endcomment %}
+                        </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="board_upload">Evaluation Sheet</label>
+                        <input type="file" name="file" id="file9" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file9" style="color: red;"></div>
+                        {% comment %} <label for="pro_department_code">Employee Code +Syllabus + Current Year</label> {% endcomment %}
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="board_upload">Completion Letter</label>
+                        <input type="file" name="file" id="file10" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file10" style="color: red;"></div>
+                        {% comment %} <label for="pro_department_code"> Employee Code +Detailed Report with photograph+ Current Year</label> {% endcomment %}
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <label for="board_upload">Detailed Report</label>
+                        <input type="file" name="file" id="file11" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file11" style="color: red;"></div>
+                        {% comment %} <label for="pro_department_code">Employee Code +Detailed Report with photograph+ Current Year</label> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+            </div>
+            {% endif %}
+
+            <!-- Submit Button -->
+            <div class="text-end mb-3 mt-4">
+                <button type="submit" class="btn btn-primary">Next</button>
+                <a href="{% url 'project_view' project.psk_id %}"><button type="button" class="btn btn-primary">Cancel</button></a>
+            </div>
+        </div>
+       
+    </div>
+</div>
+</form>
+
+{% comment %} <script>
+    // Year range
+    const startYear = 2000, endYear = 2026;
+
+    // Preselected years (provided by the backend as JSON data)
+    const selectedYears = JSON.parse(`{
+        "pro_year_of_offering": "{{ request.POST.pro_year_of_offering|default:'' }}",
+        "field_year_of_offering": "{{ request.POST.field_year_of_offering|default:'' }}",
+        "intern_year_of_offering": "{{ request.POST.intern_year_of_offering|default:'' }}"
+    }`);
+
+    // Populate years for multiple dropdowns (descending order)
+    Object.keys(selectedYears).forEach(id => {
+        const dropdown = document.getElementById(id);
+        if (dropdown) { // Ensure the dropdown exists in the DOM
+            const selectedYear = selectedYears[id];
+            for (let i = endYear; i >= startYear; i--) {   // 👈 loop backwards
+                const isSelected = i.toString() === selectedYear; // Ensure string comparison
+                dropdown.add(new Option(i, i, false, isSelected));
+            }
+        } else {
+            console.warn(`Dropdown with ID '${id}' not found in the DOM.`);
+        }
+    });
+</script> {% endcomment %}
+
+
+
+
+
+{% endblock content %}

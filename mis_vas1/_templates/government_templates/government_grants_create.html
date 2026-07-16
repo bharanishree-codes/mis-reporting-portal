@@ -1,0 +1,205 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+<!-- Include necessary CSS for multi-select -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+
+
+<div class="card mb-4">
+    <div class="card-body">
+	<h5 class="fw-bold py-3 mb-4">Government and non-governmental</h5>
+        <form method="POST" action="{% url 'government_grants_create' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row">
+                <!-- Department Name -->
+                {% comment %} <div class="mb-3 col-md-3">
+                    <label for="staff_id" class="form-label">Staff ID</label>
+                    <div class="input-group">
+                        <select class="form-control" id="staff_id" name="staff_id" required>
+                            <option value="" disabled selected>Select Staff ID</option>
+                            {% for stf in government_data %}
+                                <option value="{{ stf.stf_id }}"
+                                        data-staff-name="{{ stf.stf_name }}"
+                                        data-department="{{ stf.department }}">
+                                    {{ stf.stf_id }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <span class="input-group-text">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </div>
+                </div> {% endcomment %}
+
+                <!-- Staff Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="username" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{username}}" readonly>
+                </div>
+                
+                
+                <div class="mb-3 col-md-3">
+                    <label for="staff_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="staff_name" name="staff_name" value="{{staff_name}}" readonly>
+                </div>
+
+                <!-- Department Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{department}}" readonly>
+                </div>
+
+                <!-- Department of Principal Investigator -->
+                <div class="mb-3 col-md-3">
+                    <label for="department_of_principal_investigator" class="form-label">Department of Principal Investigator:</label>
+                    <input type="text" class="form-control" id="department_of_principal_investigator" name="department_of_principal_investigator" required>
+                </div>
+
+                <!-- Amount Sanctioned -->
+                <div class="mb-3 col-md-3">
+                    <label for="amount_sanctioned" class="form-label">Amount Sanctioned:</label>
+                    <input type="number" class="form-control" id="amount_sanctioned" name="amount_sanctioned" required>
+                </div>
+
+                <!-- Name of Funding Agency -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_funding_agency" class="form-label">Name of Funding Agency:</label>
+                    <input type="text" class="form-control" id="name_of_funding_agency" name="name_of_funding_agency" required>
+                </div>
+
+                <!-- Name of Principal Investigator -->
+                <div class="mb-3 col-md-3">
+                    <label for="name_of_principal_investigator" class="form-label">Name of Principal Investigator:</label>
+                    <input type="text" class="form-control" id="name_of_principal_investigator" name="name_of_principal_investigator" required>
+                </div>
+
+                <!-- Project Name -->
+                <div class="mb-3 col-md-3">
+                    <label for="project_name" class="form-label">Project Name:</label>
+                    <input type="text" class="form-control" id="project_name" name="project_name" required>
+                </div>
+
+                <!-- Duration Start Date -->
+                <div class="mb-3 col-md-3">
+                    <label for="duration_start_date" class="form-label">Duration Start Date:</label>
+                    <input type="date" class="form-control" id="duration_start_date" name="duration_start_date" required>
+                </div>
+
+                <!-- Duration End Date -->
+                <div class="mb-3 col-md-3">
+                    <label for="duration_end_date" class="form-label">Duration End Date:</label>
+                    <input type="date" class="form-control" id="duration_end_date" name="duration_end_date" required>
+                </div>
+
+                <!-- Year of Award -->
+                <div class="mb-3 col-md-3">
+                    <label for="year_of_award" class="form-label">Year of Award</label>
+                    <div class="input-group">
+                        <select class="form-control" id="year_of_award" name="year_of_award" required>
+                            <option value="" disabled selected>Select Year</option> <!-- Default placeholder option -->
+                        </select>
+                    </div>
+                </div>
+
+
+                {% comment %} <div class="mb-3 col-md-3">
+                    <label for="year_of_award" class="form-label">Year of Award:</label>
+                    <input type="text" class="form-control" id="year_of_award" name="year_of_award" required>
+                </div> {% endcomment %}
+
+                <!-- Government Type -->
+                <div class="mb-3 col-md-3">
+                    <label for="government_type" class="form-label">Government Type:</label>
+                    <input type="text" class="form-control" id="government_type" name="government_type" required>
+                </div>
+
+            </div>
+    {% comment %} </div>
+</div>
+
+<!-- Upload Documents Section -->
+<div class="card">
+    <h5 class="card-header">Upload Documents</h5>
+    <div class="card-body"> {% endcomment %}
+        <div class="row">
+            <!-- Permission Letter -->
+            <div class="mb-3 col-md-3">
+                <label for="journal_cover_page" class="form-label">Grant Application</label>
+                <input type="file" name="file" id="file1" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file1" style="color: red;"></div>
+            </div>
+
+            <!-- Circular -->
+            <div class="mb-3 col-md-3">
+                <label for="index_page" class="form-label">Grant Sanction Letter</label>
+                <input type="file" name="file" id="file2" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file2" style="color: red;"></div>
+            </div>
+
+            <!-- Objective & Outcome -->
+            <div class="mb-3 col-md-3">
+                <label for="citation_index" class="form-label">Utilization Certificate</label>
+                <input type="file" name="file" id="file3" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file3" style="color: red;"></div>
+            </div>
+
+            <!-- Detailed Report -->
+            <div class="mb-3 col-md-3">
+                <label for="detailed_report" class="form-label">Detailed Report</label>
+                <input type="file" name="file" id="file4" class="form-control" accept="application/pdf" required>
+<div class="error-message" id="error-file4" style="color: red;"></div>
+            </div>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a href="{% url 'government_grants_list' %}"><button type="button" class="btn btn-primary">Cancel</button></a>
+        </div>
+    </div>
+</div>
+
+<!-- Submit Button -->
+
+</form>
+</div>
+</div>
+
+<!-- Include necessary JS for multi-select -->
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+<script>
+    new MultiSelectTag('userrole'); // id
+</script>
+
+<script>
+    document.getElementById('staff_id').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const staffName = selectedOption.getAttribute('data-staff-name');
+        const department = selectedOption.getAttribute('data-department');
+
+        // Populate the respective input fields
+        document.getElementById('staff_name').value = staffName || '';
+        document.getElementById('department_name').value = department || '';
+    });
+</script>
+
+<script>
+    // Define year range
+    const startYear = 2000; // Start year for the dropdown
+    const endYear = 2030;   // End year for the dropdown (inclusive)
+    const yearSelect = document.getElementById('year_of_award');
+
+    // Populate the dropdown with years
+    for (let i = startYear; i <= endYear; i++) {
+        const option = new Option(i, i); // Create a new option with the year as both value and text
+        yearSelect.add(option); // Add the option to the dropdown
+    }
+</script>
+
+{% endblock %}

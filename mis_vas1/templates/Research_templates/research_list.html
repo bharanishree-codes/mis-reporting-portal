@@ -1,0 +1,87 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<h4 class="fw-bold py-3 mb-2"><center>Research Article Publication</center></h4>
+{% if not from_dashboard %}
+<a href="{% url 'research_create' %}" class="btn btn-primary">
+    <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add
+</a>
+{% endif %}
+<div class="card mt-4">
+    <div class="table-responsive text-nowrap mt-3">
+        <table class="table py-3" id="example">
+            <thead>
+                <tr>
+                    <th></th>
+                    {% comment %} <th>Employee ID</th>
+                    <th>Department Name</th>
+                    <th>Staff Name</th> {% endcomment %}
+                    <th>Publication Year</th>
+                    <th>Paper Title</th>
+                    <th>Author Name</th>
+                    <th>Journal Name</th>
+                    <th>ISSN Number</th>
+                    {% comment %} <th>UGC Recognition Link</th> {% endcomment %}
+                    <th>Issue Date</th>
+                    <th>Journal Nature</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% for research in researchs %}
+                <tr>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                    data-bs-toggle="dropdown" aria-expanded="true">
+                                <i class="bx bx-cog"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'research_update' research.psk_id %}">Edit</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ research.psk_id }}">Delete</a></li>
+                            </ul>
+                        
+                            <!-- Modal for Delete Confirmation -->
+                            <div class="modal fade" id="modalToggleDelete{{ research.psk_id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this record?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <!-- Delete button (calls the research_delete view with the correct id) -->
+                                            <a href="{% url 'research_delete' research.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    {% comment %} <td>{{ research.employee_id }}</td>
+                    <td>{{ research.department_name }}</td>
+                    <td>{{ research.staff_name }}</td> {% endcomment %}
+                    <td>{{ research.publication_year }}-{{ research.publication_year|add:1 }}</td>
+                    <td>{{ research.paper_title }}</td>
+                    <td>{{ research.author_name }}</td>
+                    <td>{{ research.journal_name }}</td>
+                    <td>{{ research.issn_number }}</td>
+                    {% comment %} <td>{{ research.ugc_recognition_link }}</td> {% endcomment %}
+                    <td>{{ research.issue_date }}</td>
+                    <td>{{ research.journal_nature }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

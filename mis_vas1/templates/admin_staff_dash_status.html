@@ -1,0 +1,166 @@
+{% load static %}
+
+ <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background for the page */
+            padding: 20px;
+        }
+
+        .container-xxl {
+            background-color: #ffffff; /* Pure white background */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* soft shadow to lift the container */
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: #ffffff; /* White card background */
+            border: 1px solid rgba(0, 0, 0, 0.125); /* Subtle border */
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-label {
+            font-size: 1rem;
+            color: #333; /* Dark text for better contrast on white */
+            font-weight: 500;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #333; /* Dark headings for contrast */
+        }
+
+        p, div {
+            color: #555; /* Slightly lighter text for body */
+        }
+    </style>
+
+<div class="container-xxl flex-grow-1 container-p-y rounded">
+    <form method="GET" class="align-items-center" id="filterForm">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0 text-dark"><u><i><b>STAFF DASHBOARD</b></i></u></h3>
+            <button type="button" class="btn btn-dark ms-6" style="width: 100px;" onclick="clearFilters()">Clear</button>
+        </div>
+        
+        
+        <div class="row">
+            <!-- Department Dropdown -->
+            <div class="mb-3 col-md-4">
+                <label for="department" class="form-label text-dark fw-bold">Select Department</label>
+                <select name="department" id="department" class="form-select" style="font-weight: bold; color: red;" onchange="this.form.submit()">
+                    <option value="">-- Select Department --</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept }}" {% if dept == selected_dept %}selected{% endif %}>{{ dept }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        
+            
+        
+            <!-- Staff Name Dropdown -->
+            <div class="mb-3 col-md-4">
+                <label for="staff_name" class="form-label text-dark fw-bold">Select Staff Name</label>
+                <select name="staff_name" id="staff_name" class="form-select" style="font-weight: bold; color: red;" onchange="this.form.submit()">
+                    <option value="">-- Select Staff Name --</option>
+                    {% for staff in department_staff %}
+                        <option value="{{ staff.stf_name }}" {% if staff.stf_name == selected_staff_name %}selected{% endif %}>{{ staff.stf_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        
+            <!-- Staff ID Dropdown -->
+            <div class="mb-3 col-md-4">
+                <label for="staff_id" class="form-label text-dark fw-bold">Select Staff ID</label>
+                <select name="staff_id" id="staff_id" class="form-select" style="font-weight: bold; color: red;" onchange="this.form.submit()">
+                    <option value="">-- Select Staff ID --</option>
+                    {% for staff in department_staff %}
+                        <option value="{{ staff.stf_id }}" {% if staff.stf_id == selected_staff_id %}selected{% endif %}>{{ staff.stf_id }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Clear Button -->
+            
+            
+            
+        </div>
+        
+    </form>
+
+    <!-- Display blocks -->
+    {% if staff_id %}
+    <div class="row g-4 mt-3">
+        {% for block in blocks_to_display %}
+        
+            {% if block == 'total_participation' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'list_participations' %}?staff_id={{ staff_id }}" class="card-link">
+                        <div class="card h-100 text-dark">
+                            <div class="card-body rounded">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                    <i class="bi bi-person-arms-up"></i>
+                                    </div>
+                                <h4 class="mb-0 text-dark">{{ filtered_data.total_participation|default:0 }}</h4>
+                                </div>
+                                <p class="fw-bold">Faculty Participation</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+        
+                {% elif block == 'total_research' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'research_list' %}?staff_id={{ staff_id }}" class="card-link">
+                    <div class="card h-100 text-dark">
+                        <div class="card-body rounded">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-rocket-takeoff-fill"></i>
+                                </div>
+                            <h4 class="mb-0 text-dark">{{ filtered_data.total_research|default:0 }}</h4>
+                            </div>
+                            <p class="mb-2 fw-bold">Research Article Publication</p>
+                        </div>
+                    </div>
+                </a>
+                </div>
+
+            {% elif block == 'total_books' %}
+                <div class="col-lg-4 col-sm-6">
+                    <a href="{% url 'book_list' %}?staff_id={{ staff_id }}" class="card-link">
+                    <div class="card h-100 text-dark">
+                        <div class="card-body rounded">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="avatar me-4">
+                                    <i class="bi bi-journal-medical"></i>
+                                </div>
+                            <h4 class="mb-0 text-dark">{{ filtered_data.total_books|default:0 }}</h4>
+                            </div>
+                            <p class="fw-bold">Books & Chapters</p>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+
+<script>
+    function clearFilters() {
+        document.getElementById("department").selectedIndex = 0;
+        document.getElementById("staff_id").selectedIndex = 0;
+        document.getElementById("staff_name").selectedIndex = 0;
+        document.getElementById("filterForm").submit();
+    }
+    </script>

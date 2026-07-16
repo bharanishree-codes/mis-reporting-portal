@@ -1,0 +1,145 @@
+{% extends 'con_menus.html' %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+    <h5 class="fw-bold">Create Menu Element</h5>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+
+                <div class="mb-3 col-md-6" id="dbCol">
+                        <label class="form-label">Menu Name</label>
+                        <input type="text" class="form-control" id="menu_name" name="menu_name">
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label for="dbConnection" class="form-label">Menu Place Holder</label>
+                        <select class="form-control" id="menu_view" name="menu_view">
+                            <option selected="" value="">--------- Select ---------</option>
+                            <option value="1">Sidebar Menu</option>
+                            <option value="2">Topbar Menu</option>
+                        </select>
+                    </div>
+
+                      <div class="mb-3 col-md-6" id="dbCol">
+                        <label class="form-label">Menu Order</label>
+                        <input type="text" class="form-control" id="menu_order" name="menu_order">
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label for="dbConnection" class="form-label">Menu Parent</label>
+                        <select class="form-control" id="parent_id" name="parent_id">
+                            <option selected="" value="0">Do Not hav parent</option>
+                            {% for menu in menu_lists_data %}
+                            <option value="{{ menu.psk_id }}">{{ menu.menu_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label for="dbConnection" class="form-label">Menu Type</label>
+                        <select class="form-control" id="menu_type" name="menu_type" onchange="toggleMenuFields()">
+                            <option selected="" value="">--------- Select ---------</option>
+                            <option value="link">Link</option>
+                            <option value="dropdown">Dropdown</option>
+                        </select>
+                    </div>
+
+                <div class="mb-3 col-md-6" id="menu_code_field" style="display:none;">
+                        <label class="form-label">Menu Code</label>
+                        <select class="form-control" name="menu_code" id="menu_code">
+                            <option value="">--------- Select ---------</option>
+                            <option value="HTML">HTML</option>
+                            <option value="PYTHON">PYTHON</option>
+                            <option value="PHP">PHP</option>
+                            <option value="AXPERT">AXPERT</option>
+                            <option value="DART">DART</option>
+                            <option value="REACT">REACT</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label for="dbConnection" class="form-label">Menu Status</label>
+                        <select class="form-control" id="active" name="active" required>
+                            <option selected="" value="">--------- Select ---------</option>
+                            <option value="Active">Active</option>
+                            <option value="In Active">In Active</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="menu_icon_field" style="display:none;">
+                        <label class="form-label">Icon</label>
+                        <input type="text" class="form-control" id="icon_value" name="icon_value">
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="menu_uid_field">
+                        <label class="form-label">Menu UID</label>
+                        <input type="text" class="form-control" id="menu_unique_id" name="menu_unique_id" required>
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="menu_href_field" style="display:none;">
+                        <label class="form-label">Href</label>
+                        <input type="text" class="form-control" id="href_value" name="href_value">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+    <script>
+        new MultiSelectTag('userrole')  // id
+
+        function toggleMenuFields() {
+            var menuType = document.getElementById("menu_type").value;
+
+            // Get the elements
+            var hrefField = document.getElementById("menu_href_field");
+            var iconField = document.getElementById("menu_icon_field");
+            var menuCodeField = document.getElementById("menu_code_field");
+
+            // Hide all fields by default
+            hrefField.style.display = "none";
+            menuCodeField.style.display = "none";
+
+            if (menuType === "link") {
+                hrefField.style.display = "block"; // Show Href for Link
+                menuCodeField.style.display = "block"; // Show Menu Code for Link
+                iconField.style.display = "block"; // Show Menu Code for Link
+            } else if (menuType === "dropdown") {
+                iconField.style.display = "block"; // Show Icon for Dropdown
+                updateMenuUniqueId(); // Update UID when Dropdown is selected
+            }
+        }
+
+        // Update menu_unique_id based on dropdown selection
+        function updateMenuUniqueId() {
+            var menuName = document.getElementById("menu_name").value;
+           
+
+            // Only set UID if menu type is Dropdown
+            var menuType = document.getElementById("menu_type").value;
+           
+        }
+
+        // Initialize the function to set default state on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            toggleMenuFields();
+
+            // Add event listener to update UID whenever menu name changes
+            document.getElementById("menu_name").addEventListener("input", function() {
+                updateMenuUniqueId();
+            });
+        });
+    </script>
+
+{% endblock content %}

@@ -1,0 +1,827 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button><br><br>
+
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+        {% comment %} <h4 class="fw-bold">Faculty Participation Detail</h4> {% endcomment %}
+        
+    </div>
+    
+    <!-- General Details of Participation -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="demo-inline-spacing text-end">
+                <a href="{% url 'update_participation' participation.psk_id %}">
+                    <button type="button" class="btn btn-primary">
+                        <i class="bx bxs-edit"></i> Edit
+                    </button>
+                </a>
+                {% comment %} <a href="{% url 'list_participations' %}">
+                    <input type="button" value="List" class="btn btn-primary">
+                </a> {% endcomment %}
+            </div>
+
+
+                <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="stf_id" class="form-label">Staff ID</label>
+                    <input type="text" class="form-control" id="stf_id" name="stf_id" value="{{ participation.stf_id }}" readonly>
+                </div>
+
+                <!-- Staff Name (auto-filled) -->
+                <div class="mb-3 col-md-4">
+                    <label for="stf_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="stf_name" name="stf_name" value="{{ participation.stf_name }}" readonly>
+                </div>
+
+                <!-- Department Name (auto-filled) -->
+                <div class="mb-3 col-md-4">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{ participation.department }}" readonly>
+                </div>
+
+                <!-- Year of Participation -->
+                <div class="mb-3 col-md-4">
+                    <label for="year" class="form-label">Year</label>
+                    <div class="input-group">
+                        <select class="form-control" id="year" name="year" required disabled>
+                            {% comment %} <option value="" disabled selected>Select Year</option> {% endcomment %}
+                            {% comment %} {% for year in years %} {% endcomment %}
+                                <option value="{{ year }}" {% if year == participation.year %} selected {% endif %}>
+                                    {{ year }}
+                                </option>
+                            {% comment %} {% endfor %} {% endcomment %}
+                        </select>
+                    </div>
+                </div>
+    
+                
+                    <div class="mb-3 col-md-3">
+                        <label for="items" class="form-label">Participated in</label>
+                        <select class="form-control" name="items" multiple>
+                            {% for option in selected_options %}
+                            <option value="{{ option }}">{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                
+        </div>
+    </div>
+    
+    
+    <!-- Separate Tables for Each Participation Type -->
+    {% if 'Board of Studies' in selected_options %}
+    <div class="card mt-4">
+        <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+                    <h5 id="Board of Studies" {% if missing_children and 'Board of Studies' in missing_children %}class="blink"{% endif %}>
+                    {% if missing_children and 'Board of Studies' in missing_children %}
+                        Board of Studies (Missing Data)
+                    {% else %}
+                        Board of Studies
+                    {% endif %}</h5>
+                    <div class="mb-3">
+                        <a href="{% url 'create_participation_child' participation.psk_id 'Board of Studies' %}" class="btn btn-primary">
+                            <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add
+                        </a>
+                    </div>                
+                </div>
+
+                
+                <div class="table-responsive text-nowrap">
+                    <table class="table py-3">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name of the Board / University</th>
+                                <th>Nature of Post or Designation</th>
+                                <th>Upload Proof of Document</th>
+                            </tr>
+                        </thead>
+                        <tbody id="boardTableBody">
+                            {% for child in children %}
+                            {% if child.board_university_college_name %}
+                            <tr>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                                data-bs-toggle="dropdown" aria-expanded="true">
+                                            <i class="bx bx-cog"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'Board of Studies' %}">Edit</a></li>
+                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+                                        </ul>
+                                        <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Delete</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete this participation child?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ child.board_university_college_name }}</td>
+                                <td>{{ child.board_designation }}</td>
+                                <td>
+                                    {% for media in child.media %}
+                                    {{ media }} 
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- Alert message -->
+                </div>
+            </div>
+        </div>
+{% endif %}
+
+
+
+    
+    {% if 'Question Paper Setting' in selected_options %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+                <h5 id="Question Paper Setting" {% if missing_children and 'Question Paper Setting' in missing_children %}class="blink"{% endif %}>
+                    {% if missing_children and 'Question Paper Setting' in missing_children %}
+                    Question Paper Setting (Missing Data)
+                {% else %}
+                Question Paper Setting
+                {% endif %}
+                </h5>
+            <div class="mb-3">
+                <a href="{% url 'create_participation_child' participation.psk_id 'Question Paper Setting' %}" class="btn btn-primary"><span class="tf-icons bx bx-list-plus"></span>&nbsp; Add</a>
+                </div>
+                </div>
+            <div class="table-responsive text-nowrap">
+                <table class="table py-3">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name of the University / College</th>
+                            <th>Subject</th>
+                            <th>Upload Communication Letter</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children %}
+                        {% if child.qp_university_college_name %}
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                            data-bs-toggle="dropdown" aria-expanded="true">
+                                        <i class="bx bx-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'Question Paper Setting' %}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+                                    </ul>
+                                
+                                    <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Delete</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this participation child?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </td>
+                            <td>{{ child.qp_university_college_name }}</td>
+                            <td>{{ child.qp_subject }}</td>
+                            <td>
+                                {% for media in child.media %}
+                                {{ media }} 
+                                {% endfor %}
+                            </td>
+                            
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if 'Evaluation' in selected_options %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+            <h5 id="Evaluation" {% if missing_children and 'Evaluation' in missing_children %}class="blink"{% endif %}>
+                {% if missing_children and 'Evaluation' in missing_children %}
+                Evaluation (Missing Data)
+           {% else %}
+                Evaluation
+           {% endif %}
+            </h5>
+            <div class="mb-3">
+                <a href="{% url 'create_participation_child' participation.psk_id 'Evaluation' %}" class="btn btn-primary"><span class="tf-icons bx bx-list-plus"></span>&nbsp; Add</a>
+                </div>
+                </div>
+            <div class="table-responsive text-nowrap">
+                <table class="table py-3">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name of the University / College</th>
+                            <th>Subject</th>
+                            <th>Upload Communication Letter</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children %}
+                        {% if child.eval_university_college_name %}
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                            data-bs-toggle="dropdown" aria-expanded="true">
+                                        <i class="bx bx-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'Evaluation' %}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+                                    </ul>
+                                
+                                    <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Delete</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this participation child?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ child.eval_university_college_name }}</td>
+                            <td>{{ child.eval_subject }}</td>
+                            <td>{% for media in child.media %}
+                                {{ media }} 
+                                {% endfor %}</td>
+                            
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if 'Design and Development of Curriculum for ADD-On' in selected_options %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+            <h5 id="Design and Development of Curriculum for ADD-On" {% if missing_children and 'Design and Development of Curriculum for ADD-On' in missing_children %}class="blink"{% endif %}>
+                {% if missing_children and 'Design and Development of Curriculum for ADD-On' in missing_children %}
+                Design and Development of Curriculum for ADD-On (Missing Data)
+           {% else %}
+           Design and Development of Curriculum for ADD-On
+           {% endif %}
+            </h5>
+            <div class="mb-3">
+                <a href="{% url 'create_participation_child' participation.psk_id 'Design and Development of Curriculum for ADD-On' %}" class="btn btn-primary"><span class="tf-icons bx bx-list-plus"></span>&nbsp; Add</a>
+                </div>
+</div>
+                <div class="table-responsive text-nowrap">
+                <table class="table py-3">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name of the University / College</th>
+                            <th>Name of the Addon</th>
+                            <th>Upload Proof of Document</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children %}
+                        {% if child.design_development_university_college_name %}
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                            data-bs-toggle="dropdown" aria-expanded="true">
+                                        <i class="bx bx-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'Design and Development of Curriculum for ADD-On' %}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+                                    </ul>
+                                
+                                    <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Delete</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this participation child?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ child.design_development_university_college_name }}</td>
+                            <td>{{ child.design_development_addon }}</td>
+                            <td>{% for media in child.media %}
+                                {{ media }} 
+                                {% endfor %}</td>
+                            
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if 'Certificate Courses' in selected_options %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+            <h5 id="Certificate Courses" {% if missing_children and 'Certificate Courses' in missing_children %}class="blink"{% endif %}>
+                {% if missing_children and 'Certificate Courses' in missing_children %}
+                Certificate Courses (Missing Data)
+           {% else %}
+           Certificate Courses
+           {% endif %}
+            </h5>
+            <div class="mb-3">
+                <a href="{% url 'create_participation_child' participation.psk_id 'Certificate Courses' %}" class="btn btn-primary"><span class="tf-icons bx bx-list-plus"></span>&nbsp; Add</a>
+                </div>
+                </div>
+            <div class="table-responsive text-nowrap">
+                <table class="table py-3">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name of the University / College</th>
+                            <th>Name of the Course</th>
+                            <th>Upload Proof of Document</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children %}
+                        {% if child.certificate_university_college_name %}
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                            data-bs-toggle="dropdown" aria-expanded="true">
+                                        <i class="bx bx-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'certificate_university_college_name' %}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+                                    </ul>
+                                
+                                    <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Delete</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this participation child?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ child.certificate_university_college_name }}</td>
+                            <td>{{ child.certificate_course }}</td>
+                            <td>{% for media in child.media %}
+                                {{ media }} 
+                                {% endfor %}</td>
+                            
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if 'External Examiner' in selected_options %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+            <h5 id="External Examiner" {% if missing_children and 'External Examiner' in missing_children %}class="blink"{% endif %}>
+                {% if missing_children and 'External Examiner' in missing_children %}
+                External Examiner (Missing Data)
+           {% else %}
+           External Examiner
+           {% endif %}
+            </h5>
+            <div class="mb-3">
+                <a href="{% url 'create_participation_child' participation.psk_id 'External Examiner' %}" class="btn btn-primary"><span class="tf-icons bx bx-list-plus"></span>&nbsp; Add</a>
+                </div>
+                </div>
+            <div class="table-responsive text-nowrap">
+                <table class="table py-3">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name of the University / College</th>
+                            <th>Upload Communication Letter</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children %}
+                        {% if child.external_examiner_university_college_name %}
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                            data-bs-toggle="dropdown" aria-expanded="true">
+                                        <i class="bx bx-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'External Examiner' %}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+                                    </ul>
+                                
+                                    <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Delete</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this participation child?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ child.external_examiner_university_college_name }}</td>
+                            <td>{% for media in child.media %}
+                                {{ media }} 
+                                {% endfor %}</td>
+                            
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}    
+    {% if 'Conference' in selected_options %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+            <h5 id="Conference" {% if missing_children and 'Conference' in missing_children %}class="blink"{% endif %}>
+                {% if missing_children and 'Conference' in missing_children %}
+                Conference (Missing Data)
+           {% else %}
+           Conference
+           {% endif %}
+            </h5>
+            <div class="mb-3">
+                <a href="{% url 'create_participation_child' participation.psk_id 'Conference' %}" class="btn btn-primary"><span class="tf-icons bx bx-list-plus"></span>&nbsp; Add</a>
+                </div>
+                </div>
+            <div class="table-responsive text-nowrap">
+                <table class="table py-3">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name of the University / College</th>
+                            <th>Name of the Conference</th>
+                            <th>Upload Proof of Document</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children %}
+                        {% if child.conference_university_college_name %}
+                        <tr>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                                            data-bs-toggle="dropdown" aria-expanded="true">
+                                        <i class="bx bx-cog"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'Conference' %}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+                                    </ul>
+                                
+                                    <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Delete</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this participation child?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ child.conference_university_college_name }}</td>
+                            <td>{{ child.conference_name }}</td>
+                            <td>{% for media in child.media %}
+                                {{ media }} 
+                                {% endfor %}</td>
+                            
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if 'Seminar' in selected_options %}
+<div class="card mt-4">
+<div class="card-body">
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+<h5 id="Seminar" {% if missing_children and 'Seminar' in missing_children %}class="blink"{% endif %}>
+    {% if missing_children and 'Seminar' in missing_children %}
+    Seminar (Missing Data)
+{% else %}
+Seminar
+{% endif %}
+</h5>
+<div class="mb-3">
+    <a href="{% url 'create_participation_child' participation.psk_id 'Seminar' %}" class="btn btn-primary"><span class="tf-icons bx bx-list-plus"></span>&nbsp; Add</a>
+    </div>
+    </div>
+<div class="table-responsive text-nowrap">
+<table class="table py-3">
+<thead>
+<tr>
+<th></th>
+<th>Name of the University / College</th>
+<th>Name of the Seminar</th>
+<th>Upload Proof of Document</th>
+
+</tr>
+</thead>
+<tbody>
+{% for child in children %}
+{% if child.seminar_university_college_name %}
+<tr>
+    <td>
+        <div class="btn-group">
+            <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                    data-bs-toggle="dropdown" aria-expanded="true">
+                <i class="bx bx-cog"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'Seminar' %}">Edit</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+            </ul>
+        
+            <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this participation child?
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </td>
+<td>{{ child.seminar_university_college_name }}</td>
+<td>{{ child.seminar_name }}</td>
+<td>{% for media in child.media %}
+    {{ media }} 
+    {% endfor %}</td>
+
+</tr>
+{% endif %}
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+{% endif %}
+{% if 'Workshop' in selected_options %}
+<div class="card mt-4">
+<div class="card-body">
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+<h5 id="Workshop" {% if missing_children and 'Workshop' in missing_children %}class="blink"{% endif %}>
+    {% if missing_children and 'Workshop' in missing_children %}
+    Workshop (Missing Data)
+{% else %}
+Workshop
+{% endif %}
+</h5>
+<div class="mb-3">
+    <a href="{% url 'create_participation_child' participation.psk_id 'Workshop' %}" class="btn btn-primary"><span class="tf-icons bx bx-list-plus"></span>&nbsp; Add</a>
+    </div>
+    </div>
+<div class="table-responsive text-nowrap">
+<table class="table py-3">
+<thead>
+<tr>
+    <th></th>
+<th>Name of the University / College</th>
+<th>Name of the Workshop</th>
+<th>Upload Proof of Document</th>
+
+</tr>
+</thead>
+<tbody>
+{% for child in children %}
+{% if child.workshop_university_college_name %}
+<tr>
+    <td>
+        <div class="btn-group">
+            <button class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" 
+                    data-bs-toggle="dropdown" aria-expanded="true">
+                <i class="bx bx-cog"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'update_participation_child' participation.psk_id child.psk_id 'Workshop' %}">Edit</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}">Delete</a></li>
+            </ul>
+        
+            <div class="modal fade" id="modalToggleDelete{{ participation.psk_id }}-{{ child.psk_id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this participation child?
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url 'delete_participation_child' participation.psk_id child.psk_id %}" class="btn btn-danger"><i class="bx bxs-trash"></i> Yes</a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bx bx-x"></i> No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </td>
+<td>{{ child.workshop_university_college_name }}</td>
+<td>{{ child.workshop_name }}</td>
+<td>{% for media in child.media %}
+    {{ media }} 
+    {% endfor %}</td>
+
+</tr>
+{% endif %}
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+{% endif %}
+<br/>
+<div class="text-end">
+<button type="submit" class="btn btn-primary"><i class="bx bx-save"></i> Save Changes</button>
+</div>
+</form>
+
+
+
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js">
+    new MultiSelectTag('userrole')  // id
+
+    
+
+</script>
+
+
+<script>
+    // Update faculty information based on selected staff ID
+    function updateFacultyInfo() {
+        const stf_id = document.getElementById('stf_id').value;
+        const selectedFaculty = {{ faculty_data|safe }}.find(faculty => faculty.stf_id == stf_id);
+
+        // Update fields if faculty is found, else reset them
+        document.getElementById('stf_name').value = selectedFaculty ? selectedFaculty.stf_name : '';
+        document.getElementById('department').value = selectedFaculty ? selectedFaculty.department : '';
+    }
+
+    // Set the current year for the select dropdown dynamically using JavaScript
+    const currentYear = new Date().getFullYear();
+    const yearSelect = document.getElementById('year');
+    
+    // Populate the dropdown with years from 2000 to current year
+    for (let i = 2000; i <= currentYear; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.text = i;
+        // Uncomment this line to make the current year selected by default
+        // if (i === currentYear) option.selected = true; 
+        yearSelect.appendChild(option);
+    }
+</script>
+
+<style>
+    .blink {
+        color: red;
+        animation: blink-animation 1s steps(5, start) infinite;
+    }
+
+    @keyframes blink-animation {
+        to {
+            visibility: hidden;
+        }
+    }
+</style>
+
+{% endblock content %}

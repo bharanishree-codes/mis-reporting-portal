@@ -1,0 +1,112 @@
+{% extends 'con_menus.html' %}
+
+{% block content %}
+
+
+    
+
+
+<h5 class="fw-bold">Create New User</h5>
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+
+
+
+
+            <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+
+                   <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">firstname</label>
+                <input type="text" class="form-control" id="firstname" name="firstname" required>
+            </div>
+
+              <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">Lastname</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" required>
+            </div>
+
+                  <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">password</label>
+                <input type="text" class="form-control" id="password" name="password" required>
+            </div>
+
+
+            
+                <div class="mb-3 col-md-6" id="dbCol">
+                    <label class="form-label">usertype</label>
+                    <select class="form-control" id="usertype" name="usertype" required>
+                        <option selected="" value="">--------- Select ---------</option>
+                        {% for ustc in user_type_choices %}
+                            <option value="{{ ustc }}">{{ ustc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                       <div class="mb-3 col-md-6" id="dbCol">
+                <label class="form-label">email</label>
+                <input type="text" class="form-control" id="email" name="email" required>
+            </div>
+
+{#            <div class="mb-3 col-md-6">#}
+{#                    <label for="dbConnection" class="form-label">user role</label>#}
+{#                    <select class="form-control" name="userrole" id="userrole" multiple required>#}
+{#                        {% for urole in user_role_list %}#}
+{#                        <option value="{{ urole.psk_id }}">{{ urole.role }}</option>#}
+{#                      {% endfor %}#}
+{#                    </select>#}
+{#                </div>#}
+{#            #}
+
+
+                <div class="row">
+                    <!-- User Role Field -->
+                    <div class="col-md-6 mb-3">
+                        <label for="select2Success" class="form-label">User Role</label>
+                        <div class="select2-info">
+                            <select id="userrole" name="userrole" class="select2 form-select" multiple required>
+                                {% for urole in user_role_list %}
+                                    <option value="{{ urole.psk_id }}">{{ urole.role }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Reporting To Field -->
+                    <div class="col-md-6 mb-3" id="dbCol">
+                        <label for="reporting" class="form-label">Reporting To</label>
+                        <select class="form-control" id="reporting" name="reporting">
+                            <option selected="" value="">--------- Select ---------</option>
+                            {% for userna in users_names_list %}
+                                <option value="{{ userna }}">{{ userna }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+
+
+
+
+            <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+{% endblock content %}
+

@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>{{ favicon_caption }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+     <link id="favicon_link" rel="icon" href="{{ favicon_logo }}">
+   
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/fonts/boxicons.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/css/core.css' %}"
+      class="template-customizer-core-css"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/css/theme-default.css' %}"
+      class="template-customizer-theme-css"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/libs/apex-charts/apex-charts.css' %}"
+    />
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+    <script src="{% static 'assets/js/config.js' %}"></script>
+
+      <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+    <style>
+        #example_filter {
+            padding-right: 20px;
+        }
+
+        #example_length {
+            padding-left: 20px;
+        }
+
+        #example_info {
+            padding-left: 20px;
+        }
+
+        .pagination {
+            padding-right: 20px;
+        }
+    </style>
+ 
+  </head>
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="" class="app-brand-link">
+             <img id="favicon_image" src="{{ app_bar_logo }}" alt="Application Logo" style="height: 40px; width: auto;"/>
+            </a>
+              
+                <a class="btn btn-icon ms-2" onClick="window.location.reload()" href="#" style="margin-right: 10px;">
+                    <i class='bx bx-refresh' style="font-size: 30px;"></i>
+                </a>
+              
+               <a class="btn btn-icon ms-auto" href="#"  id="menu-toggle-btn" onclick="firstClick()">
+              <i class="bx bx-menu" style="font-size: 30px;"></i>
+            </a>
+              
+             
+          
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+              <i class="bx bx-chevron-left bx-sm align-middle"></i>
+            </a>
+              
+              
+          </div>
+          
+
+          <div class="menu-inner-shadow"></div>
+            <ul class="menu-inner">
+                
+                <li class="menu-item" id="menu-0">
+                    <a href="{% url 'home_page' home_page_url %}" class="menu-link">
+                        <i class='menu-icon tf-icons bx bxs-home'></i>
+                        <div data-i18n="usermaster">Home</div>
+                    </a>
+                </li>
+                
+                {% include 'dropdown.html' %}
+                {% include 'not_dropdown.html' %}
+              
+            </ul>
+        </aside>
+      
+        <div class="layout-page">
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="bx bx-menu bx-sm"></i>
+              </a>
+            </div>
+
+                 <button class="btn btn-icon btn-outline-dark" id="back_button" onClick="javascript:history.go(-1);">
+                    <i class='bx bx-arrow-back'></i>
+                </button>
+          
+
+          <a class="btn btn-icon m-5" href="#" id="menu-button">
+              <i class="bx bx-menu" style="font-size: 30px;"></i>
+            </a>
+          
+           
+          
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                         {% if photo_url %}
+                                <img d="uploadedAvatar" src="{{ photo_url }}" alt="user-avatar" class="d-block rounded" height="100"
+                                     width="100"
+                                     >
+                            {% else %}
+                                <img id="uploadedAvatar" src="{% static 'assets/img/avatars/default.png' %}" alt="user-avatar"
+                                     class="d-block rounded"
+                                     height="100" width="100" id="uploadedAvatar">
+                            {% endif %}
+                    </div>
+                  </a>
+                 <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
+              <li>
+                <a class="dropdown-item" href="#">
+                  <div class="d-flex">
+                    <div class="flex-shrink-0 me-3">
+                      <div class="avatar avatar-online">
+                         {% if photo_url %}
+                                <img id="uploadedAvatar2" src="{{ photo_url }}" alt="user-avatar" class="d-block rounded" height="100"
+                                     width="100"
+                                     >
+                            {% else %}
+                                <img id="uploadedAvatar2"  src="{% static 'assets/img/avatars/default.png' %}" alt="user-avatar"
+                                     class="d-block rounded"
+                                     height="100" width="100" id="uploadedAvatar">
+                            {% endif %}
+                      </div>
+                    </div>
+                    <div class="flex-grow-1">
+                     <span  class="fw-medium d-block">{{ request.user.username }}</span>
+                      <small class="text-muted">{{ request.user.first_name }}</small>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <div class="dropdown-divider"></div>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'user_profile' %}">
+                  <i class="bx bx-user me-2"></i>
+                  <span class="align-middle">My Profile</span>
+                </a>
+              </li>
+                 {% if request.user.is_superuser or request.user.first_name == "admin" or request.user.first_name == "power" %}
+              <li>
+                <a class="dropdown-item" href="{% url 'settings_screen' user_id %}">
+                  <i class="bx bx-cog me-2"></i>
+                  <span class="align-middle">Configuration</span>
+                </a>
+              </li>
+                 {% endif %}
+              <li>
+                <a class="dropdown-item" href="#"  data-bs-toggle="modal" data-bs-target="#modalReset">
+                  <span class="d-flex align-items-center align-middle">
+                    <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                    <span class="flex-grow-1 align-middle ms-1">Reset Password</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <div class="dropdown-divider"></div>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'user_login' %}">
+                  <i class="bx bx-power-off me-2"></i>
+                  <span class="align-middle">Log Out</span>
+                </a>
+              </li>
+            </ul>
+                </li>
+                <!--/ User -->
+            </ul>
+          </nav>
+            <div class="content-wrapper">
+              <div class="container-xxl flex-grow-1 container-p-y">
+
+                {% if messages %}
+                  {% for message in messages %}
+                    {% if message.tags == "error" %}
+                      <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" class="bs-toast toast toast-placement-ex m-2 bg-danger top-0 end-0 fade show">
+                        <div class="toast-header">
+                          <i class='bx bxs-error-alt'></i>&nbsp;
+                          <div class="me-auto fw-semibold">Error</div>
+                          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">{{ message }}</div>
+                      </div>
+                    {% elif message.tags == "success" %}
+                    <div role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" class="bs-toast toast toast-placement-ex m-2 bg-success top-0 end-0 fade show">
+                      <div class="toast-header">
+                        <i class='bx bx-list-check'></i>&nbsp;
+                        <div class="me-auto fw-semibold">Success</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                      </div>
+                      <div class="toast-body">{{ message }}</div>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+
+
+     
+
+                {% block content %}
+                    
+                {% endblock content %}
+              
+              </div>
+            </div>
+      </div>
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    
+
+    <div class="modal fade" id="modalReset" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalToggleLabel">do you change your password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'reset_password' user_id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                     <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">Current Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="password"
+                                        class="form-control"
+                                        name="password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                    <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">New Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="new_password"
+                                        class="form-control"
+                                        name="new_password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                    <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">Confirm Password</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input
+                                        type="password"
+                                        id="confirm_password"
+                                        class="form-control"
+                                        name="confirm_password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password"
+                                />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+
+                </form>
+        </div>
+    </div>
+</div>
+    </div>
+    
+
+    
+ 
+    
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Access the active menu UID from Django context
+        let activeMenuUid = "{{ active_menu_uid }}";
+        
+
+        if (activeMenuUid) {
+            let currentMenu = document.getElementById("menu-" + activeMenuUid);
+            if (currentMenu) {
+                currentMenu.classList.add("active");
+
+                // Recursive function to activate parent menus
+                function activateParentMenu(menuItem) {
+                    let parentMenu = menuItem.closest('.menu-sub');
+                    if (parentMenu) {
+                        let parentMenuItem = parentMenu.closest('.menu-item');
+                        if (parentMenuItem) {
+                            parentMenuItem.classList.add("open", "active");
+                            activateParentMenu(parentMenuItem);  // Recursively activate parent
+                        }
+                    }
+                }
+
+                // Start activating parents from the current menu item
+                activateParentMenu(currentMenu);
+            }
+        }
+        
+    });
+</script>
+    
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            const backButton2 = document.getElementById("menu-button");
+            backButton2.style.display = "none";
+        });
+        
+        document.getElementById("menu-button").addEventListener("click", function () {
+            const layoutMenu = document.getElementById("layout-menu");
+            const backButton = document.getElementById("back_button");
+            const menuButton = document.getElementById("menu-button");
+
+            // Hide menu button and show back button
+            menuButton.style.display = "none";
+            backButton.style.display = "block";
+
+            // Toggle the 'menu-hidden' class and set display to 'block'
+            layoutMenu.classList.toggle("menu-hidden");
+            layoutMenu.style.display = "block";
+        });
+
+
+        function firstClick() {
+            const layoutMenu = document.getElementById("layout-menu");
+            const backButton = document.getElementById("back_button");
+
+            const backButton2 = document.getElementById("menu-button");
+            backButton2.style.display = "block";
+            backButton.style.display = "none";
+            layoutMenu.classList.toggle("menu-hidden"); 
+            layoutMenu.style.display = "none";// Toggle the class
+        }
+
+       
+        
+    </script>
+
+
+
+
+
+   
+
+
+
+
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'as sets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/dashboards-analytics.js' %}"></script>
+    <script src="{% static 'assets/js/ui-toasts.js' %}"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+ 
+
+  </body>
+</html>

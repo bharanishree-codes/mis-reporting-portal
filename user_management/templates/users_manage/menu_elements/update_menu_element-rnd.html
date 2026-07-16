@@ -1,0 +1,125 @@
+{% extends "login/user_menus.html" %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+    <h4 class="fw-bold py-3 mb-4">Update Menu Element</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label class="form-label">Menu Name</label>
+                        <input type="text" class="form-control" id="menu_name" name="menu_name" value="{{ obj.menu_name }}">
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label for="dbConnection" class="form-label">Menu Place Holder</label>
+                        <select class="form-control" id="menu_view" name="menu_view">
+                            {% if obj.menu_app_bar == "1" %}
+                                <option selected="" value="1">Sidebar Menu</option>
+                                <option value="2">Topbar Menu</option>
+                            {% else %}
+                                <option selected="" value="2">Topbar Menu</option>
+                                <option value="1">Sidebar Menu</option>
+                            {% endif %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label class="form-label">Menu Order</label>
+                        <input type="text" class="form-control" id="menu_order" name="menu_order" value="{{ obj.menu_order }}">
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label for="dbConnection" class="form-label">Select dropdown parent</label>
+                        <select class="form-control" id="parent_id" name="parent_id">
+                            <option selected="" value="0">Do Not have parent</option>
+                            {% for menu in menu_lists_data %}
+                                <option value="{{ menu.psk_id }}" {% if obj.menu_parent_id == menu.psk_id %}selected{% endif %}>{{ menu.menu_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label class="form-label">Menu Type</label>
+                        <select class="form-control" id="menu_type" name="menu_type">
+                        
+                            {% if obj.menu_type == "link" %}
+                                <option selected="" value="link">Link</option>
+                                <option value="dropdown">Dropdown</option>
+                            {% else %}
+                                <option value="link">Link</option>
+                                <option selected="" value="dropdown">Dropdown</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                
+                
+                  
+
+                    <div class="mb-3 col-md-6" id="menu_code_field">
+                        <label class="form-label">Menu Code</label>
+                        <select class="form-control" name="menu_code" id="menu_code" >
+                            <option value="">--------- Select ---------</option>
+                            <option value="HTML" {% if obj.menu_code == "HTML" %}selected{% endif %}>HTML</option>
+                            <option value="PYTHON" {% if obj.menu_code == "PYTHON" %}selected{% endif %}>PYTHON</option>
+                            <option value="PHP" {% if obj.menu_code == "PHP" %}selected{% endif %}>PHP</option>
+                            <option value="AXPERT" {% if obj.menu_code == "AXPERT" %}selected{% endif %}>AXPERT</option>
+                            <option value="DART" {% if obj.menu_code == "DART" %}selected{% endif %}>DART</option>
+                            <option value="REACT" {% if obj.menu_code == "REACT" %}selected{% endif %}>REACT</option>
+                        </select>
+                    </div>
+                
+              
+
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label for="dbConnection" class="form-label">Menu Status</label>
+                        <select class="form-control" id="active" name="active">
+                            <option value="Active" {% if obj.active == "Active" %}selected{% endif %}>Active</option>
+                            <option value="In Active" {% if obj.active == "In Active" %}selected{% endif %}>In Active</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="menu_icon_field" >
+                        <label class="form-label">Icon</label>
+                        <input type="text" class="form-control" id="icon_value" name="icon_value" value="{{ obj.menu_icon }}">
+                    </div>
+
+                    <div class="mb-3 col-md-6" id="menu_uid_field">
+                        <label class="form-label">Menu Unique ID</label>
+                        <input type="text" class="form-control" id="menu_unique_id" name="menu_unique_id" value="{{ obj.menu_uid }}">
+                    </div>
+
+                 
+                        <div class="mb-3 col-md-6" id="menu_href_field">
+                            <label class="form-label">Href</label>
+                            <input type="text" class="form-control" id="href_value" name="href_value"
+                                   value="{{ obj.menu_href }}">
+                        </div>
+                  
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+    <script>
+        new MultiSelectTag('userrole');
+
+        
+
+    </script>
+        
+       
+
+
+
+{% endblock content %}

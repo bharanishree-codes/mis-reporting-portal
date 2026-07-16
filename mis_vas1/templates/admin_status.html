@@ -1,0 +1,515 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('{% static "images/imagesaa.jpg" %}');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            color: #fff;
+        }
+    
+        .container-xxl {
+            padding: 2rem;
+        }
+    
+        .card-link {
+            text-decoration: none;
+        }
+    
+        .card-body {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+    
+        /* 🎉 Hover effect */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+    
+        .card-hover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+    </style>
+    
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('{% static "images/imagesaa.jpg" %}');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            color: #fff;
+        }
+
+        .container-xxl {
+            padding: 2rem;
+        }
+
+        .card-link {
+            text-decoration: none;
+        }
+
+        .card-body {
+            background-color: rgba(0, 0, 0, 0.6); /* Slight dark background for better text contrast */
+        }
+
+        
+    </style>
+</head>
+<body>
+
+<div class="container-xxl flex-grow-1 container-p-y rounded" style="background-image: url('{% static 'images/collegeaaa.jpg' %}'); background-size: cover; background-position: center;">
+    <!-- Flexbox Row for Alignment -->
+    <div class="justify-content-between align-items-center">
+        <!-- Dashboard Title -->  
+        <h3 style="background-color: #90EE90;
+                   color: transparent;
+                   -webkit-background-clip: text;
+                   -moz-background-clip: text;
+                   background-clip: text;">
+            <!-- MIS DASHBOARD -->
+        </h3>
+
+        <!-- Staff ID Dropdown -->
+        <form method="GET" id="filterForm" class="flex-wrap gap-3 align-items-center p-3 rounded">
+            <!-- Department Dropdown -->
+            <div class="row g-6">
+                <div class="mb-3 col-md-3">
+                <label for="department" class="text-white"><b>Select Department:</b></label>
+                <select name="department" id="department" class="form-select text-black" onchange="onDepartmentChange()">
+                    <option value="">-- All Departments --</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept }}" style="font-weight: bold;" {% if dept == selected_department %}selected{% endif %}>{{ dept }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        
+            <!-- Staff ID Dropdown -->
+            <div class="mb-3 col-md-3">
+                <label for="staff_id" class="text-white"><b>Select Staff ID:</b></label>
+                <select name="staff_id" id="staff_id" class="form-select text-black" onchange="onStaffIdChange()">
+                    <option value="">-- All Staff --</option>
+                    {% for sid in staff_ids %}
+                        <option value="{{ sid }}" style="font-weight: bold;" {% if sid == selected_staff_id %}selected{% endif %}>{{ sid }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        
+            <!-- Staff Name Dropdown -->
+            <div class="mb-3 col-md-3">
+                <label for="staff_name" class="text-white"><b>Select Staff Name:</b></label>
+                <select name="staff_name" id="staff_name" class="form-select text-black" onchange="onStaffNameChange()">
+                    <option value="">-- All Names --</option>
+                    {% for staff_id, staff_name in filtered_staff_map.items %}
+                        <option value="{{ staff_name }}" style="font-weight: bold;" {% if staff_name == selected_staff_name %}selected{% endif %}>{{ staff_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        </form>
+        
+        
+    </div>
+
+
+
+    <br/>
+    <br/>
+    <!-- Display Data Blocks -->
+    <div class="row g-6">
+        {% for block in blocks_to_display %}
+            {% if block == 'total_participation' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'list_participations' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-danger"> {% endcomment %}
+                                        <i class="bi bi-person-arms-up"></i>
+                                        {% comment %} </span> {% endcomment %}
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_participation|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Faculty participation</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            {% elif block == 'total_research' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'research_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-danger"> {% endcomment %}
+                                        <i class="bi bi-rocket-takeoff-fill"></i>
+                                        {% comment %} </span> {% endcomment %}
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_research|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Research Article Publication</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_books' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'book_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-danger"> {% endcomment %}
+                                        <i class="bi bi-journal-medical"></i>
+                                        {% comment %} </span> {% endcomment %}
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_books|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Books & Chapter Publication</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_certificate' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'program_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-info"> {% endcomment %}
+                                        <i class="bi bi-award-fill"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_certificate|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">ADD ON / Certificate Program Offered</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_courses' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'project_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-info"> {% endcomment %}
+                                        <i class="bi bi-buildings"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_courses|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Project work/Field work/Internship</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_gov_and_non_gov' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'government_grants_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-danger"> {% endcomment %}
+                                        <i class="bi bi-globe2"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_gov_and_non_gov|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Government and Non-Governmental Grants</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_workshops' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'seminar_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-warning"> {% endcomment %}
+                                        <i class="bi bi-box-fill"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_workshops|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Workshops/Seminars Conducted</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_extentions' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'extension_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-primary"> {% endcomment %}
+                                        <i class="bi bi-file-earmark-code-fill"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_extentions|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Extension and Outreach Programs</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_competitive' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'competitve_examination_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-primary"> {% endcomment %}
+                                        <i class="bi bi-fingerprint"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_competitive|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Competitive Examination</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_career_counseling' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'career_counseeling_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-warning"> {% endcomment %}
+                                        <i class="bi bi-suitcase-lg-fill"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_career_counseling|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Career Counseling</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_faculty_exchange' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'faculty_exchange_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-danger"> {% endcomment %}
+                                        <i class="bi bi-person-fill-check"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_faculty_exchange|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Collaborative Faculty Exchange</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% elif block == 'total_collaborative_students' %}
+                <div class="col-lg-2 col-sm-4 mb-4">
+                    <a href="{% url 'collaborative_students_list' %}?staff_id={{ selected_staff_id }}" class="card-link">
+                        <div class="card card-border-shadow-primary h-100 card-hover" style="background-image: url('{% static 'images/part.jpg' %}'); background-size: cover; background-position: center;">
+                            <div class="card-body text-white">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="avatar me-4">
+                                        {% comment %} <span class="avatar-initial rounded bg-label-info"> {% endcomment %}
+                                        <i class="bi bi-microsoft-teams"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mb-0 text-white">{{ filtered_data.total_collaborative_students|default:0 }}</h4>
+                                </div>
+                                <p class="mb-2">Collaborative Activities for Students</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+            </div>
+            <div class="row g-6">
+    {% comment %} </div> {% endcomment %}
+{% comment %} </div> {% endcomment %}
+{% comment %} </div> {% endcomment %}
+{% comment %} <div class="container-xxl flex-grow-1 container-p-y rounded"  {% endcomment %}
+    {% comment %} style="background-image: url('{% static 'images/college.jpg' %}'); background-size: cover; background-position: center;"> {% endcomment %}
+    {% comment %} <div class="row"> {% endcomment %}
+        <!-- Single chart for all blocks -->
+        {% comment %} <div class="col-lg-3 mb-3">
+            <div class="card card-border-shadow-primary h-100 card-hover" 
+                 style="background-image: url('{% static 'images/images.jpg' %}'); background-size: cover; background-position: center; background-color: rgba(0, 0, 0, 0);">
+                <div class="card-body" style="padding: 15px;"> {% endcomment %}
+                    <!-- Adjust canvas size here -->
+                    {% comment %} <canvas id="combined-chart" width="400" height="300"></canvas> {% endcomment %}
+                    {% comment %} <p class="mb-3 text-white text-center">Department Graph</p> {% endcomment %}
+                {% comment %} </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> {% endcomment %}
+
+{% comment %} <script>
+    // Prepare data from the merged graph data passed from the view
+    var mergedGraphData = {{ merged_graph_data|safe }}; // merged data from the view
+
+    // Extract the labels (departments) and the data for each category
+    var departments = Object.keys(mergedGraphData.Departments); // Department names
+    
+    // Prepare datasets dynamically based on the blocks available in mergedGraphData
+    var datasets = [];
+
+    // Iterate over each block to create datasets
+    var blockColors = {
+        "total_research": 'rgba(54, 162, 235, 0.6)', 
+        "total_participation": 'rgba(75, 192, 192, 0.6)', 
+        "total_books": 'rgba(255, 159, 64, 0.6)', 
+        "total_workshops": 'rgba(153, 102, 255, 0.6)', 
+        "total_extentions": 'rgba(255, 99, 132, 0.6)', 
+        "total_certificate": 'rgba(255, 159, 64, 0.6)',
+        "total_courses": 'rgba(153, 255, 51, 0.6)',
+        "total_gov_and_non_gov": 'rgba(102, 102, 255, 0.6)',
+        "total_faculty_exchange": 'rgba(255, 51, 153, 0.6)'
+    };
+
+    // Dynamically add datasets based on blocks_to_display
+    var blocksToDisplay = Object.keys(mergedGraphData).filter(block => block !== "Departments"); // Remove 'Departments'
+
+    blocksToDisplay.forEach(function(block) {
+        if (mergedGraphData[block] && mergedGraphData[block].length > 0) {
+            datasets.push({
+                label: block.replace("total_", "").replace(/_/g, " ").toUpperCase(), // Label: Clean up block name
+                data: mergedGraphData[block], // Block data
+                backgroundColor: blockColors[block] || 'rgba(0, 0, 0, 0.6)', // Default color if not defined
+                borderColor: blockColors[block] || 'rgba(0, 0, 0, 1)', // Default border color
+                borderWidth: 1
+            });
+        }
+    });
+
+    // Create the combined chart
+    var ctx = document.getElementById("combined-chart").getContext('2d');
+    new Chart(ctx, {
+        type: 'bar', // Change this to 'pie' or 'line' for different chart types
+        data: {
+            labels: departments, // Department names as the labels
+            datasets: datasets // Dynamically generated datasets
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: 'white' // Change legend text color
+                    }
+                },
+                tooltip: {
+                    bodyColor: 'white', // Change tooltip body text color
+                    titleColor: 'white' // Change tooltip title text color
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'white', // Y-axis tick color
+                        stepSize: 1,   // Step size for ticks (whole numbers)
+                        precision: 0   // Ensure no decimals
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: 'white' // X-axis tick color
+                    }
+                }
+            },
+            layout: {
+                padding: 10
+            },
+            animation: {
+                duration: 1000
+            }
+        }
+    });
+</script> {% endcomment %}
+
+
+<script>
+    const staffIdInfo = JSON.parse('{{ staff_id_info|escapejs }}');
+    const staffNameInfo = JSON.parse('{{ staff_name_info|escapejs }}');
+
+    function onStaffIdChange() {
+        const sid = document.getElementById("staff_id").value;
+        const name = staffIdInfo[sid]?.name || "";
+        const dept = staffIdInfo[sid]?.department || "";
+
+        document.getElementById("staff_name").value = name;
+        document.getElementById("department").value = dept;
+        document.getElementById("filterForm").submit();
+    }
+
+    function onStaffNameChange() {
+        const name = document.getElementById("staff_name").value;
+        const sid = staffNameInfo[name]?.id || "";
+        const dept = staffNameInfo[name]?.department || "";
+
+        document.getElementById("staff_id").value = sid;
+        document.getElementById("department").value = dept;
+        document.getElementById("filterForm").submit();
+    }
+
+    function onDepartmentChange() {
+        // Clear staff_id and staff_name when department changes
+        document.getElementById("staff_id").value = "";
+        document.getElementById("staff_name").value = "";
+        document.getElementById("filterForm").submit();
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cards = document.querySelectorAll(".card-hover");
+        cards.forEach(card => {
+            card.addEventListener("mouseenter", () => {
+                card.style.border = "2px solid #90EE90";
+            });
+
+            card.addEventListener("mouseleave", () => {
+                card.style.border = "none";
+            });
+        });
+    });
+</script>

@@ -1,0 +1,99 @@
+{% extends 'con_menus.html' %}
+{% block content %}
+
+<h5 class="fw-bold">{{ form_name}}</h5>
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                {% for field in form %}
+                    <div class="mb-3 col-md-6" id="dbCol">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            
+                 <div class="mb-3 col-md-6" id="dbCol">
+                    <label class="form-label">starter menu</label>
+                     {% if menu == "menu-usermaster-details" %}
+                     <input type="text" class="form-control" value="user_master" disabled>
+                     {% elif menu == "menu-rolesmaster-details" %}
+                    <input type="text" class="form-control" value="roles_master" disabled>
+                     {% elif menu == "menu-userprivilege-details" %}
+                     <input type="text" class="form-control" value="user_privilege" disabled>
+                         {% elif menu == "menu-menuelements-details" %}
+                     <input type="text" class="form-control" value="menu_elements" disabled>
+                         {% else %}
+                         <input type="text" class="form-control" value="menu_privilege" disabled>
+                     {% endif %}
+                </div>
+            
+        {% if prev_api_methods %}
+
+         <div class="mb-3 col-md-6" id="api_list">
+    <label for="dbConnection" class="form-label">User Privilege</label>
+    <div class="">
+        <label class="list-group-item">
+            <input class="form-check-input me-1" name="api_list" type="checkbox" value="get"
+            {% if 'get' in prev_api_methods %}checked{% endif %}>
+            GET
+        </label>
+        <label class="list-group-item">
+            <input class="form-check-input me-1" name="api_list" type="checkbox" value="post"
+            {% if 'post' in prev_api_methods %}checked{% endif %}>
+            POST
+        </label>
+        <label class="list-group-item">
+            <input class="form-check-input me-1" name="api_list" type="checkbox" value="put"
+            {% if 'put' in prev_api_methods %}checked{% endif %}>
+            PUT
+        </label>
+        <label class="list-group-item">
+            <input class="form-check-input me-1" name="api_list" type="checkbox" value="delete"
+            {% if 'delete' in prev_api_methods %}checked{% endif %}>
+            DELETE
+        </label>
+    </div>
+</div>
+
+            
+            {% else %}
+       
+       
+         <div class="mb-3 col-md-6" id="api_list">
+                    <label for="dbConnection" class="form-label">User Privilege</label>
+                    <div class="">
+                        <label class="list-group-item">
+                            <input class="form-check-input me-1" name="api_list" type="checkbox" value="get">
+                            GET
+                        </label>
+                           <label class="list-group-item">
+                            <input class="form-check-input me-1" name="api_list" type="checkbox" value="post">
+                            POST
+                        </label>
+                           <label class="list-group-item">
+                            <input class="form-check-input me-1" name="api_list" type="checkbox" value="put">
+                            PUT
+                        </label>
+                           <label class="list-group-item">
+                            <input class="form-check-input me-1" name="api_list" type="checkbox" value="delete">
+                            DELETE
+                        </label>
+
+                    </div>
+                </div>
+            
+            {% endif %}
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+
+
+        </form>
+    </div>
+</div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,72 @@
+{% extends 'con_menus.html' %}
+
+{% block content %}
+
+    <h5 class="fw-bold">Roles Master</h5>
+
+<a href="{% url 'create_role_master' user_id %}" class="btn btn-primary">
+    <span class="tf-icons bx bx-list-plus"></span>&nbsp; Add New
+</a>
+
+
+    <div class="card mt-3">
+    <div class="card-datatable table-responsive">
+        <table id="example" class="table" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Role Name</th>
+                    <th>Dashboard Name</th>
+                    <th>User Privilege</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                {% for obj in response_json %}
+                    <tr>
+                        <td>{{obj.user_role}}</td>
+                        <td>{{obj.user_dashboard_name}}</td>
+                        <td>{{obj.user_role_privilege_names}}</td>
+                        <td>{{obj.active}}</td>
+                        <td>
+                            <a class="btn btn-icon btn-sm btn-primary"
+                               href="{% url 'update_role_master' user_id obj.psk_id %}">
+                                <i class="bx bxs-edit"></i>
+                            </a>
+                            <a class="btn btn-icon btn-sm btn-danger" href="#" data-bs-toggle="modal"
+                               data-bs-target="#modalToggle{{ obj.psk_id }}">
+                                <i class="bx bxs-trash"></i>
+                            </a>
+                        </td>
+
+                        <div class="modal fade" id="modalToggle{{ obj.psk_id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalToggleLabel">Delete</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Do you want to delete the role?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                            No
+                                        </button>
+                                        <a href="{% url 'delete_role_master' user_id obj.psk_id %}"
+                                           class="btn btn-danger">Yes</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock content %}

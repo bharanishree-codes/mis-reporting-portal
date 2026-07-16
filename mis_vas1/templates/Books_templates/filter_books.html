@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books and Publications Filter</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .badge-publication {
+            background-color: #6c757d;
+            color: white;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .badge-scope {
+            background-color: #17a2b8;
+            color: white;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .media-badge {
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .export-buttons {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        .table-sm th, .table-sm td {
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">
+                        <i class="fas fa-book me-2"></i>Books and Publications Management
+                    </h2>
+                    <div>
+                        <span class="badge bg-secondary me-2">Role: {{ user_role }}</span>
+                        <span class="badge bg-info">User: {{ username }}</span>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+        <!-- Filter Form -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-filter me-2"></i>Filter Options
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="get" id="filterForm">
+                            <div class="row">
+                                <!-- Staff ID Dropdown -->
+                                {% if user_role == "Hod" %}
+                                <div class="col-md-3 mb-3">
+                                    <label for="stf_id" class="form-label">Staff Member</label>
+                                    <select class="form-select" id="stf_id" name="stf_id">
+                                        <option value="">All Staff</option>
+                                        {% for staff_id in staff_ids %}
+                                        <option value="{{ staff_id }}" {% if staff_id == selected_stf_id %}selected{% endif %}>
+                                            {{ staff_id }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endif %}
+
+                                <!-- Year Range -->
+                                <div class="col-md-2 mb-3">
+                                    <label for="from_year" class="form-label">From Year</label>
+                                    <select class="form-select" id="from_year" name="from_year">
+                                        <option value="">All Years</option>
+                                        {% for year in years %}
+                                        <option value="{{ year }}" {% if year == selected_from_year %}selected{% endif %}>
+                                            {{ year }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2 mb-3">
+                                    <label for="to_year" class="form-label">To Year</label>
+                                    <select class="form-select" id="to_year" name="to_year">
+                                        <option value="">All Years</option>
+                                        {% for year in years %}
+                                        <option value="{{ year }}" {% if year == selected_to_year %}selected{% endif %}>
+                                            {{ year }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <!-- Publication Type Options -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label"><b>Publication Types:</b></label>
+                                    <div class="row">
+                                        {% for option in publication_options %}
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="publication_type" 
+                                                       value="{{ option }}" id="pub{{ forloop.counter }}"
+                                                       {% if option in selected_publication_types %}checked{% endif %}>
+                                                <label class="form-check-label" for="pub{{ forloop.counter }}">
+                                                    {{ option }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <!-- National/International Options -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label"><b>Scope:</b></label>
+                                    <div class="row">
+                                        {% for option in national_international_options %}
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="national_international" 
+                                                       value="{{ option }}" id="scope{{ forloop.counter }}"
+                                                       {% if option in selected_national_international %}checked{% endif %}>
+                                                <label class="form-check-label" for="scope{{ forloop.counter }}">
+                                                    {{ option }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-search me-1"></i>Apply Filters
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
+                                            <i class="fas fa-times me-1"></i>Clear Filters
+                                        </button>
+                                        {% if filter_applied %}
+                                        <button type="submit" class="btn btn-success" name="export" value="excel">
+                                            <i class="fas fa-file-excel me-1"></i>Export Excel
+                                        </button>
+                                        <button type="submit" class="btn btn-danger" name="export" value="pdf">
+                                            <i class="fas fa-file-pdf me-1"></i>Export PDF
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        {% if filter_applied %}
+        <div class="row">
+            <div class="col-12">
+                <!-- Summary Statistics -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-center bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Total Publications</h6>
+                                <h3 class="text-primary">{{ books|length }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">With Attachments</h6>
+                                <h3 class="text-success">
+                                    {% with books_with_files=books|length %}
+                                    {{ books_with_files }}
+                                    {% endwith %}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Selected Filters</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% if selected_stf_id %}
+                                    <span class="badge bg-primary">Staff: {{ selected_stf_id }}</span>
+                                    {% endif %}
+                                    {% if selected_from_year %}
+                                    <span class="badge bg-info">From: {{ selected_from_year }}</span>
+                                    {% endif %}
+                                    {% if selected_to_year %}
+                                    <span class="badge bg-info">To: {{ selected_to_year }}</span>
+                                    {% endif %}
+                                    {% for option in selected_publication_types %}
+                                    <span class="badge bg-success">{{ option }}</span>
+                                    {% endfor %}
+                                    {% for option in selected_national_international %}
+                                    <span class="badge bg-warning text-dark">{{ option }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Books and Publications Table -->
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-book me-2"></i>Books and Publications ({{ books|length }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-sm">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Staff ID</th>
+                                        <th>Name</th>
+                                        <th>Department</th>
+                                        <th>Publication Type</th>
+                                        <th>Title</th>
+                                        <th>Year</th>
+                                        <th>Scope</th>
+                                        <th>ISBN/ISSN</th>
+                                        <th>Attachments</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for book in books %}
+                                    <tr>
+                                        <td>{{ book.staff_id }}</td>
+                                        <td>{{ book.staff_name }}</td>
+                                        <td>{{ book.department_name }}</td>
+                                        <td>
+                                            {% if book.publication_type_list %}
+                                            {% for pub_type in book.publication_type_list %}
+                                            <span class="badge badge-publication">{{ pub_type }}</span>
+                                            {% endfor %}
+                                            {% else %}
+                                            <span class="text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <strong>{{ book.title_of_book_or_chapter|default:book.title_of_paper|default:book.title_of_proceedings|default:"N/A" }}</strong>
+                                            {% if book.name_of_conference %}
+                                            <br><small class="text-muted">Conference: {{ book.name_of_conference }}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ book.year_of_publication }}</td>
+                                        <td>
+                                            {% if book.national_international_list %}
+                                            {% for scope in book.national_international_list %}
+                                            <span class="badge badge-scope">{{ scope }}</span>
+                                            {% endfor %}
+                                            {% else %}
+                                            <span class="text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ book.isbn_or_issn_number|default:"N/A" }}</td>
+                                        <td>
+                                            {% if book.media_files %}
+                                            {% for media in book.media_files %}
+                                            <a href="{{ media.direct_api_url }}" 
+                                               target="_blank" class="badge bg-info media-badge" style="font-size: 0.7rem;">
+                                                <i class="fas fa-file me-1"></i>{{ media.file_name }}
+                                            </a>
+                                            {% endfor %}
+                                            {% else %}
+                                            <span class="badge bg-secondary" style="font-size: 0.7rem;">No attachments</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="9" class="text-center text-muted">No books or publications found</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Welcome/Instruction Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">Apply filters to view books and publications</h4>
+                        <p class="text-muted">Select filters from above to see books, chapters, and publications records</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function clearFilters() {
+            // Clear dropdowns
+            document.getElementById('stf_id').value = '';
+            document.getElementById('from_year').value = '';
+            document.getElementById('to_year').value = '';
+            
+            // Clear checkboxes
+            const pubCheckboxes = document.querySelectorAll('input[name="publication_type"]');
+            pubCheckboxes.forEach(checkbox => checkbox.checked = false);
+            
+            const scopeCheckboxes = document.querySelectorAll('input[name="national_international"]');
+            scopeCheckboxes.forEach(checkbox => checkbox.checked = false);
+            
+            document.getElementById('filterForm').submit();
+        }
+
+        // Auto-submit form when export buttons are clicked
+        document.querySelectorAll('[name="export"]').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('filterForm').submit();
+            });
+        });
+
+        // Show loading state on form submission
+        document.getElementById('filterForm').addEventListener('submit', function() {
+            const submitButton = this.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Loading...';
+                submitButton.disabled = true;
+            }
+        });
+
+        // Add smooth scrolling to table rows for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    this.classList.toggle('table-active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

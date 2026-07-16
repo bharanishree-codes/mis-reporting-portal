@@ -1,0 +1,100 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
+
+{{ error }}  <!-- Show error message if any -->
+
+<!-- Back Button -->
+<button class="btn btn-icon btn-outline-dark" onClick="javascript:history.go(-1);">
+    <i class='bx bx-arrow-back'></i>
+</button><br><br>
+
+<!-- Form for Faculty Participation -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <!-- Staff ID Selection (Readonly) -->
+                <div class="mb-3 col-md-4">
+                    <label for="stf_id" class="form-label">Staff ID</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="staff_id" name="stf_id" value="{{ staff_id }}" readonly>
+                    </div>
+                </div>
+
+                <!-- Staff Name (Auto-filled) -->
+                <div class="mb-3 col-md-4">
+                    <label for="stf_name" class="form-label">Staff Name</label>
+                    <input type="text" class="form-control" id="stf_name" name="stf_name" value="{{ stf_name }}" readonly>
+                </div>
+
+                <!-- Department Name (Auto-filled) -->
+                <div class="mb-3 col-md-4">
+                    <label for="department" class="form-label">Department Name</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{ department }}" readonly>
+                </div>
+
+                <!-- Year of Participation -->
+                <div class="mb-3 col-md-4">
+                    <label for="year" class="form-label">Year</label>
+                    <div class="input-group">
+                        <select class="form-control" id="year" name="year" required>
+                            <option value="" disabled selected>Select Year</option>
+                            {% for year in year %}
+                                <option value="{{ year }}" {% if year == selected_year %} selected {% endif %}>
+                                    {{ year }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Participation Items -->
+                <div class="mb-3 col-md-4">
+                    <label for="items" class="form-label">Participated in</label>
+                    <select class="form-control" id="items" name="items" multiple>
+                        {% for option in options %}
+                            <option value="{{ option }}" {% if option in selected_options %} selected {% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+            <div class="mb-3 text-end">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{% url 'list_participations' %}">
+                    <input type="button" value="Cancel" class="btn btn-primary">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit and Cancel Buttons -->
+
+</form>
+
+<!-- Multi Select Script -->
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js">
+new MultiSelectTag('items');  // Initialize multi-select dropdown for 'items'</script>
+
+<script>
+    // Update Staff Name and Department based on the selected Staff ID
+    function updateFacultyInfo() {
+        const staffId = document.getElementById('staff_id').value;
+        const selectedFaculty = {{ faculty_data|safe }}.find(faculty => faculty.stf_id === staffId);
+
+        if (selectedFaculty) {
+            document.getElementById('stf_name').value = selectedFaculty.stf_name;
+            document.getElementById('department').value = selectedFaculty.department;
+        }
+    }
+
+    // Call the updateFacultyInfo function when the page loads if staff_id is already set
+    window.onload = function() {
+        updateFacultyInfo();
+    };
+</script>
+
+{% endblock content %}
